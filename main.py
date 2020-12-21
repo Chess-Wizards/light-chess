@@ -9,6 +9,7 @@ def main():
 	for i in range(8):
 		for j in range(8):
 			print('Position %d %d: %s' % (i, j, start_board.get_piece(Position(i, j))))
+            
 
 if __name__ == '__main__':
 	main()
