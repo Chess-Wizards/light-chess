@@ -26,8 +26,8 @@ class Board(object):
 		# Stores board characteristic
 		self.min_y, self.max_y = 0, 7
 		self.min_x, self.max_x = 0, 7
-		self.height = self.max_y-self.min_y+1
-		self.width = self.max_x-self.min_x+1
+		self.height = self.max_y - self.min_y + 1
+		self.width = self.max_x - self.min_x + 1
 
 	# Set a provided piece on a specified position.
 	def set_piece(self, pos: Position, piece: Piece) -> None:
@@ -64,6 +64,14 @@ class Board(object):
 	def get_positions_for_piece(self, piece: Piece) -> List[Position]:
 		return list(self._piece_to_pos[piece])
 
+	# Return all positions for one side
+	def get_positions_for_side(self, colour: Colour):
+		side_positions = []
+		for _, positions in self._piece_to_pos.items():
+			side_positions.extend([pos for pos in positions
+							 	   if self.get_piece(pos) is not None and self.get_piece(pos).colour == colour])
+		return side_positions
+
 	# Check if position locates inside board
 	@staticmethod
 	def is_position_on_board(pos: Position, board: Board) -> bool:
@@ -92,7 +100,6 @@ class Board(object):
 		board.set_piece(Position(5, 1), Piece(PieceType.Pawn, Colour.WHITE))
 		board.set_piece(Position(6, 1), Piece(PieceType.Pawn, Colour.WHITE))
 		board.set_piece(Position(7, 1), Piece(PieceType.Pawn, Colour.WHITE))
-
 
 		# Set black pieces.
 		board.set_piece(Position(0, 7), Piece(PieceType.Rook, Colour.BLACK))
