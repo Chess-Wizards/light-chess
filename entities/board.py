@@ -9,6 +9,7 @@ from entities.pieces import Piece, PieceType
 from entities.position import Position
 from typing import List, Optional
 
+
 class Board(object):
 	"""
 	Represents a chess board.
@@ -22,6 +23,11 @@ class Board(object):
 		# Stores mapping from position to a piece description.
 		# Used for getting a piece standing on a position.
 		self._pos_to_piece = dict()
+		# Stores board characteristic
+		self.min_y, self.max_y = 0, 7
+		self.min_x, self.max_x = 0, 7
+		self.height = self.max_y-self.min_y+1
+		self.width = self.max_x-self.min_x+1
 
 	# Set a provided piece on a specified position.
 	def set_piece(self, pos: Position, piece: Piece) -> None:
@@ -35,6 +41,9 @@ class Board(object):
 	# Method returns None if there is no piece on a specified position.
 	def get_piece(self, pos) -> Optional[Piece]:
 		return self._pos_to_piece.get(pos)
+
+	def is_position_empty(self, pos):
+		return self.get_piece(pos) is None
 
 	# Remove piece from a specified position.
 	#
@@ -54,6 +63,11 @@ class Board(object):
 	# Return positions of a specific piece.
 	def get_positions_for_piece(self, piece: Piece) -> List[Position]:
 		return list(self._piece_to_pos[piece])
+
+	# Check if position locates inside board
+	@staticmethod
+	def is_position_on_board(pos: Position, board: Board) -> bool:
+		return board.min_x <= pos.x <= board.max_x and board.min_y <= pos.y <= board.max_y
 
 	# Create a chess board with a default start position.
 	@staticmethod
