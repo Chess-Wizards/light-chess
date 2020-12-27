@@ -5,6 +5,7 @@ from typing import NamedTuple
 
 from entities.colour import Colour
 
+
 class PieceType(Enum):
 	King = 0
 	Queen = 1
@@ -12,6 +13,7 @@ class PieceType(Enum):
 	Knight = 3
 	Rook = 4
 	Pawn = 5
+
 
 class Piece(NamedTuple):
 	type: PieceType

@@ -14,13 +14,27 @@ import copy
 
 
 class GameLogic(object):
-    """Class used to handle logic. This class is technically utilization of PieceMoves with additional checking of
-    check after each move.
+    """Class used to handle game logic. This class is technically utilization of PieceMoves with additional checking of
+    check after each move. 3 main method: is_mate(), is_check() and make_move() are necessary to handle chess game.
     """
 
     @staticmethod
+    def is_mate(game: Game):
+        """ Check if <game.turn> side got mate.
+            mate = check without possibility to defend own king
+        """
+
+        if GameLogic.is_check(game.board, game.turn):
+            for move in PieceMoves.all_moves(game):
+                if GameLogic.is_move_possible(game, move):
+                    return False
+            return True
+        return False
+
+    @staticmethod
     def is_check(board: Board, colour: Colour) -> bool:
-        """ Check if check occurs.
+        """ Check if <colour> side got check.
+            check = at least one opponent piece aims at own king
         """
 
         # Retrieve king position
@@ -30,6 +44,8 @@ class GameLogic(object):
     @staticmethod
     def make_move(move: Move, game: Game) -> Game:
         """ Make move.
+
+        Attention: no checking of check after move. Technically move can be not valid!!!
         """
 
         # Copy game (pass by value)
@@ -39,9 +55,9 @@ class GameLogic(object):
         # Get possible moves
         possible_moves = PieceMoves.moves(piece.type, move.start, game)
         # Check if move satisfies
-        if move.finish in possible_moves:
+        if move in possible_moves:
             # Check if castling occurs
-            if move.finish in PieceMoves.castling_moves(move.start, game):
+            if move in PieceMoves.castling_moves(move.start, game):
                 game.board.set_piece(Position(int((move.finish.x+move.start.x)/2), move.start.y),
                                      Piece(PieceType.Rook, game.turn))
                 # Short castling
@@ -51,7 +67,7 @@ class GameLogic(object):
                 else:
                     game.board.remove_piece(Position(0, move.start.y))
             # Check if en passant occurs
-            if move.finish in PieceMoves.en_passant_moves(move.start, game):
+            if move in PieceMoves.en_passant_moves(move.start, game):
                 game.board.remove_piece(Position(move.finish.x, move.start.y))
             # Update board
             game.board.set_piece(move.finish, piece)
@@ -74,9 +90,9 @@ class GameLogic(object):
         if game.turn != piece.colour:
             return False
         # Make move
-        next_game = GameLogic.make_move(move, game)
+        further_game = GameLogic.make_move(move, game)
         # Check if check occurs after making move
-        if GameLogic.is_check(next_game.board, next_game.turn):
-            return True
-        else:
+        if GameLogic.is_check(further_game.board, Colour.change_colour(further_game.turn)):
             return False
+        else:
+            return True

@@ -41,6 +41,22 @@ class TestGameLogic(unittest.TestCase):
 
         assert not GameLogic.is_check(self.game.board, self.game.turn)
 
+    def test_is_mate(self):
+        """Test of is_check() method.
+        """
+
+        assert not GameLogic.is_mate(self.game)
+        # Create dummy board
+        board = Board()
+        board.set_piece(Position(0, 1), Piece(PieceType.Pawn, Colour.WHITE))
+        board.set_piece(Position(1, 1), Piece(PieceType.Pawn, Colour.WHITE))
+        board.set_piece(Position(0, 0), Piece(PieceType.King, Colour.WHITE))
+        board.set_piece(Position(2, 0), Piece(PieceType.Rook, Colour.BLACK))
+        history_moves = [Move(Position(4, 3), Position(4, 4)),
+                         Move(Position(3, 6), Position(3, 4))]
+        game = Game(board, Colour.WHITE, history_moves)
+        assert GameLogic.is_mate(game)
+
     def test_make_move(self):
         """Test of make_move() method.
         """
