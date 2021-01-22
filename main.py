@@ -6,9 +6,9 @@ from entities.position import Position
 
 
 def main():
-	start_board = Board.create_start_board()
-	game = Game.create_start_game()
-            
+    start_board = Board.create_start_board()
+    game = Game.create_start_game()
 
-if __name__ == '__main__':
-	main()
+
+if __name__ == "__main__":
+    main()
