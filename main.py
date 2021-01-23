@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
+# pylint: disable=unused-variable
+
 from engine.game import Game
 from entities.board import Board
-from entities.position import Position
 
 
 def main():

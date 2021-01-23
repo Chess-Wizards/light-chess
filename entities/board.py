@@ -3,15 +3,15 @@
 from __future__ import annotations
 
 from collections import defaultdict
-
-from entities.colour import Colour
-from entities.pieces import Piece, Pieces, PieceType
-from entities.position import Position
 from typing import List, Optional
+
+from entities.pieces import Piece, Pieces
+from entities.position import Position
 
 
 class SinglePositionNotFoundException(Exception):
     def __init__(self, actual_positions_count: int) -> None:
+        super().init(self)
         self._actual_positions_count = actual_positions_count
 
     def actual_positions_count(self) -> int:

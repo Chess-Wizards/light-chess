@@ -3,8 +3,8 @@
 import unittest
 
 from entities.board import Board
-from entities.position import Position
 from entities.pieces import Pieces
+from entities.position import Position
 
 
 class TestBoard(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestBoard(unittest.TestCase):
         assert board.get_piece(Position(1, 3)) == Pieces.BLACK_KING
 
     def test_set_piece_invalid_coordinates(self):
-        board = Board()
+        # board = Board()
         # TODO(amirov-m): Try with (-1, 3), (8, 8), (3, 100)
         # InvalidPositionException should be thrown.
 
@@ -40,7 +40,7 @@ class TestBoard(unittest.TestCase):
         assert board.get_piece(Position(7, 7)) == Pieces.BLACK_PAWN
 
     def test_get_piece_invalid_coordinates(self):
-        board = Board()
+        # board = Board()
         # TODO(amirov-m): Try with (-10, 5), (8, 6), (10, 0)
 
         # InvalidPositionException should be thrown.
@@ -60,7 +60,7 @@ class TestBoard(unittest.TestCase):
         assert board.get_piece(Position(3, 4)) is None
 
     def test_remvoe_piece_invalid_coordinates(self):
-        board = Board()
+        # board = Board()
         # TODO(amirov-m): Try with (5, -3), (6, 9), (100, 0)
 
         # InvalidPositionException should be thrown.
