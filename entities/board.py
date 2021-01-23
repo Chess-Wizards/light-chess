@@ -67,10 +67,6 @@ class Board(object):
             raise SinglePositionNotFoundException(len(piece_positions))
         return piece_positions[0]
 
-    # Return positions of a specific piece.
-    def get_positions_for_piece(self, piece: Piece) -> List[Position]:
-        return list(self._piece_to_pos[piece])
-
     # Create a chess board with a default start position.
     @staticmethod
     def create_start_board() -> Board:
