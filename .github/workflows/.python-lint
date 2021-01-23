@@ -1,0 +1,4 @@
+# Disable specific checks
+# inherit-non-class - Example of a false-positive check: Inheriting 'NamedTuple', which is not a class.
+# unsubscriptable-object - Example of a false-positive check: Value 'Optional' is unsubscriptable.
+disable=inherit-non-class,unsubscriptable-object
