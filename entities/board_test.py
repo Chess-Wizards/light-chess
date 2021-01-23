@@ -28,6 +28,7 @@ class TestBoard(unittest.TestCase):
         # board = Board()
         # TODO(amirov-m): Try with (-1, 3), (8, 8), (3, 100)
         # InvalidPositionException should be thrown.
+        pass
 
     def test_get_piece(self):
         board = Board()
@@ -44,6 +45,7 @@ class TestBoard(unittest.TestCase):
         # TODO(amirov-m): Try with (-10, 5), (8, 6), (10, 0)
 
         # InvalidPositionException should be thrown.
+        pass
 
     def test_remove_piece(self):
         board = Board()
@@ -64,6 +66,7 @@ class TestBoard(unittest.TestCase):
         # TODO(amirov-m): Try with (5, -3), (6, 9), (100, 0)
 
         # InvalidPositionException should be thrown.
+        pass
 
     def test_get_positions_for_piece(self):
         board = Board()

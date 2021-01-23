@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 
-# pylint: disable=unused-variable
-
 from engine.game import Game
 from entities.board import Board
 
 
 def main():
-    start_board = Board.create_start_board()
-    game = Game.create_start_game()
+    _ = Board.create_start_board()
+    _ = Game.create_start_game()
 
 
 if __name__ == "__main__":
