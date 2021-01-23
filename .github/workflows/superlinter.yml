@@ -18,4 +18,5 @@ jobs:
         uses: github/super-linter@v3
         env:
           DEFAULT_BRANCH: main
+          PYTHON_VERSION: "3.8.0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
