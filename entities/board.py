@@ -12,7 +12,7 @@ from entities.position import Position
 class SinglePositionNotFoundException(Exception):
     def __init__(self, actual_positions_count: int) -> None:
         message = f"Found {actual_positions_count} positions. Expected 1."
-        super(SinglePositionNotFoundException, self).init(message)
+        super().__init__(message)
         self._actual_positions_count = actual_positions_count
 
     def actual_positions_count(self) -> int:
