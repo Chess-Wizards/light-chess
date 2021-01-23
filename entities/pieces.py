@@ -20,7 +20,7 @@ class Piece(NamedTuple):
     colour: Colour
 
 
-class Pieces(object):
+class Pieces(NamedTuple):
     WHITE_KING = Piece(PieceType.KING, Colour.WHITE)
     WHITE_QUEEN = Piece(PieceType.QUEEN, Colour.WHITE)
     WHITE_BISHOP = Piece(PieceType.BISHOP, Colour.WHITE)

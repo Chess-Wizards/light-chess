@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
+import sys
+
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow
-import sys
 
 
 class LightChessApp(object):
