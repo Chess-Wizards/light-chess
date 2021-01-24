@@ -3,8 +3,7 @@
 import unittest
 from entities.board import Board
 from entities.position import Position
-from entities.pieces import Piece
-from entities.pieces import PieceType
+from entities.pieces import Pieces
 from entities.colour import Colour
 from entities.move import Move
 from engine.piece_moves import PieceMoves
@@ -22,16 +21,16 @@ class TestPieceMoves(unittest.TestCase):
 
         # Create dummy board
         self.board = Board()
-        self.board.set_piece(Position(4, 0), Piece(PieceType.King, Colour.WHITE))
-        self.board.set_piece(Position(0, 0), Piece(PieceType.Rook, Colour.WHITE))
-        self.board.set_piece(Position(0, 1), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(7, 0), Piece(PieceType.Rook, Colour.WHITE))
-        self.board.set_piece(Position(7, 1), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(4, 4), Piece(PieceType.Pawn, Colour.WHITE))
+        self.board.set_piece(Position(4, 0), Pieces.WHITE_KING)
+        self.board.set_piece(Position(0, 0), Pieces.WHITE_ROOK)
+        self.board.set_piece(Position(0, 1), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(7, 0), Pieces.WHITE_ROOK)
+        self.board.set_piece(Position(7, 1), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(4, 4), Pieces.WHITE_PAWN)
 
-        self.board.set_piece(Position(2, 7), Piece(PieceType.Rook, Colour.BLACK))
-        self.board.set_piece(Position(3, 4), Piece(PieceType.Pawn, Colour.BLACK))
-        self.board.set_piece(Position(5, 4), Piece(PieceType.Pawn, Colour.BLACK))
+        self.board.set_piece(Position(2, 7), Pieces.BLACK_ROOK)
+        self.board.set_piece(Position(3, 4), Pieces.BLACK_PAWN)
+        self.board.set_piece(Position(5, 4), Pieces.BLACK_PAWN)
         # Create game
         history_moves = [Move(Position(4, 3), Position(4, 4)),
                          Move(Position(3, 6), Position(3, 4))]

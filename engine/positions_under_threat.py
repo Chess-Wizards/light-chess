@@ -89,17 +89,17 @@ class PositionsUnderThreat(object):
 
     @staticmethod
     def positions_under_threat(pos: Position, piece: Piece, board: Board) -> List[Position]:
-        if piece.type == PieceType.King:
+        if piece.type == PieceType.KING:
             return PositionsUnderThreat.positions_under_king_threat(pos, piece.colour, board)
-        elif piece.type == PieceType.Queen:
+        elif piece.type == PieceType.QUEEN:
             return PositionsUnderThreat.positions_under_queen_threat(pos, piece.colour, board)
-        elif piece.type == PieceType.Bishop:
+        elif piece.type == PieceType.BISHOP:
             return PositionsUnderThreat.positions_under_bishop_threat(pos, piece.colour, board)
-        elif piece.type == PieceType.Knight:
+        elif piece.type == PieceType.KNIGHT:
             return PositionsUnderThreat.positions_under_knight_threat(pos, piece.colour, board)
-        elif piece.type == PieceType.Rook:
+        elif piece.type == PieceType.ROOK:
             return PositionsUnderThreat.positions_under_rook_threat(pos, piece.colour, board)
-        elif piece.type == PieceType.Pawn:
+        elif piece.type == PieceType.PAWN:
             return PositionsUnderThreat.positions_under_pawn_threat(pos, piece.colour, board)
 
     @staticmethod

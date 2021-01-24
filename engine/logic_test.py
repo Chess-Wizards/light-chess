@@ -5,6 +5,7 @@ from entities.board import Board
 from entities.position import Position
 from entities.pieces import Piece
 from entities.pieces import PieceType
+from entities.pieces import Pieces
 from entities.colour import Colour
 from entities.move import Move
 from engine.logic import GameLogic
@@ -22,16 +23,16 @@ class TestGameLogic(unittest.TestCase):
 
         # Create dummy board
         self.board = Board()
-        self.board.set_piece(Position(4, 0), Piece(PieceType.King, Colour.WHITE))
-        self.board.set_piece(Position(0, 0), Piece(PieceType.Rook, Colour.WHITE))
-        self.board.set_piece(Position(7, 0), Piece(PieceType.Rook, Colour.WHITE))
-        self.board.set_piece(Position(4, 4), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(4, 1), Piece(PieceType.Bishop, Colour.WHITE))
+        self.board.set_piece(Position(4, 0), Pieces.WHITE_KING)
+        self.board.set_piece(Position(0, 0), Pieces.WHITE_ROOK)
+        self.board.set_piece(Position(7, 0), Pieces.WHITE_ROOK)
+        self.board.set_piece(Position(4, 4), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(4, 1), Pieces.WHITE_BISHOP)
 
-        self.board.set_piece(Position(3, 4), Piece(PieceType.Pawn, Colour.BLACK))
-        self.board.set_piece(Position(5, 4), Piece(PieceType.Pawn, Colour.BLACK))
-        self.board.set_piece(Position(4, 3), Piece(PieceType.Rook, Colour.BLACK))
-        self.board.set_piece(Position(2, 2), Piece(PieceType.Pawn, Colour.BLACK))
+        self.board.set_piece(Position(3, 4), Pieces.BLACK_PAWN)
+        self.board.set_piece(Position(5, 4), Pieces.BLACK_PAWN)
+        self.board.set_piece(Position(4, 3), Pieces.BLACK_ROOK)
+        self.board.set_piece(Position(2, 2), Pieces.BLACK_PAWN)
         # Create game
         self.game = Game(self.board, Colour.WHITE, [Move(Position(3, 6), Position(3, 4))])
 
@@ -48,10 +49,10 @@ class TestGameLogic(unittest.TestCase):
         assert not GameLogic.is_mate(self.game)
         # Create dummy board
         board = Board()
-        board.set_piece(Position(0, 1), Piece(PieceType.Pawn, Colour.WHITE))
-        board.set_piece(Position(1, 1), Piece(PieceType.Pawn, Colour.WHITE))
-        board.set_piece(Position(0, 0), Piece(PieceType.King, Colour.WHITE))
-        board.set_piece(Position(2, 0), Piece(PieceType.Rook, Colour.BLACK))
+        board.set_piece(Position(0, 1), Piece(PieceType.PAWN, Colour.WHITE))
+        board.set_piece(Position(1, 1), Piece(PieceType.PAWN, Colour.WHITE))
+        board.set_piece(Position(0, 0), Piece(PieceType.KING, Colour.WHITE))
+        board.set_piece(Position(2, 0), Piece(PieceType.ROOK, Colour.BLACK))
         history_moves = [Move(Position(4, 3), Position(4, 4)),
                          Move(Position(3, 6), Position(3, 4))]
         game = Game(board, Colour.WHITE, history_moves)
@@ -66,16 +67,16 @@ class TestGameLogic(unittest.TestCase):
         assert game.turn != self.game.turn
         assert game.history_moves[-1] == Move(Position(4, 0), Position(6, 0))
         assert game.board.get_piece(Position(4, 0)) is None
-        assert game.board.get_piece(Position(5, 0)).type == PieceType.Rook
-        assert game.board.get_piece(Position(6, 0)).type == PieceType.King
+        assert game.board.get_piece(Position(5, 0)).type == PieceType.ROOK
+        assert game.board.get_piece(Position(6, 0)).type == PieceType.KING
         assert game.board.get_piece(Position(7, 0)) is None
         # Check long castling
         game = GameLogic.make_move(Move(Position(4, 0), Position(2, 0)), self.game)
         assert game.turn != self.game.turn
         assert game.history_moves[-1] == Move(Position(4, 0), Position(2, 0))
         assert game.board.get_piece(Position(4, 0)) is None
-        assert game.board.get_piece(Position(3, 0)).type == PieceType.Rook
-        assert game.board.get_piece(Position(2, 0)).type == PieceType.King
+        assert game.board.get_piece(Position(3, 0)).type == PieceType.ROOK
+        assert game.board.get_piece(Position(2, 0)).type == PieceType.KING
         assert game.board.get_piece(Position(1, 0)) is None
         assert game.board.get_piece(Position(0, 0)) is None
         # Check en_passant
@@ -83,7 +84,7 @@ class TestGameLogic(unittest.TestCase):
         assert game.turn != self.game.turn
         assert game.history_moves[-1] == Move(Position(4, 4), Position(3, 5))
         assert game.board.get_piece(Position(4, 4)) is None
-        assert game.board.get_piece(Position(3, 5)).type == PieceType.Pawn
+        assert game.board.get_piece(Position(3, 5)).type == PieceType.PAWN
         assert game.board.get_piece(Position(3, 5)).colour == Colour.WHITE
         assert game.board.get_piece(Position(3, 4)) is None
 

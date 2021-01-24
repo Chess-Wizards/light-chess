@@ -5,7 +5,6 @@ from engine.positions_under_threat import PositionsUnderThreat
 from entities.position import Position
 from entities.pieces import PieceType
 from entities.colour import Colour
-from entities.board import Board
 from entities.move import Move
 from typing import List
 from engine.game import Game
@@ -26,17 +25,17 @@ class PieceMoves(object):
         # Retrieve piece.
         piece = game.board.get_piece(position)
         # Return list of moves using the correct piece method.
-        if piece_type.King is piece.type:
+        if piece_type.KING is piece.type:
             return PieceMoves.king_moves(position, game)
-        elif piece_type.Queen is piece.type:
+        elif piece_type.QUEEN is piece.type:
             return PieceMoves.queen_moves(position, game)
-        elif piece_type.Bishop is piece.type:
+        elif piece_type.BISHOP is piece.type:
             return PieceMoves.bishop_moves(position, game)
-        elif piece_type.Knight is piece.type:
+        elif piece_type.KNIGHT is piece.type:
             return PieceMoves.knight_moves(position, game)
-        elif piece_type.Rook is piece.type:
+        elif piece_type.ROOK is piece.type:
             return PieceMoves.rook_moves(position, game)
-        elif piece_type.Pawn is piece.type:
+        elif piece_type.PAWN is piece.type:
             return PieceMoves.pawn_moves(position, game)
 
     @staticmethod
@@ -74,13 +73,13 @@ class PieceMoves(object):
         # Retrieve start piece.
         piece_start = game.board.get_piece(pos)
         # Check if piece_start not empty.
-        if piece_start is not None and piece_start.type == PieceType.Pawn:
+        if piece_start is not None and piece_start.type == PieceType.PAWN:
             # 2 directions.
             shifts = [(-1, 0), (1, 0)]
             for shift_x, shift_y in shifts:
                 # Retrieve not start piece.
                 piece = game.board.get_piece(Position(pos.x + shift_x, pos.y + shift_y))
-                if piece is not None and piece.type == PieceType.Pawn:
+                if piece is not None and piece.type == PieceType.PAWN:
                     # Retrieve last_move.
                     last_move = game.history_moves[-1]
                     # Check if pawn makes the last move and if it jumps over 2 positions.
@@ -109,7 +108,7 @@ class PieceMoves(object):
         pos_under_threat = PositionsUnderThreat.all_positions_under_threat_for_side(game.turn, game.board)
         # Check if piece piece at start position King with no threat/check.
         if piece_start is not None and \
-                piece_start.type == PieceType.King and \
+                piece_start.type == PieceType.KING and \
                 not PieceMoves.is_piece_touched(pos, game) and \
                 pos not in pos_under_threat:
             # Short castling. Bunch of conditions.
@@ -118,7 +117,7 @@ class PieceMoves(object):
                     game.board.is_position_empty(Position(pos.x + 2, pos.y)) and \
                     Position(pos.x + 2, pos.y) not in pos_under_threat and \
                     not game.board.is_position_empty(Position(pos.x + 3, pos.y)) and \
-                    game.board.get_piece(Position(pos.x + 3, pos.y)).type == PieceType.Rook and \
+                    game.board.get_piece(Position(pos.x + 3, pos.y)).type == PieceType.ROOK and \
                     not PieceMoves.is_piece_touched(Position(pos.x + 3, pos.y), game):
                 move = Move(pos, Position(pos.x + 2, pos.y))
                 castling.append(move)
@@ -129,7 +128,7 @@ class PieceMoves(object):
                     Position(pos.x - 2, pos.y) not in pos_under_threat and \
                     game.board.is_position_empty(Position(pos.x - 3, pos.y)) and \
                     not game.board.is_position_empty(Position(pos.x - 4, pos.y)) and \
-                    game.board.get_piece(Position(pos.x - 4, pos.y)).type == PieceType.Rook and \
+                    game.board.get_piece(Position(pos.x - 4, pos.y)).type == PieceType.ROOK and \
                     not PieceMoves.is_piece_touched(Position(pos.x - 4, pos.y), game):
                 move = Move(pos, Position(pos.x - 2, pos.y))
                 castling.append(move)

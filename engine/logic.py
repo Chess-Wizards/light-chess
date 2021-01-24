@@ -38,7 +38,7 @@ class GameLogic(object):
         """
 
         # Retrieve king position
-        king_pos = board.get_positions_for_piece(Piece(PieceType.King, colour))[0]
+        king_pos = board.get_positions_for_piece(Piece(PieceType.KING, colour))[0]
         return king_pos in PositionsUnderThreat.all_positions_under_threat_for_side(colour, board)
 
     @staticmethod
@@ -59,7 +59,7 @@ class GameLogic(object):
             # Check if castling occurs
             if move in PieceMoves.castling_moves(move.start, game):
                 game.board.set_piece(Position(int((move.finish.x+move.start.x)/2), move.start.y),
-                                     Piece(PieceType.Rook, game.turn))
+                                     Piece(PieceType.ROOK, game.turn))
                 # Short castling
                 if move.finish.x-move.start.x > 0:
                     game.board.remove_piece(Position(7, move.start.y))
@@ -88,6 +88,9 @@ class GameLogic(object):
             return False
         # Check if colours match.
         if game.turn != piece.colour:
+            return False
+        # Check if x and y vary between 0 (included) and 7 (included)
+        if not Board.is_position_on_board(move.finish, game.board):
             return False
         # Make move
         further_game = GameLogic.make_move(move, game)

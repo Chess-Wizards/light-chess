@@ -4,8 +4,7 @@ import unittest
 from engine.positions_under_threat import PositionsUnderThreat
 from entities.board import Board
 from entities.position import Position
-from entities.pieces import Piece
-from entities.pieces import PieceType
+from entities.pieces import Pieces
 from entities.colour import Colour
 
 
@@ -20,19 +19,19 @@ class TestPositionsUnderThreat(unittest.TestCase):
 
         # Create dummy board
         self.board = Board()
-        self.board.set_piece(Position(4, 3), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(3, 4), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(5, 4), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(0, 6), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(7, 7), Piece(PieceType.Pawn, Colour.WHITE))
-        self.board.set_piece(Position(4, 4), Piece(PieceType.King, Colour.WHITE))
-        self.board.set_piece(Position(6, 6), Piece(PieceType.Bishop, Colour.WHITE))
-        self.board.set_piece(Position(3, 7), Piece(PieceType.Rook, Colour.WHITE))
-        self.board.set_piece(Position(5, 5), Piece(PieceType.Queen, Colour.WHITE))
-        self.board.set_piece(Position(7, 6), Piece(PieceType.Knight, Colour.WHITE))
+        self.board.set_piece(Position(4, 3), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(3, 4), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(5, 4), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(0, 6), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(7, 7), Pieces.WHITE_PAWN)
+        self.board.set_piece(Position(4, 4), Pieces.WHITE_KING)
+        self.board.set_piece(Position(6, 6), Pieces.WHITE_BISHOP)
+        self.board.set_piece(Position(3, 7), Pieces.WHITE_ROOK)
+        self.board.set_piece(Position(5, 5), Pieces.WHITE_QUEEN)
+        self.board.set_piece(Position(7, 6), Pieces.WHITE_KNIGHT)
 
-        self.board.set_piece(Position(4, 5), Piece(PieceType.Pawn, Colour.BLACK))
-        self.board.set_piece(Position(5, 7), Piece(PieceType.Rook, Colour.BLACK))
+        self.board.set_piece(Position(4, 5), Pieces.BLACK_PAWN)
+        self.board.set_piece(Position(5, 7), Pieces.BLACK_ROOK)
 
     def test_positions_under_king_threat(self):
         """Test of positions_under_king_threat() method.
@@ -109,7 +108,7 @@ class TestPositionsUnderThreat(unittest.TestCase):
         """Test of positions_under_threat() method.
         """
 
-        assert sorted(PositionsUnderThreat.positions_under_threat(Position(4, 4), Piece(PieceType.King, Colour.WHITE),
+        assert sorted(PositionsUnderThreat.positions_under_threat(Position(4, 4), Pieces.WHITE_KING,
                                                                   self.board)) == \
                                                                                                        [Position(3, 3),
                                                                                                         Position(3, 5),
