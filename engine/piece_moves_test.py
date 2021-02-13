@@ -79,7 +79,6 @@ class TestPieceMoves(unittest.TestCase):
 
     def test_all_moves(self):
         """Test of all_moves() method."""
-
         assert sorted(PieceMoves.all_moves(self.game)) == [
             Move(Position(0, 0), Position(1, 0)),
             Move(Position(0, 0), Position(2, 0)),

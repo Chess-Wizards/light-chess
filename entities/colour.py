@@ -13,5 +13,4 @@ class Colour(Enum):
     def change_colour(colour: Colour):
         if colour == colour.WHITE:
             return colour.BLACK
-        else:
-            return colour.WHITE
+        return colour.WHITE

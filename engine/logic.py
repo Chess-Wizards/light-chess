@@ -1,21 +1,23 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
+
+import copy
+
 from engine.game import Game
+from engine.positions_under_threat import PositionsUnderThreat
+from engine.piece_moves import PieceMoves
 from entities.move import Move
-from entities.pieces import PieceType
-from entities.pieces import Piece
+from entities.pieces import PieceType, Piece
 from entities.colour import Colour
 from entities.board import Board
 from entities.position import Position
-from engine.positions_under_threat import PositionsUnderThreat
-from engine.piece_moves import PieceMoves
-import copy
 
 
-class GameLogic(object):
-    """Class used to handle game logic. This class is technically utilization of PieceMoves with additional checking of
-    check after each move. 3 main method: is_mate(), is_check() and make_move() are necessary to handle chess game.
+class GameLogic():
+    """Class used to handle game logic. This class is technically utilization of PieceMoves with
+    additional checking of check after each move. 3 main method: is_mate(), is_check() and
+    make_move() are necessary to handle chess game.
     """
 
     @staticmethod
@@ -98,9 +100,6 @@ class GameLogic(object):
         # Make move
         further_game = GameLogic.make_move(move, game)
         # Check if check occurs after making move
-        if GameLogic.is_check(
+        return not GameLogic.is_check(
             further_game.board, Colour.change_colour(further_game.turn)
-        ):
-            return False
-        else:
-            return True
+        )

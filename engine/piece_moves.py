@@ -1,16 +1,18 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
+
+from typing import List
+
 from engine.positions_under_threat import PositionsUnderThreat
+from engine.game import Game
 from entities.position import Position
 from entities.pieces import PieceType
 from entities.colour import Colour
 from entities.move import Move
-from typing import List
-from engine.game import Game
 
 
-class PieceMoves(object):
+class PieceMoves:
     """Class used to make move. This class is technically PositionsUnderThreat with taking into
     account en_passant and castling.
 
@@ -23,19 +25,18 @@ class PieceMoves(object):
 
         # Retrieve piece.
         piece = game.board.get_piece(position)
-        # Return list of moves using the correct piece method.
-        if piece_type.KING is piece.type:
-            return PieceMoves.king_moves(position, game)
-        elif piece_type.QUEEN is piece.type:
-            return PieceMoves.queen_moves(position, game)
-        elif piece_type.BISHOP is piece.type:
-            return PieceMoves.bishop_moves(position, game)
-        elif piece_type.KNIGHT is piece.type:
-            return PieceMoves.knight_moves(position, game)
-        elif piece_type.ROOK is piece.type:
-            return PieceMoves.rook_moves(position, game)
-        elif piece_type.PAWN is piece.type:
-            return PieceMoves.pawn_moves(position, game)
+
+        piece_types = {
+            piece_type.KING: PieceMoves.king_moves,
+            piece_type.QUEEN: PieceMoves.queen_moves,
+            piece_type.BISHOP: PieceMoves.bishop_moves,
+            piece_type.KNIGHT: PieceMoves.knight_moves,
+            piece_type.ROOK: PieceMoves.rook_moves,
+            piece_type.PAWN: PieceMoves.pawn_moves,
+        }
+
+        assert piece.type in piece_types.keys()
+        return piece_types[piece.type](position, game)
 
     @staticmethod
     def all_moves(game: Game) -> List[Move]:
@@ -48,14 +49,11 @@ class PieceMoves(object):
 
     @staticmethod
     def is_piece_touched(pos: Position, game: Game):
-        """Check if piece is being touched. Check if there are at least one occurrence of move/touch in history."""
+        """Check if piece is being touched. Check if there are at least one occurrence of move/touch
+        in history."""
 
-        # Iterate over history.
-        for move in game.history_moves:
-            # Check if pos is being touched at least once.
-            if pos == move.start or pos == move.finish:
-                return True
-        return False
+        # Check if positions are being touched at least once.
+        return any(pos in [move.start, move.finish] for move in game.history_moves)
 
     @staticmethod
     def en_passant_moves(pos: Position, game: Game) -> List[Move]:
@@ -114,29 +112,47 @@ class PieceMoves(object):
             and not PieceMoves.is_piece_touched(pos, game)
             and pos not in pos_under_threat
         ):
-            # Short castling. Bunch of conditions.
-            if (
+            # Short castling. _1r_ means 1 pos to the right from white side.
+            is_1r_pos_avail = (
                 game.board.is_position_empty(Position(pos.x + 1, pos.y))
                 and Position(pos.x + 1, pos.y) not in pos_under_threat
-                and game.board.is_position_empty(Position(pos.x + 2, pos.y))
+            )
+            is_2r_pos_avail = (
+                game.board.is_position_empty(Position(pos.x + 2, pos.y))
                 and Position(pos.x + 2, pos.y) not in pos_under_threat
-                and not game.board.is_position_empty(Position(pos.x + 3, pos.y))
+            )
+            is_3r_pos_rook = (
+                not game.board.is_position_empty(Position(pos.x + 3, pos.y))
                 and game.board.get_piece(Position(pos.x + 3, pos.y)).type
                 == PieceType.ROOK
+            )
+            if (
+                is_1r_pos_avail
+                and is_2r_pos_avail
+                and is_3r_pos_rook
                 and not PieceMoves.is_piece_touched(Position(pos.x + 3, pos.y), game)
             ):
                 move = Move(pos, Position(pos.x + 2, pos.y))
                 castling.append(move)
-            # Long castling. Bunch of conditions.
-            if (
+            # Long castling. _1l_ means 1 pos to the left from white side.
+            is_1l_pos_avail = (
                 game.board.is_position_empty(Position(pos.x - 1, pos.y))
                 and Position(pos.x - 1, pos.y) not in pos_under_threat
-                and game.board.is_position_empty(Position(pos.x - 2, pos.y))
+            )
+            is_2l_pos_avail = (
+                game.board.is_position_empty(Position(pos.x - 2, pos.y))
                 and Position(pos.x - 2, pos.y) not in pos_under_threat
-                and game.board.is_position_empty(Position(pos.x - 3, pos.y))
-                and not game.board.is_position_empty(Position(pos.x - 4, pos.y))
+            )
+            is_4l_pos_rook = (
+                not game.board.is_position_empty(Position(pos.x - 4, pos.y))
                 and game.board.get_piece(Position(pos.x - 4, pos.y)).type
                 == PieceType.ROOK
+            )
+            if (
+                is_1l_pos_avail
+                and is_2l_pos_avail
+                and is_4l_pos_rook
+                and game.board.is_position_empty(Position(pos.x - 3, pos.y))
                 and not PieceMoves.is_piece_touched(Position(pos.x - 4, pos.y), game)
             ):
                 move = Move(pos, Position(pos.x - 2, pos.y))
