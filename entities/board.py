@@ -5,9 +5,9 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import List, Optional
 
+from entities.colour import Colour
 from entities.pieces import Piece, Pieces
 from entities.position import Position
-from entities.colour import Colour
 
 
 class SinglePositionNotFoundException(Exception):

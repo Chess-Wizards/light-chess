@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple, List
+from typing import List, NamedTuple
 
 from entities.board import Board
 from entities.colour import Colour

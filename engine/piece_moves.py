@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typing import List
 
-from engine.positions_under_threat import PositionsUnderThreat
 from engine.game import Game
-from entities.position import Position
-from entities.pieces import PieceType
+from engine.positions_under_threat import PositionsUnderThreat
 from entities.colour import Colour
 from entities.move import Move
+from entities.pieces import PieceType
+from entities.position import Position
 
 
 class PieceMoves:

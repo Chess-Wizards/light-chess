@@ -5,11 +5,10 @@ from __future__ import annotations
 import itertools
 from typing import List
 
-from entities.position import Position
 from entities.board import Board
-from entities.pieces import Piece
-from entities.pieces import PieceType
 from entities.colour import Colour
+from entities.pieces import Piece, PieceType
+from entities.position import Position
 
 
 class PositionsUnderThreat:

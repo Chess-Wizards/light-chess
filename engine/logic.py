@@ -5,12 +5,12 @@ from __future__ import annotations
 import copy
 
 from engine.game import Game
-from engine.positions_under_threat import PositionsUnderThreat
 from engine.piece_moves import PieceMoves
-from entities.move import Move
-from entities.pieces import PieceType, Piece
-from entities.colour import Colour
+from engine.positions_under_threat import PositionsUnderThreat
 from entities.board import Board
+from entities.colour import Colour
+from entities.move import Move
+from entities.pieces import Piece, PieceType
 from entities.position import Position
 
 

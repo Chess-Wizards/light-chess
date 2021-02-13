@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 import unittest
+
+from engine.game import Game
+from engine.piece_moves import PieceMoves
 from entities.board import Board
-from entities.position import Position
-from entities.pieces import Pieces
 from entities.colour import Colour
 from entities.move import Move
-from engine.piece_moves import PieceMoves
-from engine.game import Game
+from entities.pieces import Pieces
+from entities.position import Position
 
 
 class TestPieceMoves(unittest.TestCase):

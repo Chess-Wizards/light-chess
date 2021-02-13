@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 import unittest
+
 from engine.positions_under_threat import PositionsUnderThreat
 from entities.board import Board
-from entities.position import Position
-from entities.pieces import Pieces
 from entities.colour import Colour
+from entities.pieces import Pieces
+from entities.position import Position
 
 
 class TestPositionsUnderThreat(unittest.TestCase):

@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 
 import unittest
+
+from engine.game import Game
+from engine.logic import GameLogic
 from entities.board import Board
-from entities.position import Position
-from entities.pieces import Piece
-from entities.pieces import PieceType
-from entities.pieces import Pieces
 from entities.colour import Colour
 from entities.move import Move
-from engine.logic import GameLogic
-from engine.game import Game
+from entities.pieces import Piece, Pieces, PieceType
+from entities.position import Position
 
 
 class TestGameLogic(unittest.TestCase):
