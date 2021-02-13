@@ -78,14 +78,22 @@ class Board(object):
     def get_positions_for_side(self, colour: Colour):
         side_positions = []
         for _, positions in self._piece_to_pos.items():
-            side_positions.extend([pos for pos in positions
-                                   if self.get_piece(pos) is not None and self.get_piece(pos).colour == colour])
+            side_positions.extend(
+                [
+                    pos
+                    for pos in positions
+                    if self.get_piece(pos) is not None
+                    and self.get_piece(pos).colour == colour
+                ]
+            )
         return side_positions
 
     # Check if position locates inside board
     @staticmethod
     def is_position_on_board(pos: Position, board: Board) -> bool:
-        return board.min_x <= pos.x <= board.max_x and board.min_y <= pos.y <= board.max_y
+        return (
+            board.min_x <= pos.x <= board.max_x and board.min_y <= pos.y <= board.max_y
+        )
 
     # Create a chess board with a default start position.
     @staticmethod

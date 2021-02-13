@@ -75,7 +75,12 @@ class TestBoard(unittest.TestCase):
         board.set_piece(Position(0, 7), Pieces.WHITE_KNIGHT)
         board.set_piece(Position(7, 7), Pieces.WHITE_KNIGHT)
         piece_positions = board.get_positions_for_piece(Pieces.WHITE_KNIGHT)
-        assert set(piece_positions) == {Position(1, 0), Position(4, 0), Position(0, 7), Position(7, 7)}
+        assert set(piece_positions) == {
+            Position(1, 0),
+            Position(4, 0),
+            Position(0, 7),
+            Position(7, 7),
+        }
 
     def test_get_positions_for_piece_after_rewrites(self):
         pass

@@ -11,16 +11,15 @@ from engine.game import Game
 
 
 class PieceMoves(object):
-    """Class used to make move. This class is technically PositionsUnderThreat with taking into account
-    en_passant and castling.
+    """Class used to make move. This class is technically PositionsUnderThreat with taking into
+    account en_passant and castling.
 
     ATTENTION: not taking into account check after moves, doing it ONLY for castling!!!
     """
 
     @staticmethod
     def moves(piece_type: PieceType, position: Position, game: Game) -> List[Move]:
-        """Return list of possible moves by piece from <game.turn> side.
-        """
+        """Return list of possible moves by piece from <game.turn> side."""
 
         # Retrieve piece.
         piece = game.board.get_piece(position)
@@ -40,8 +39,7 @@ class PieceMoves(object):
 
     @staticmethod
     def all_moves(game: Game) -> List[Move]:
-        """Return all moves of <game.turn> turn.
-        """
+        """Return all moves of <game.turn> turn."""
 
         moves = []
         for pos in game.board.get_positions_for_side(game.turn):
@@ -50,8 +48,7 @@ class PieceMoves(object):
 
     @staticmethod
     def is_piece_touched(pos: Position, game: Game):
-        """Check if piece is being touched. Check if there are at least one occurrence of move/touch in history.
-        """
+        """Check if piece is being touched. Check if there are at least one occurrence of move/touch in history."""
 
         # Iterate over history.
         for move in game.history_moves:
@@ -83,8 +80,10 @@ class PieceMoves(object):
                     # Retrieve last_move.
                     last_move = game.history_moves[-1]
                     # Check if pawn makes the last move and if it jumps over 2 positions.
-                    if Position(pos.x + shift_x, pos.y + shift_y) == last_move.finish and \
-                            abs(last_move.start.y - last_move.finish.y) == 2:
+                    if (
+                        Position(pos.x + shift_x, pos.y + shift_y) == last_move.finish
+                        and abs(last_move.start.y - last_move.finish.y) == 2
+                    ):
                         # Add move in dependence of colour.
                         if game.turn == Colour.WHITE:
                             move = Move(pos, Position(pos.x + shift_x, pos.y + 1))
@@ -97,7 +96,7 @@ class PieceMoves(object):
     @staticmethod
     def castling_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> castling moves.
-           Check is taking into account!!!
+        Check is taking into account!!!
         """
 
         # Init catling list.
@@ -105,31 +104,41 @@ class PieceMoves(object):
         # Retrieve piece at start position.
         piece_start = game.board.get_piece(pos)
         # Retrieve positions under threat (important info for castling).
-        pos_under_threat = PositionsUnderThreat.all_positions_under_threat_for_side(game.turn, game.board)
+        pos_under_threat = PositionsUnderThreat.all_positions_under_threat_for_side(
+            game.turn, game.board
+        )
         # Check if piece piece at start position King with no threat/check.
-        if piece_start is not None and \
-                piece_start.type == PieceType.KING and \
-                not PieceMoves.is_piece_touched(pos, game) and \
-                pos not in pos_under_threat:
+        if (
+            piece_start is not None
+            and piece_start.type == PieceType.KING
+            and not PieceMoves.is_piece_touched(pos, game)
+            and pos not in pos_under_threat
+        ):
             # Short castling. Bunch of conditions.
-            if game.board.is_position_empty(Position(pos.x + 1, pos.y)) and \
-                    Position(pos.x + 1, pos.y) not in pos_under_threat and \
-                    game.board.is_position_empty(Position(pos.x + 2, pos.y)) and \
-                    Position(pos.x + 2, pos.y) not in pos_under_threat and \
-                    not game.board.is_position_empty(Position(pos.x + 3, pos.y)) and \
-                    game.board.get_piece(Position(pos.x + 3, pos.y)).type == PieceType.ROOK and \
-                    not PieceMoves.is_piece_touched(Position(pos.x + 3, pos.y), game):
+            if (
+                game.board.is_position_empty(Position(pos.x + 1, pos.y))
+                and Position(pos.x + 1, pos.y) not in pos_under_threat
+                and game.board.is_position_empty(Position(pos.x + 2, pos.y))
+                and Position(pos.x + 2, pos.y) not in pos_under_threat
+                and not game.board.is_position_empty(Position(pos.x + 3, pos.y))
+                and game.board.get_piece(Position(pos.x + 3, pos.y)).type
+                == PieceType.ROOK
+                and not PieceMoves.is_piece_touched(Position(pos.x + 3, pos.y), game)
+            ):
                 move = Move(pos, Position(pos.x + 2, pos.y))
                 castling.append(move)
             # Long castling. Bunch of conditions.
-            if game.board.is_position_empty(Position(pos.x - 1, pos.y)) and \
-                    Position(pos.x - 1, pos.y) not in pos_under_threat and \
-                    game.board.is_position_empty(Position(pos.x - 2, pos.y)) and \
-                    Position(pos.x - 2, pos.y) not in pos_under_threat and \
-                    game.board.is_position_empty(Position(pos.x - 3, pos.y)) and \
-                    not game.board.is_position_empty(Position(pos.x - 4, pos.y)) and \
-                    game.board.get_piece(Position(pos.x - 4, pos.y)).type == PieceType.ROOK and \
-                    not PieceMoves.is_piece_touched(Position(pos.x - 4, pos.y), game):
+            if (
+                game.board.is_position_empty(Position(pos.x - 1, pos.y))
+                and Position(pos.x - 1, pos.y) not in pos_under_threat
+                and game.board.is_position_empty(Position(pos.x - 2, pos.y))
+                and Position(pos.x - 2, pos.y) not in pos_under_threat
+                and game.board.is_position_empty(Position(pos.x - 3, pos.y))
+                and not game.board.is_position_empty(Position(pos.x - 4, pos.y))
+                and game.board.get_piece(Position(pos.x - 4, pos.y)).type
+                == PieceType.ROOK
+                and not PieceMoves.is_piece_touched(Position(pos.x - 4, pos.y), game)
+            ):
                 move = Move(pos, Position(pos.x - 2, pos.y))
                 castling.append(move)
         return castling
@@ -137,16 +146,19 @@ class PieceMoves(object):
     @staticmethod
     def pawn_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> pawn moves.
-           pawn moves = positions_under_threat + move forward + en_passant
+        pawn moves = positions_under_threat + move forward + en_passant
         """
 
         # Init move list
         moves = []
         # Check if position under threat occupied with opponent pieces or en_passant possible.
-        for pos_under_threat in PositionsUnderThreat.positions_under_pawn_threat(pos, game.turn, game.board):
+        for pos_under_threat in PositionsUnderThreat.positions_under_pawn_threat(
+            pos, game.turn, game.board
+        ):
             move = Move(pos, pos_under_threat)
-            if PositionsUnderThreat.is_position_enemy(pos_under_threat, game.turn, game.board) or \
-                    move in PieceMoves.en_passant_moves(pos, game):
+            if PositionsUnderThreat.is_position_enemy(
+                pos_under_threat, game.turn, game.board
+            ) or move in PieceMoves.en_passant_moves(pos, game):
                 moves.append(move)
 
         # Check forward move.
@@ -158,8 +170,11 @@ class PieceMoves(object):
         # Check double move forward
         shift_forward_y = 2 if game.turn == Colour.WHITE else -2
         pos_d_forward = Position(pos.x, pos.y + shift_forward_y)
-        if game.board.is_position_empty(pos_forward) and game.board.is_position_empty(pos_d_forward) and \
-           not PieceMoves.is_piece_touched(pos, game):
+        if (
+            game.board.is_position_empty(pos_forward)
+            and game.board.is_position_empty(pos_d_forward)
+            and not PieceMoves.is_piece_touched(pos, game)
+        ):
             move = Move(pos, pos_d_forward)
             moves.append(move)
         return moves
@@ -167,50 +182,69 @@ class PieceMoves(object):
     @staticmethod
     def rook_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> rook moves.
-           rook moves = positions_under_threat
+        rook moves = positions_under_threat
         """
 
-        moves = [Move(pos, pos_threat)
-                 for pos_threat in PositionsUnderThreat.positions_under_rook_threat(pos, game.turn, game.board)]
+        moves = [
+            Move(pos, pos_threat)
+            for pos_threat in PositionsUnderThreat.positions_under_rook_threat(
+                pos, game.turn, game.board
+            )
+        ]
         return moves
 
     @staticmethod
     def knight_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> knight moves.
-           knight moves = positions_under_threat
+        knight moves = positions_under_threat
         """
 
-        moves = [Move(pos, pos_threat)
-                 for pos_threat in PositionsUnderThreat.positions_under_knight_threat(pos, game.turn, game.board)]
+        moves = [
+            Move(pos, pos_threat)
+            for pos_threat in PositionsUnderThreat.positions_under_knight_threat(
+                pos, game.turn, game.board
+            )
+        ]
         return moves
 
     @staticmethod
     def bishop_moves(pos: Position, game: Game) -> List[Position]:
         """Return list of <game.turn> bishop moves.
-           bishop moves = positions_under_threat
+        bishop moves = positions_under_threat
         """
 
-        moves = [Move(pos, pos_threat)
-                 for pos_threat in PositionsUnderThreat.positions_under_bishop_threat(pos, game.turn, game.board)]
+        moves = [
+            Move(pos, pos_threat)
+            for pos_threat in PositionsUnderThreat.positions_under_bishop_threat(
+                pos, game.turn, game.board
+            )
+        ]
         return moves
 
     @staticmethod
     def queen_moves(pos: Position, game: Game) -> List[Position]:
         """Return list of <game.turn> queen moves.
-           queen moves = positions_under_threat
+        queen moves = positions_under_threat
         """
 
-        moves = [Move(pos, pos_threat)
-                 for pos_threat in PositionsUnderThreat.positions_under_queen_threat(pos, game.turn, game.board)]
+        moves = [
+            Move(pos, pos_threat)
+            for pos_threat in PositionsUnderThreat.positions_under_queen_threat(
+                pos, game.turn, game.board
+            )
+        ]
         return moves
 
     @staticmethod
     def king_moves(pos: Position, game: Game) -> List[Position]:
         """Return list of <game.turn> king moves.
-           king moves = positions_under_threat + castling
+        king moves = positions_under_threat + castling
         """
 
-        moves = [Move(pos, pos_threat)
-                 for pos_threat in PositionsUnderThreat.positions_under_king_threat(pos, game.turn, game.board)]
+        moves = [
+            Move(pos, pos_threat)
+            for pos_threat in PositionsUnderThreat.positions_under_king_threat(
+                pos, game.turn, game.board
+            )
+        ]
         return [*PieceMoves.castling_moves(pos, game), *moves]
-

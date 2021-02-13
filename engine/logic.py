@@ -20,8 +20,8 @@ class GameLogic(object):
 
     @staticmethod
     def is_mate(game: Game):
-        """ Check if <game.turn> side got mate.
-            mate = check without possibility to defend own king
+        """Check if <game.turn> side got mate.
+        mate = check without possibility to defend own king
         """
 
         if GameLogic.is_check(game.board, game.turn):
@@ -33,17 +33,19 @@ class GameLogic(object):
 
     @staticmethod
     def is_check(board: Board, colour: Colour) -> bool:
-        """ Check if <colour> side got check.
-            check = at least one opponent piece aims at own king
+        """Check if <colour> side got check.
+        check = at least one opponent piece aims at own king
         """
 
         # Retrieve king position
         king_pos = board.get_positions_for_piece(Piece(PieceType.KING, colour))[0]
-        return king_pos in PositionsUnderThreat.all_positions_under_threat_for_side(colour, board)
+        return king_pos in PositionsUnderThreat.all_positions_under_threat_for_side(
+            colour, board
+        )
 
     @staticmethod
     def make_move(move: Move, game: Game) -> Game:
-        """ Make move.
+        """Make move.
 
         Attention: no checking of check after move. Technically move can be not valid!!!
         """
@@ -58,10 +60,12 @@ class GameLogic(object):
         if move in possible_moves:
             # Check if castling occurs
             if move in PieceMoves.castling_moves(move.start, game):
-                game.board.set_piece(Position(int((move.finish.x+move.start.x)/2), move.start.y),
-                                     Piece(PieceType.ROOK, game.turn))
+                game.board.set_piece(
+                    Position(int((move.finish.x + move.start.x) / 2), move.start.y),
+                    Piece(PieceType.ROOK, game.turn),
+                )
                 # Short castling
-                if move.finish.x-move.start.x > 0:
+                if move.finish.x - move.start.x > 0:
                     game.board.remove_piece(Position(7, move.start.y))
                 # Long castling
                 else:
@@ -78,8 +82,7 @@ class GameLogic(object):
 
     @staticmethod
     def is_move_possible(game: Game, move: Move) -> bool:
-        """ Check if move possible.
-        """
+        """Check if move possible."""
 
         # Get piece at start position
         piece = game.board.get_piece(move.start)
@@ -95,7 +98,9 @@ class GameLogic(object):
         # Make move
         further_game = GameLogic.make_move(move, game)
         # Check if check occurs after making move
-        if GameLogic.is_check(further_game.board, Colour.change_colour(further_game.turn)):
+        if GameLogic.is_check(
+            further_game.board, Colour.change_colour(further_game.turn)
+        ):
             return False
         else:
             return True
