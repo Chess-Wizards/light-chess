@@ -14,7 +14,7 @@ from entities.board import Board
 from entities.position import Position
 
 
-class GameLogic():
+class GameLogic:
     """Class used to handle game logic. This class is technically utilization of PieceMoves with
     additional checking of check after each move. 3 main method: is_mate(), is_check() and
     make_move() are necessary to handle chess game.
