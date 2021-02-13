@@ -31,14 +31,7 @@ class TestBoard(unittest.TestCase):
         pass
 
     def test_get_piece(self):
-        board = Board()
-
-        board.set_piece(Position(4, 4), Pieces.WHITE_ROOK)
-        # TODO(amirov-m): What is the right order for actual and expected?
-        assert board.get_piece(Position(4, 4)) == Pieces.WHITE_ROOK
-
-        board.set_piece(Position(7, 7), Pieces.BLACK_PAWN)
-        assert board.get_piece(Position(7, 7)) == Pieces.BLACK_PAWN
+        self.test_set_piece()
 
     def test_get_piece_invalid_coordinates(self):
         # board = Board()
