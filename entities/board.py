@@ -20,7 +20,7 @@ class SinglePositionNotFoundException(Exception):
         return self._actual_positions_count
 
 
-class Board(object):
+class Board:
     """
     Represents a chess board.
     """
@@ -34,10 +34,10 @@ class Board(object):
         # Used for getting a piece standing on a position.
         self._pos_to_piece = dict()
         # Stores board characteristic
-        self.min_y, self.max_y = 0, 7
-        self.min_x, self.max_x = 0, 7
-        self.height = self.max_y - self.min_y + 1
-        self.width = self.max_x - self.min_x + 1
+        self.x_corners = {"min": 0, "max": 7}
+        self.y_corners = {"min": 0, "max": 7}
+        self.width = self.x_corners["max"] - self.x_corners["min"] + 1
+        self.height = self.y_corners["max"] - self.y_corners["min"] + 1
 
     # Set a provided piece on a specified position.
     def set_piece(self, pos: Position, piece: Piece) -> None:
@@ -92,7 +92,8 @@ class Board(object):
     @staticmethod
     def is_position_on_board(pos: Position, board: Board) -> bool:
         return (
-            board.min_x <= pos.x <= board.max_x and board.min_y <= pos.y <= board.max_y
+            board.x_corners["min"] <= pos.x <= board.x_corners["max"]
+            and board.y_corners["min"] <= pos.y <= board.y_corners["max"]
         )
 
     # Create a chess board with a default start position.
