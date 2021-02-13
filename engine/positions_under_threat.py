@@ -2,18 +2,19 @@
 
 from __future__ import annotations
 
+import itertools
+from typing import List
+
 from entities.position import Position
 from entities.board import Board
 from entities.pieces import Piece
 from entities.pieces import PieceType
 from entities.colour import Colour
-from typing import List
-import itertools
 
 
-class PositionsUnderThreat(object):
-    """Class used to returning list of positions under thread. 'under thread' means all positions which enemy king
-    cannot reach, because of the check.
+class PositionsUnderThreat:
+    """Class used to returning list of positions under thread. 'under thread' means all positions
+    which enemy king cannot reach, because of the check.
     """
 
     @staticmethod
@@ -31,12 +32,10 @@ class PositionsUnderThreat(object):
         """
 
         # Check if pos locates on the board.
-        if Board.is_position_on_board(pos, board):
-            return PositionsUnderThreat.is_position_enemy(
-                pos, colour, board
-            ) or board.is_position_empty(pos)
-        else:
-            return False
+        return Board.is_position_on_board(pos, board) and (
+            PositionsUnderThreat.is_position_enemy(pos, colour, board)
+            or board.is_position_empty(pos)
+        )
 
     @staticmethod
     def check_positions(
@@ -101,30 +100,17 @@ class PositionsUnderThreat(object):
     def positions_under_threat(
         pos: Position, piece: Piece, board: Board
     ) -> List[Position]:
-        if piece.type == PieceType.KING:
-            return PositionsUnderThreat.positions_under_king_threat(
-                pos, piece.colour, board
-            )
-        elif piece.type == PieceType.QUEEN:
-            return PositionsUnderThreat.positions_under_queen_threat(
-                pos, piece.colour, board
-            )
-        elif piece.type == PieceType.BISHOP:
-            return PositionsUnderThreat.positions_under_bishop_threat(
-                pos, piece.colour, board
-            )
-        elif piece.type == PieceType.KNIGHT:
-            return PositionsUnderThreat.positions_under_knight_threat(
-                pos, piece.colour, board
-            )
-        elif piece.type == PieceType.ROOK:
-            return PositionsUnderThreat.positions_under_rook_threat(
-                pos, piece.colour, board
-            )
-        elif piece.type == PieceType.PAWN:
-            return PositionsUnderThreat.positions_under_pawn_threat(
-                pos, piece.colour, board
-            )
+
+        pos_types = {
+            PieceType.KING: PositionsUnderThreat.positions_under_king_threat,
+            PieceType.QUEEN: PositionsUnderThreat.positions_under_queen_threat,
+            PieceType.BISHOP: PositionsUnderThreat.positions_under_bishop_threat,
+            PieceType.KNIGHT: PositionsUnderThreat.positions_under_knight_threat,
+            PieceType.ROOK: PositionsUnderThreat.positions_under_rook_threat,
+            PieceType.PAWN: PositionsUnderThreat.positions_under_pawn_threat,
+        }
+
+        return pos_types[piece.type](pos, piece.colour, board)
 
     @staticmethod
     def positions_under_king_threat(
