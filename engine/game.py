@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple
+from typing import List, NamedTuple
 
 from entities.board import Board
 from entities.colour import Colour
+from entities.move import Move
 
 
 class Game(NamedTuple):
     board: Board
     turn: Colour
+    history_moves: List[Move] = []
 
     @staticmethod
     def create_start_game() -> Game:

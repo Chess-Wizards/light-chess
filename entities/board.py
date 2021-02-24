@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import List, Optional
 
+from entities.colour import Colour
 from entities.pieces import Piece, Pieces
 from entities.position import Position
 
@@ -19,7 +20,7 @@ class SinglePositionNotFoundException(Exception):
         return self._actual_positions_count
 
 
-class Board(object):
+class Board:
     """
     Represents a chess board.
     """
@@ -32,6 +33,11 @@ class Board(object):
         # Stores mapping from position to a piece description.
         # Used for getting a piece standing on a position.
         self._pos_to_piece = dict()
+        # Stores board characteristic
+        self.x_corners = {"min": 0, "max": 7}
+        self.y_corners = {"min": 0, "max": 7}
+        self.width = self.x_corners["max"] - self.x_corners["min"] + 1
+        self.height = self.y_corners["max"] - self.y_corners["min"] + 1
 
     # Set a provided piece on a specified position.
     def set_piece(self, pos: Position, piece: Piece) -> None:
@@ -46,6 +52,9 @@ class Board(object):
     def get_piece(self, pos) -> Optional[Piece]:
         return self._pos_to_piece.get(pos)
 
+    def is_position_empty(self, pos):
+        return self.get_piece(pos) is None
+
     # Remove piece from a specified position.
     #
     # If there is no piece on a specified position, do nothig.
@@ -55,18 +64,37 @@ class Board(object):
             self._piece_to_pos[piece_to_remove].remove(pos)
             del self._pos_to_piece[pos]
 
-    # Return positions of a specific piece.
-    def get_positions_for_piece(self, piece: Piece) -> List[Position]:
-        return list(self._piece_to_pos[piece])
-
     # Return the position of a specific piece.
     #
     # If several or 0 positions were found, throw SinglePositionNotFoundError.
     def get_single_piece_position(self, piece) -> Position:
-        piece_positions = self.get_positions_for_piece(piece)
-        if len(piece_positions) != 1:
-            raise SinglePositionNotFoundException(len(piece_positions))
-        return piece_positions[0]
+        pass
+
+    # Return positions of a specific piece.
+    def get_positions_for_piece(self, piece: Piece) -> List[Position]:
+        return list(self._piece_to_pos[piece])
+
+    # Return all positions for one side
+    def get_positions_for_side(self, colour: Colour):
+        side_positions = []
+        for _, positions in self._piece_to_pos.items():
+            side_positions.extend(
+                [
+                    pos
+                    for pos in positions
+                    if self.get_piece(pos) is not None
+                    and self.get_piece(pos).colour == colour
+                ]
+            )
+        return side_positions
+
+    # Check if position locates inside board
+    @staticmethod
+    def is_position_on_board(pos: Position, board: Board) -> bool:
+        return (
+            board.x_corners["min"] <= pos.x <= board.x_corners["max"]
+            and board.y_corners["min"] <= pos.y <= board.y_corners["max"]
+        )
 
     # Create a chess board with a default start position.
     @staticmethod

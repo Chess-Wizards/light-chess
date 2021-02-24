@@ -31,14 +31,7 @@ class TestBoard(unittest.TestCase):
         pass
 
     def test_get_piece(self):
-        board = Board()
-
-        board.set_piece(Position(4, 4), Pieces.WHITE_ROOK)
-        # TODO(amirov-m): What is the right order for actual and expected?
-        assert board.get_piece(Position(4, 4)) == Pieces.WHITE_ROOK
-
-        board.set_piece(Position(7, 7), Pieces.BLACK_PAWN)
-        assert board.get_piece(Position(7, 7)) == Pieces.BLACK_PAWN
+        self.test_set_piece()
 
     def test_get_piece_invalid_coordinates(self):
         # board = Board()
@@ -61,7 +54,7 @@ class TestBoard(unittest.TestCase):
         board.remove_piece(Position(3, 4))
         assert board.get_piece(Position(3, 4)) is None
 
-    def test_remvoe_piece_invalid_coordinates(self):
+    def test_remove_piece_invalid_coordinates(self):
         # board = Board()
         # TODO(amirov-m): Try with (5, -3), (6, 9), (100, 0)
 
@@ -75,9 +68,12 @@ class TestBoard(unittest.TestCase):
         board.set_piece(Position(0, 7), Pieces.WHITE_KNIGHT)
         board.set_piece(Position(7, 7), Pieces.WHITE_KNIGHT)
         piece_positions = board.get_positions_for_piece(Pieces.WHITE_KNIGHT)
-        assert set(piece_positions) == set(
-            [Position(1, 0), Position(4, 0), Position(0, 7), Position(7, 7)]
-        )
+        assert set(piece_positions) == {
+            Position(1, 0),
+            Position(4, 0),
+            Position(0, 7),
+            Position(7, 7),
+        }
 
     def test_get_positions_for_piece_after_rewrites(self):
         pass
