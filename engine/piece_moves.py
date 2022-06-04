@@ -97,7 +97,7 @@ class PieceMoves:
         Check is taking into account!!!
         """
 
-        # Init catling list.
+        # Init castling list.
         castling = []
         # Retrieve piece at start position.
         piece_start = game.board.get_piece(pos)
