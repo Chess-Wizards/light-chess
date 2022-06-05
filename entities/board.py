@@ -29,6 +29,7 @@ class Board:
         # Stores mapping from unique pairs of (piece_type, colour)
         # to a set of positions.
         # Used for getting all positions for a specific piece type.
+        # TODO (@EK): think about it in case of pawn promotion
         self._piece_to_pos = defaultdict(set)
         # Stores mapping from position to a piece description.
         # Used for getting a piece standing on a position.
@@ -57,7 +58,7 @@ class Board:
 
     # Remove piece from a specified position.
     #
-    # If there is no piece on a specified position, do nothig.
+    # If there is no piece on a specified position, do nothing.
     def remove_piece(self, pos) -> None:
         piece_to_remove = self._pos_to_piece.get(pos)
         if piece_to_remove is not None:

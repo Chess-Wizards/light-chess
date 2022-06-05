@@ -21,7 +21,7 @@ class GameLogic:
     """
 
     @staticmethod
-    def is_mate(game: Game):
+    def is_mate(game: Game) -> bool:
         """Check if <game.turn> side got mate.
         mate = check without possibility to defend own king
         """
@@ -80,7 +80,7 @@ class GameLogic:
             game.board.remove_piece(move.start)
             # Update history
             game.history_moves.append(move)
-        return Game(game.board, Colour.change_colour(game.turn), game.history_moves)
+        return Game(game.board, game.turn.invert(), game.history_moves)
 
     @staticmethod
     def is_move_possible(game: Game, move: Move) -> bool:
@@ -101,5 +101,5 @@ class GameLogic:
         further_game = GameLogic.make_move(move, game)
         # Check if check occurs after making move
         return not GameLogic.is_check(
-            further_game.board, Colour.change_colour(further_game.turn)
+            further_game.board, further_game.turn.invert()
         )

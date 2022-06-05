@@ -105,7 +105,7 @@ class PieceMoves:
         pos_under_threat = PositionsUnderThreat.all_positions_under_threat_for_side(
             game.turn, game.board
         )
-        # Check if piece piece at start position King with no threat/check.
+        # Check if piece at start position King with no threat/check.
         if (
             piece_start is not None
             and piece_start.type == PieceType.KING
@@ -224,7 +224,7 @@ class PieceMoves:
         return moves
 
     @staticmethod
-    def bishop_moves(pos: Position, game: Game) -> List[Position]:
+    def bishop_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> bishop moves.
         bishop moves = positions_under_threat
         """
@@ -238,7 +238,7 @@ class PieceMoves:
         return moves
 
     @staticmethod
-    def queen_moves(pos: Position, game: Game) -> List[Position]:
+    def queen_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> queen moves.
         queen moves = positions_under_threat
         """
@@ -252,7 +252,7 @@ class PieceMoves:
         return moves
 
     @staticmethod
-    def king_moves(pos: Position, game: Game) -> List[Position]:
+    def king_moves(pos: Position, game: Game) -> List[Move]:
         """Return list of <game.turn> king moves.
         king moves = positions_under_threat + castling
         """

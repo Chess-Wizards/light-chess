@@ -9,8 +9,7 @@ class Colour(Enum):
     WHITE = 0
     BLACK = 1
 
-    @staticmethod
-    def change_colour(colour: Colour):
-        if colour == colour.WHITE:
-            return colour.BLACK
-        return colour.WHITE
+    def invert(self) -> Colour:
+        if self == Colour.WHITE:
+            return Colour.BLACK
+        return Colour.WHITE

@@ -84,7 +84,7 @@ class TestBoard(unittest.TestCase):
     def test_single_piece_position(self):
         pass
 
-    def test_single_piece_position_raises_expection_many_positions_found(self):
+    def test_single_piece_position_raises_exception_many_positions_found(self):
         pass
 
     def test_create_start_board(self):

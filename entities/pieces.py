@@ -18,6 +18,7 @@ class PieceType(Enum):
 class Piece(NamedTuple):
     type: PieceType
     colour: Colour
+    # id: int  # TODO (@EK): maybe add to handle pawn promotion correctly
 
 
 class Pieces(NamedTuple):

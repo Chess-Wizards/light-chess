@@ -87,7 +87,7 @@ class PositionsUnderThreat:
         colour: Colour, board: Board
     ) -> List[Position]:
         positions_under_threat = []
-        for pos in board.get_positions_for_side(Colour.change_colour(colour)):
+        for pos in board.get_positions_for_side(colour.invert()):
             positions_under_threat.extend(
                 PositionsUnderThreat.positions_under_threat(
                     pos, board.get_piece(pos), board
