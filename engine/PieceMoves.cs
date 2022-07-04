@@ -286,5 +286,4 @@ namespace LightChess
             return cellsNext;
         }
     }
-
 }

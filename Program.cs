@@ -10,7 +10,5 @@ namespace LightChess
         static void Main(string[] args)
         {
         }
-
-
     }
 }
