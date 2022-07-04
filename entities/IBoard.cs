@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-
     public interface IBoard
     {
         /*
@@ -25,7 +24,7 @@ namespace LightChess
 
         // The method removes the piece from the cell.
         void RemovePiece(Cell cell);
-        
+
         // Get cells containing pieces.
         List<Cell> GetCellsWithPieces(Color? filterByColor=null, 
                                       PieceType? filterByPieceType=null);

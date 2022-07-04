@@ -6,7 +6,6 @@ namespace LightChess
     [TestFixture]
     public class StandardBoard_Test
     {
-
         [Test]
         public void ShallowCopyPieces()
         {

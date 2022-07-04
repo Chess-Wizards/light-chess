@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-
     public class GameState
     {
         /*

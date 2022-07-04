@@ -6,7 +6,6 @@ namespace LightChess
     [TestFixture]
     public class StandardGameState_Test
     {
-
         [Test]
         // 1. White moves
         // King castle.

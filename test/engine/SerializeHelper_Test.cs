@@ -6,7 +6,6 @@ namespace LightChess
     [TestFixture]
     public class SerializeHelper_Test
     {
-
         [Test]
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")]
         public void BoardNotationNotChanged(string boardFENNotation)

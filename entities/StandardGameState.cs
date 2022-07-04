@@ -4,18 +4,17 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-    /*
-    This class represents the game state. Game state can be uniquely identified by FEN notation.
-    In addition, the + operator is overloaded to get the next game state after move.
-
-    Please refer to FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 
-
-    TODO: pawn promotion is not implemented
-    */
-
     public class StandardGameState: GameState
     {
-    
+        /*
+        This class represents the game state. Game state can be uniquely identified by FEN notation.
+        In addition, the + operator is overloaded to get the next game state after move.
+
+        Please refer to FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 
+
+        TODO: pawn promotion is not implemented
+        */
+        
         public StandardBoard Board;
         public Color ActiveColor;
         public Color EnemyColor;

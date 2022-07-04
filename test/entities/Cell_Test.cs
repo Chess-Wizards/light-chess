@@ -6,7 +6,6 @@ namespace LightChess
     [TestFixture]
     public class Cell_Test
     {
-
         [Test]
         [TestCase(0, 4, 1, 1, 1, 5)]
         [TestCase(1, 5, -1, -1, 0, 4)]

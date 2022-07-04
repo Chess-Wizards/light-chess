@@ -8,7 +8,6 @@ namespace LightChess
     [TestFixture]
     public class PieceMoves_Test
     {
-
         [Test]
         public void MovesAllPieces()
         {

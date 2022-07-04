@@ -2,7 +2,6 @@ using System;
 
 namespace LightChess
 {
-
     public enum Color
     {
         /*
