@@ -78,9 +78,7 @@ namespace LightChess
                         Assert.AreEqual(board[cell], null);
                     }
                 }
-            }
-
-            
+            } 
         }
     }
 }
