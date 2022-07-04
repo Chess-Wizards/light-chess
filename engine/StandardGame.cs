@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-
     public class StandardGame: IStandardGameLogic, IFENSerializable<StandardGameState>
     {
         /*

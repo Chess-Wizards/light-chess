@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace LightChess
 {
-
     public static class SerializeHelper
     {
         public static Dictionary<char, Piece> mappingNotationToPiece = new Dictionary<char, Piece>()
