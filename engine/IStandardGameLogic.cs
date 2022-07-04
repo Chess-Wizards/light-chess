@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-
     public interface IStandardGameLogic
     {
         /*
@@ -25,7 +24,7 @@ namespace LightChess
 
         // Find all moves. Moves can be not valid.
         List<Move> FindAllMoves(StandardGameState gameState);
-        
+
         // Find all cells under threat produced by enemy
         List<Cell> FindAllCellsUndeThreat(StandardGameState gameState);
     }
