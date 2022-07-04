@@ -13,6 +13,7 @@ namespace LightChess
 
         // Serialize to FEN notation.
         string SerializeToFEN(T objectToSerialize);
+        
         // Deserialize from FEN notation.
         T DeserializeFromFEN(string fenNotation);
     }
