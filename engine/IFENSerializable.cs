@@ -2,7 +2,6 @@ using System;
 
 namespace LightChess
 {
-
     public interface IFENSerializable<T>
     {
         /*
@@ -13,7 +12,7 @@ namespace LightChess
 
         // Serialize to FEN notation.
         string SerializeToFEN(T objectToSerialize);
-        
+
         // Deserialize from FEN notation.
         T DeserializeFromFEN(string fenNotation);
     }
