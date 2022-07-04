@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace LightChess
 {
-
     static public class CellsUnderThreat
     {
         /*
