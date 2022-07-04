@@ -2,7 +2,6 @@ using System;
 
 namespace LightChess
 {
-
     public struct Cell
     {
         /*
@@ -12,7 +11,7 @@ namespace LightChess
         */
         
         public readonly int X {get; }
-        public readonly int Y {get;  }
+        public readonly int Y {get; }
 
         public Cell(int x, 
                     int y)
