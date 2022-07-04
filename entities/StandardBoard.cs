@@ -25,9 +25,8 @@ namespace LightChess
 
         public StandardBoard(Dictionary<Cell, Piece> positionToPiece)
         {
-            // Deep copy of dictionary.
-            PositionToPiece = positionToPiece.ToDictionary(entry => entry.Key,
-                                                           entry => entry.Value);
+            // Shallow copy of dictionary.
+            PositionToPiece = new Dictionary<Cell, Piece>(positionToPiece);
         }
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace LightChess
         /// <returns>
         /// The board with pieces equal to the current/this board. 
         /// </returns>
-        public StandardBoard DeepCopy()
+        public StandardBoard ShallowCopy()
         {
             return new StandardBoard(PositionToPiece);
         }

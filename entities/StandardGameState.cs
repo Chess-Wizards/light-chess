@@ -123,7 +123,7 @@ namespace LightChess
         {
 
             // Get a new board.
-            var nextBoard = board.DeepCopy();
+            var nextBoard = board.ShallowCopy();
 
             var deltaX = move.EndCell.X - move.StartCell.X;
             var y = board[move.StartCell]?.Color == Color.White ? 0 : 7;
@@ -177,7 +177,7 @@ namespace LightChess
                                                           Move move)
         {
             // Get a new board.
-            var nextBoard = board.DeepCopy();
+            var nextBoard = board.ShallowCopy();
             var piece = (Piece)board[move.StartCell];
 
             // Move own pawn.
@@ -208,7 +208,7 @@ namespace LightChess
         {
 
             // Get a new board.
-            var nextBoard = board.DeepCopy();
+            var nextBoard = board.ShallowCopy();
             var piece = (Piece)nextBoard[move.StartCell];
 
             // Perform move.

@@ -8,15 +8,15 @@ namespace LightChess
     {
 
         [Test]
-        public void DeepCopyPieces()
+        public void ShallowCopyPieces()
         {
-             /* Create a board and then deep copy using constructor and method. Finally,
-             check if the change in the initial board influences deep copies.
+             /* Create a board and then shallow copy using constructor and method. Finally,
+             check if the change in the initial board influences shallow copies.
              */
 
             var board = new StandardBoard();
-            var boardDeepCopyConstructor = new StandardBoard(board.PositionToPiece);
-            var boardDeepCopy = board.DeepCopy();
+            var boardShallowCopyConstructor = new StandardBoard(board.PositionToPiece);
+            var boardShallowCopy = board.ShallowCopy();
 
             var cell = new Cell(4, 4);
             var piece = new Piece(Color.White, PieceType.Rook);
@@ -24,8 +24,8 @@ namespace LightChess
             board[cell] = piece;
 
             Assert.False(board.IsEmpty(cell));
-            Assert.True(boardDeepCopyConstructor.IsEmpty(cell));
-            Assert.True(boardDeepCopy.IsEmpty(cell));
+            Assert.True(boardShallowCopyConstructor.IsEmpty(cell));
+            Assert.True(boardShallowCopy.IsEmpty(cell));
         }
 
         [Test]
