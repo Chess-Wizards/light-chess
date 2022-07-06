@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # C# temporary dirs
-obj/*
-bin/*
+**/obj/*
+**/bin/*
 
