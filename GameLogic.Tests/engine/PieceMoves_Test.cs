@@ -54,7 +54,7 @@ namespace GameLogic.Tests
             for (int x = 0; x < board.Height; x++)
             {
                 // Iterate over height.
-                for (int y=0; y < board.Width;y++)
+                for (int y = 0; y < board.Width; y++)
                 {
                     var cell = new Cell(x, y);
                     var cellNotation = SerializeHelper.CellToNotation(cell);
@@ -69,9 +69,9 @@ namespace GameLogic.Tests
                         var expectedCells = correctCells[cellNotation]
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();
-        
+
                         Assert.That(expectedCells, Is.EqualTo(cells).AsCollection);
-                    }  
+                    }
                     // Check if cell is empty.
                     else
                     {
@@ -80,7 +80,7 @@ namespace GameLogic.Tests
                 }
             }
 
-            
+
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public class StandardBoard: IBoard
+    public class StandardBoard : IBoard
     {
         // The class represents the board containing piece's locations/cells. 
         // The width means A-H, while height - 1-8.
@@ -106,7 +106,7 @@ namespace GameLogic
             return null;
         }
 
-        public void SetPiece(Cell cell, 
+        public void SetPiece(Cell cell,
                              Piece piece)
         {
             // Set piece at cell.
@@ -133,11 +133,11 @@ namespace GameLogic
 
         public Piece? this[Cell cell]
         {
-            get 
+            get
             {
                 return GetPiece(cell);
             }
-            set  
+            set
             {
                 RemovePiece(cell);
                 if (value != null)
@@ -145,8 +145,8 @@ namespace GameLogic
             }
         }
 
-        public List<Cell> GetCellsWithPieces(Color? filterByColor=null, 
-                                             PieceType? filterByPieceType=null)
+        public List<Cell> GetCellsWithPieces(Color? filterByColor = null,
+                                             PieceType? filterByPieceType = null)
         {
             // Finds all piece's cells/locations by color and piece type.
             //
@@ -160,11 +160,11 @@ namespace GameLogic
             // A list containing piece's cells/locations.
 
             var cells = PositionToPiece.Keys
-                        .Where((cell) =>  filterByColor == null 
-                                          ? true 
+                        .Where((cell) => filterByColor == null
+                                          ? true
                                         : PositionToPiece[cell].Color == filterByColor)
-                        .Where((cell) =>  filterByPieceType == null 
-                                        ? true 
+                        .Where((cell) => filterByPieceType == null
+                                        ? true
                                         : PositionToPiece[cell].Type == filterByPieceType)
                         .ToList();
 

@@ -15,7 +15,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var boardFENNotationOutput = SerializeHelper.BoardToNotation(board);
 
-            Assert.AreEqual(boardFENNotation, boardFENNotationOutput);
+            Assert.That(boardFENNotationOutput, Is.EqualTo(boardFENNotation));
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var colorFENNotationOutput = SerializeHelper.ColorToNotation(color);
 
-            Assert.AreEqual(colorFENNotation, colorFENNotationOutput);
+            Assert.That(colorFENNotationOutput, Is.EqualTo(colorFENNotation));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var castleFENNotationOutput = SerializeHelper.CastleToNotation(castle);
 
-            Assert.AreEqual(castleFENNotation, castleFENNotationOutput);
+            Assert.That(castleFENNotationOutput, Is.EqualTo(castleFENNotation));
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var cellFENNotationOutput = SerializeHelper.CellToNotation(cell);
 
-            Assert.AreEqual(cellFENNotation, cellFENNotationOutput);
+            Assert.That(cellFENNotationOutput, Is.EqualTo(cellFENNotation));
         }
     }
 }

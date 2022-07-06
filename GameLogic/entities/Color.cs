@@ -5,7 +5,7 @@ namespace GameLogic
     public enum Color
     {
         // The enumeration contains possible colors.
-        
+
         White,
         Black
     }

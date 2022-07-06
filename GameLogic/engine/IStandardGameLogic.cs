@@ -14,7 +14,7 @@ namespace GameLogic
         bool IsCheck(StandardGameState gameState);
 
         // Makes a move if possible, otherwise return null.
-        StandardGameState MakeMove(StandardGameState? gameState, 
+        StandardGameState MakeMove(StandardGameState? gameState,
                                    Move move);
 
         // Checks if the game state is possible.

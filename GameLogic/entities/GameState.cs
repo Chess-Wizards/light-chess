@@ -25,7 +25,7 @@ namespace GameLogic
 
         // The number of half moves since the last capture or pawn advance.
         int HalfmoveNumber;
-        
+
         // The number of the full move. It starts at 1 and is incremented after Black's move.
         int FullmoveNumber;
     }

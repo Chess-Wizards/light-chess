@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public class StandardGame: IStandardGameLogic, IFENSerializable<StandardGameState>
+    public class StandardGame : IStandardGameLogic, IFENSerializable<StandardGameState>
     {
         /*
         This class contains a game logic.
         */
-        
+
         /// <summary>
         /// Serialize game object to FEN notation.
         /// </summary>
@@ -66,7 +66,7 @@ namespace GameLogic
             return gameState;
         }
 
- 
+
         /// <summary>
         /// TODO: not finished.
         /// </summary>
@@ -89,24 +89,24 @@ namespace GameLogic
         public bool IsCheck(StandardGameState gameState)
         {
             // Extract king location(s). 
-            var kingCells = gameState.Board.GetCellsWithPieces(filterByColor:gameState.ActiveColor,
-                                                               filterByPieceType:PieceType.King);
+            var kingCells = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
+                                                               filterByPieceType: PieceType.King);
             if (kingCells.Count != 1)
             {
                 throw new InvalidOperationException("Invalid game state. There is only one king on standard board.");
-            } 
+            }
 
             // Extract only one king cell.
             var kingCell = kingCells[0];
 
-            foreach(var cell in FindAllCellsUndeThreat(gameState))
+            foreach (var cell in FindAllCellsUndeThreat(gameState))
             {
-                if (cell.Equals(kingCell)) return true;              
+                if (cell.Equals(kingCell)) return true;
             }
             return false;
         }
-                     
-        
+
+
         /// <summary>
         /// TODO: not finished.
         /// </summary>
@@ -115,14 +115,14 @@ namespace GameLogic
             var nextGameState = gameState + move;
             return (IsGameStateValid(nextGameState)) ? nextGameState : null;
         }
-        
+
         /// <summary>
         /// TODO: not finished.
         /// </summary>
         public bool IsGameStateValid(StandardGameState gameState)
         {
-            var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor:gameState.EnemyColor,
-                                                                      filterByPieceType:PieceType.King).Count == 1;
+            var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
+                                                                      filterByPieceType: PieceType.King).Count == 1;
             return onlyOneEnemyKing && !IsCheck(gameState);
         }
 
@@ -141,7 +141,7 @@ namespace GameLogic
         {
             throw new NotImplementedException();
         }
-        
+
         // public List<Move> FindAllMoves(StandardGameState gameState)
         // {
         //     var cellsWithEnemyPieces = gameState.Board.GetCellsWithPieces(filterByColor:gameState.ActiveColor,

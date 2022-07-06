@@ -12,9 +12,9 @@ namespace GameLogic
         //
         // This class does not consider checks, en passant moves, and castles.
 
-        public static List<Cell> GetCellsUnderThreat(Cell cell, 
+        public static List<Cell> GetCellsUnderThreat(Cell cell,
                                                      StandardBoard board)
-        { 
+        {
             // Finds cells under threat produced by piece at cell |cell|.
             //
             // Parameters
@@ -28,23 +28,23 @@ namespace GameLogic
 
 
             var piece = board[cell];
-            
+
             // Return empty list if cell is empty.
             if (piece == null)
             {
-                return new List<Cell>(){};
+                return new List<Cell>() { };
             }
 
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: (Color)piece?.Color);
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
 
-            var mappingPieceTypeToMethod = new Dictionary<PieceType, 
-                                                          Func<Cell, 
-                                                          List<Cell>, 
-                                                          List<Cell>, 
+            var mappingPieceTypeToMethod = new Dictionary<PieceType,
+                                                          Func<Cell,
+                                                          List<Cell>,
+                                                          List<Cell>,
                                                           Func<Cell, bool>,
-                                                          Color, 
+                                                          Color,
                                                           List<Cell>>>()
             {
                 {PieceType.Rook, GetCellsUnderThreatRook},
@@ -55,19 +55,19 @@ namespace GameLogic
                 {PieceType.Pawn, GetCellsUnderThreatPawn}
             };
 
-            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell, 
-                                            pieceCells, 
+            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
+                                            pieceCells,
                                             enemyPieceCells,
                                             board.OnBoard,
                                             (Color)piece?.Color);
         }
 
-        public static List<Cell> FindCells(Cell cell, 
-                                           List<Cell> shifts, 
-                                           List<Cell> pieceCells, 
+        public static List<Cell> FindCells(Cell cell,
+                                           List<Cell> shifts,
+                                           List<Cell> pieceCells,
                                            List<Cell> enemyPieceCells,
                                            Func<Cell, bool> OnBoard,
-                                           bool oneShift=false)
+                                           bool oneShift = false)
         {
             // Finds cells under threat produced by piece at cell |cell|. 
             // This function is a helper one for other methods.
@@ -97,20 +97,20 @@ namespace GameLogic
                 while (true)
                 {
                     currentCell = currentCell + shift;
-                    if (!OnBoard(currentCell) 
+                    if (!OnBoard(currentCell)
                         || pieceCells.Contains(currentCell)) break;
 
                     cellsUnderThreat.Add(currentCell);
 
-                    if (oneShift 
+                    if (oneShift
                         || enemyPieceCells.Contains(currentCell)) break;
                 }
             }
             return cellsUnderThreat;
         }
 
-        public static List<Cell> GetCellsUnderThreatRook(Cell cell, 
-                                                         List<Cell> pieceCells, 
+        public static List<Cell> GetCellsUnderThreatRook(Cell cell,
+                                                         List<Cell> pieceCells,
                                                          List<Cell> enemyPieceCells,
                                                          Func<Cell, bool> OnBoard,
                                                          Color activeColor)
@@ -135,12 +135,12 @@ namespace GameLogic
             var rightShift = new Cell(1, 0);
             var downShift = new Cell(0, -1);
             var leftShift = new Cell(-1, 0);
-            
+
             var shifts = new List<Cell>()
-            {   
-                upShift, 
-                rightShift, 
-                downShift, 
+            {
+                upShift,
+                rightShift,
+                downShift,
                 leftShift
             };
             return FindCells(cell,
@@ -148,11 +148,11 @@ namespace GameLogic
                              pieceCells,
                              enemyPieceCells,
                              OnBoard,
-                             oneShift:false);
+                             oneShift: false);
         }
 
-        public static List<Cell> GetCellsUnderThreatKnight(Cell cell, 
-                                                           List<Cell> pieceCells, 
+        public static List<Cell> GetCellsUnderThreatKnight(Cell cell,
+                                                           List<Cell> pieceCells,
                                                            List<Cell> enemyPieceCells,
                                                            Func<Cell, bool> OnBoard,
                                                            Color activeColor)
@@ -171,13 +171,13 @@ namespace GameLogic
             // -------
             // A list containing cells under threat produced by knight at cell |cell|.
 
-            var xs = new[] {-2, -1, 1, 2};
-            var ys = new[] {-2, -1, 1, 2};  
-            var shifts = 
-                (from x in xs 
-                from y in ys 
-                select new { x, y}) // Get all combinations.
-                .Where((tuple) => Math.Abs(tuple.x) != Math.Abs(tuple.y)) 
+            var xs = new[] { -2, -1, 1, 2 };
+            var ys = new[] { -2, -1, 1, 2 };
+            var shifts =
+                (from x in xs
+                 from y in ys
+                 select new { x, y }) // Get all combinations.
+                .Where((tuple) => Math.Abs(tuple.x) != Math.Abs(tuple.y))
                 .Select((tuple) => new Cell(tuple.x, tuple.y))
                 .ToList();
 
@@ -186,16 +186,16 @@ namespace GameLogic
                              pieceCells,
                              enemyPieceCells,
                              OnBoard,
-                             oneShift:true);
+                             oneShift: true);
 
         }
 
-        public static List<Cell> GetCellsUnderThreatBishop(Cell cell, 
-                                                           List<Cell> pieceCells, 
+        public static List<Cell> GetCellsUnderThreatBishop(Cell cell,
+                                                           List<Cell> pieceCells,
                                                            List<Cell> enemyPieceCells,
                                                            Func<Cell, bool> OnBoard,
                                                            Color activeColor)
-        
+
         {
             // Finds cells under threat produced by bishop at cell |cell|.
             //
@@ -217,12 +217,12 @@ namespace GameLogic
             var downRightShift = new Cell(1, -1);
             var downLeftShift = new Cell(-1, -1);
             var upLeftShift = new Cell(-1, 1);
-            
+
             var shifts = new List<Cell>()
             {
-                upRightShift, 
-                downRightShift, 
-                downLeftShift, 
+                upRightShift,
+                downRightShift,
+                downLeftShift,
                 upLeftShift
             };
 
@@ -231,15 +231,15 @@ namespace GameLogic
                              pieceCells,
                              enemyPieceCells,
                              OnBoard,
-                             oneShift:false);
+                             oneShift: false);
         }
- 
-        public static List<Cell> GetCellsUnderThreatQueen(Cell cell, 
-                                                          List<Cell> pieceCells, 
+
+        public static List<Cell> GetCellsUnderThreatQueen(Cell cell,
+                                                          List<Cell> pieceCells,
                                                           List<Cell> enemyPieceCells,
                                                           Func<Cell, bool> OnBoard,
                                                           Color activeColor)
-        
+
         {
             // Finds cells under threat produced by queen at cell |cell|.
             //
@@ -255,27 +255,27 @@ namespace GameLogic
             // -------
             // A list containing cells under threat produced by queen at cell |cell|.
 
-            var cellsUnderThreatRook = GetCellsUnderThreatRook(cell, 
-                                                               pieceCells, 
-                                                               enemyPieceCells, 
-                                                               OnBoard, 
+            var cellsUnderThreatRook = GetCellsUnderThreatRook(cell,
+                                                               pieceCells,
+                                                               enemyPieceCells,
+                                                               OnBoard,
                                                                activeColor);
 
-            var cellsUnderThreatBishop = GetCellsUnderThreatBishop(cell, 
-                                                                   pieceCells, 
-                                                                   enemyPieceCells, 
-                                                                   OnBoard, 
+            var cellsUnderThreatBishop = GetCellsUnderThreatBishop(cell,
+                                                                   pieceCells,
+                                                                   enemyPieceCells,
+                                                                   OnBoard,
                                                                    activeColor);
             // Concatenate/combine rook and bishop cells. 
-            return cellsUnderThreatRook.Concat(cellsUnderThreatBishop).ToList();;
+            return cellsUnderThreatRook.Concat(cellsUnderThreatBishop).ToList(); ;
         }
 
-        public static List<Cell> GetCellsUnderThreatKing(Cell cell, 
-                                                         List<Cell> pieceCells, 
+        public static List<Cell> GetCellsUnderThreatKing(Cell cell,
+                                                         List<Cell> pieceCells,
                                                          List<Cell> enemyPieceCells,
                                                          Func<Cell, bool> OnBoard,
                                                          Color activeColor)
-        {    
+        {
             // Finds cells under threat produced by king at cell |cell|.
             //
             // Parameters
@@ -290,12 +290,12 @@ namespace GameLogic
             // -------
             // A list containing cells under threat produced by king at cell |cell|.
 
-            var xs = new[] {-1, 0, 1};
-            var ys = new[] {-1, 0, 1};  
-            var shifts = 
-                (from x in xs 
-                from y in ys 
-                select new {x, y}) // Get all combinations.
+            var xs = new[] { -1, 0, 1 };
+            var ys = new[] { -1, 0, 1 };
+            var shifts =
+                (from x in xs
+                 from y in ys
+                 select new { x, y }) // Get all combinations.
                 .Where((tuple) => !(tuple.x == 0 && tuple.y == 0)) // Exclude tuple corresponding to |cell|.
                 .Select((tuple) => new Cell(tuple.x, tuple.y))
                 .ToList();
@@ -305,11 +305,11 @@ namespace GameLogic
                              pieceCells,
                              enemyPieceCells,
                              OnBoard,
-                             oneShift:true);
+                             oneShift: true);
         }
 
-        public static List<Cell> GetCellsUnderThreatPawn(Cell cell, 
-                                                         List<Cell> pieceCells, 
+        public static List<Cell> GetCellsUnderThreatPawn(Cell cell,
+                                                         List<Cell> pieceCells,
                                                          List<Cell> enemyPieceCells,
                                                          Func<Cell, bool> OnBoard,
                                                          Color activeColor)
@@ -328,18 +328,18 @@ namespace GameLogic
             // -------
             // A list containing cells under threat produced by pawn at cell |cell|.
 
-            var leftShift = activeColor == Color.White ?  new Cell(-1, 1) : new Cell(-1, -1); 
-            var rightShift = activeColor == Color.White ?  new Cell(1, 1) : new Cell(1, -1);
+            var leftShift = activeColor == Color.White ? new Cell(-1, 1) : new Cell(-1, -1);
+            var rightShift = activeColor == Color.White ? new Cell(1, 1) : new Cell(1, -1);
 
             // A list to save cells 'under threat'
             var cellsUnderThreat = new List<Cell>();
 
             // Iterate over shifts and find cells 'under threat'
-            foreach (var shift in new Cell[]{leftShift, rightShift})
+            foreach (var shift in new Cell[] { leftShift, rightShift })
             {
                 var currentCell = cell + shift;
                 if (enemyPieceCells.Contains(currentCell))
-                     cellsUnderThreat.Add(currentCell);
+                    cellsUnderThreat.Add(currentCell);
             }
 
             return cellsUnderThreat;

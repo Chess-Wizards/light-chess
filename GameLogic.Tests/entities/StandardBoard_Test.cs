@@ -9,9 +9,9 @@ namespace GameLogic.Tests
         [Test]
         public void ShallowCopyPieces()
         {
-             /* Create a board and then shallow copy using constructor and method. Finally,
-             check if the change in the initial board influences shallow copies.
-             */
+            /* Create a board and then shallow copy using constructor and method. Finally,
+            check if the change in the initial board influences shallow copies.
+            */
 
             var board = new StandardBoard();
             var boardShallowCopyConstructor = new StandardBoard(board.PositionToPiece);
@@ -41,9 +41,9 @@ namespace GameLogic.Tests
 
             var board = new StandardBoard();
             var cell = new Cell(x, y);
-            Assert.AreEqual(board.OnBoard(cell), cellOnBoard);
+            Assert.That(cellOnBoard, Is.EqualTo(board.OnBoard(cell)));
         }
-    
+
 
         [Test]
         public void CheckPiecesOnBoard()
@@ -56,8 +56,8 @@ namespace GameLogic.Tests
             var piece = new Piece(Color.White, PieceType.King);
             board[cell] = piece;
 
-            Assert.AreEqual(board.GetCellsWithPieces().Count, 1);
-            Assert.AreEqual(board.GetCellsWithPieces()[0], cell);
+            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
+            Assert.That(cell, Is.EqualTo(board.GetCellsWithPieces()[0]));
 
             // Iterate over colors.
             foreach (Color color in Enum.GetValues(typeof(Color)))
@@ -66,17 +66,17 @@ namespace GameLogic.Tests
                 foreach (PieceType pieceType in Enum.GetValues(typeof(PieceType)))
                 {
                     // Get all cells containing piece with |color| color and |pieceType| piece type.
-                    var cells = board.GetCellsWithPieces(filterByColor:color,
-                                                         filterByPieceType:pieceType);
-                    if (color == Color.White 
+                    var cells = board.GetCellsWithPieces(filterByColor: color,
+                                                         filterByPieceType: pieceType);
+                    if (color == Color.White
                         && pieceType == PieceType.King)
                     {
-                        Assert.AreEqual(cells.Count, 1);
-                        Assert.AreEqual(cells[0], cell);   
+                        Assert.That(cells.Count, Is.EqualTo(1));
+                        Assert.That(cell, Is.EqualTo(cells[0]));
                     }
                     else
                     {
-                        Assert.AreEqual(cells.Count, 0);
+                        Assert.That(cells.Count, Is.EqualTo(0));
                     }
                 }
             }
@@ -85,8 +85,8 @@ namespace GameLogic.Tests
         [Test]
         public void BoardAction()
         {
-             /* Check the board functionality, such as setting, removing, and replacing pieces.
-             */
+            /* Check the board functionality, such as setting, removing, and replacing pieces.
+            */
 
             var board = new StandardBoard();
             var cell = new Cell(4, 4);
@@ -94,20 +94,20 @@ namespace GameLogic.Tests
 
             // Set piece.
             board[cell] = piece;
-            Assert.AreEqual(board[cell], piece);
-            Assert.AreEqual(board.GetCellsWithPieces().Count, 1);
+            Assert.That(piece, Is.EqualTo(board[cell]));
+            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
 
             // Remove piece.
             board[cell] = null;
-            Assert.AreEqual(board[cell], null);
-            Assert.AreEqual(board.GetCellsWithPieces().Count, 0);
+            Assert.That(null, Is.EqualTo(board[cell]));
+            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(0));
 
             // Replace piece.
             board[cell] = piece;
             var pieceNext = new Piece(Color.Black, PieceType.Bishop);
             board[cell] = pieceNext;
-            Assert.AreEqual(board[cell], pieceNext);
-            Assert.AreEqual(board.GetCellsWithPieces().Count, 1);
+            Assert.That(pieceNext, Is.EqualTo(board[cell]));
+            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
         }
     }
 }

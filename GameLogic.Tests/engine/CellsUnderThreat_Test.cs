@@ -52,10 +52,10 @@ namespace GameLogic.Tests
             var board = SerializeHelper.NotationToBoard(fenBoardNotation);
 
             // Iterate over width.
-            for (int x=0; x < board.Height;x++)
+            for (int x = 0; x < board.Height; x++)
             {
                 // Iterate over height.
-                for (int y=0; y < board.Width;y++)
+                for (int y = 0; y < board.Width; y++)
                 {
                     var cell = new Cell(x, y);
                     var cellNotation = SerializeHelper.CellToNotation(cell);
@@ -70,15 +70,15 @@ namespace GameLogic.Tests
                         var expectedCellsUnderThreat = correctCellsUnderThreat[cellNotation]
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();
-                        Assert.AreEqual(cellsUnderThreat, expectedCellsUnderThreat);
-                    }  
+                        Assert.That(expectedCellsUnderThreat, Is.EqualTo(cellsUnderThreat));
+                    }
                     // Check if the cell is empty.
                     else
                     {
-                        Assert.AreEqual(board[cell], null);
+                        Assert.That(null, Is.EqualTo(board[cell]));
                     }
                 }
-            } 
+            }
         }
     }
 }

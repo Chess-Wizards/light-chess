@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public class StandardGameState: GameState
+    public class StandardGameState : GameState
     {
         // This class represents the game state. Game state can be uniquely identified by FEN notation.
         // In addition, the + operator is overloaded to get the next game state after move.
@@ -12,7 +12,7 @@ namespace GameLogic
         // Please refer to FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 
         //
         // TODO: pawn promotion is not implemented
-        
+
         public StandardBoard Board;
         public Color ActiveColor;
         public Color EnemyColor;
@@ -30,16 +30,16 @@ namespace GameLogic
             int fullmoveNumber
         )
         {
-        Board = board;
-        ActiveColor = color;
-        EnemyColor = color.Change();
-        AvaialbleCastles = avaialbleCastles;
-        EnPassantCell = enPassantCell;
-        HalfmoveNumber = halfmoveNumber;
-        FullmoveNumber = fullmoveNumber;
+            Board = board;
+            ActiveColor = color;
+            EnemyColor = color.Change();
+            AvaialbleCastles = avaialbleCastles;
+            EnPassantCell = enPassantCell;
+            HalfmoveNumber = halfmoveNumber;
+            FullmoveNumber = fullmoveNumber;
         }
-    
-        public static StandardGameState operator+(StandardGameState gameState, 
+
+        public static StandardGameState operator +(StandardGameState gameState,
                                                   Move move)
         {
             // Get next game state.
@@ -63,8 +63,8 @@ namespace GameLogic
                 nextBoard = PerformCastle(gameState.Board, move);
             }
             // Enpassant move.
-            else if (gameState.EnPassantCell != null 
-                    &&  move.EndCell == (Cell)gameState.EnPassantCell)
+            else if (gameState.EnPassantCell != null
+                    && move.EndCell == (Cell)gameState.EnPassantCell)
             {
                 nextBoard = PerformEnPassantMove(gameState.Board, move);
             }
@@ -75,8 +75,8 @@ namespace GameLogic
             }
 
             // Next castles.
-            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board, 
-                                                           move, 
+            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board,
+                                                           move,
                                                            gameState.AvaialbleCastles);
 
             // Next cells. 
@@ -86,7 +86,7 @@ namespace GameLogic
             var movePawn = piece.Type == PieceType.Pawn;
             var moveCapture = !gameState.Board.IsEmpty(move.EndCell) ||
                             move.EndCell == gameState.EnPassantCell;
-            var nextHalfmoveNumber = movePawn || moveCapture ? 0 :gameState.HalfmoveNumber + 1;
+            var nextHalfmoveNumber = movePawn || moveCapture ? 0 : gameState.HalfmoveNumber + 1;
 
             // Next FullmoveNumber.
             var nextFullmoveNumber = gameState.FullmoveNumber + 1;
@@ -95,13 +95,13 @@ namespace GameLogic
                 nextBoard,
                 gameState.EnemyColor,
                 nextAvaialbleCastles,
-                nextEnPassantCell, 
+                nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber
             );
         }
 
-        private static StandardBoard PerformCastle(StandardBoard board, 
+        private static StandardBoard PerformCastle(StandardBoard board,
                                                    Move move)
         {
             // Perform castle. The castle must be possible/valid.
@@ -140,8 +140,8 @@ namespace GameLogic
             }
 
             var nextKingCell = new Cell(nextXKing, y);
-            var nextRookCell = new Cell(nextXRook, 
-                                        y);        
+            var nextRookCell = new Cell(nextXRook,
+                                        y);
             var rookCell = new Cell(xRook, y);
             // Perform castle.
             var kingPiece = nextBoard[move.StartCell];
@@ -154,7 +154,7 @@ namespace GameLogic
             return nextBoard;
         }
 
-        private static StandardBoard PerformEnPassantMove(StandardBoard board, 
+        private static StandardBoard PerformEnPassantMove(StandardBoard board,
                                                           Move move)
         {
             // Perform en passant move. The en passant move must be possible/valid.
@@ -173,8 +173,8 @@ namespace GameLogic
             var piece = (Piece)board[move.StartCell];
 
             // Move own pawn.
-            nextBoard[move.EndCell] = piece;   
-            nextBoard[move.StartCell] = null; 
+            nextBoard[move.EndCell] = piece;
+            nextBoard[move.StartCell] = null;
 
             // Capture enemy pawn.
             var enemyCellWithPawn = new Cell(move.EndCell.X, move.StartCell.Y);
@@ -183,7 +183,7 @@ namespace GameLogic
             return nextBoard;
         }
 
-        private static StandardBoard PerformMove(StandardBoard board, 
+        private static StandardBoard PerformMove(StandardBoard board,
                                                  Move move)
         {
             // Perform the simple move. The move must be possible/valid.
@@ -224,7 +224,7 @@ namespace GameLogic
             // -------
             // A list of possible castles after the move is performed.
 
-            var nextCastles = new List<Castle>(castles);     
+            var nextCastles = new List<Castle>(castles);
             var piece = (Piece)board[move.StartCell];
             // Castles.
             var kingCastle = new Castle(piece.Color, CastleType.King);
@@ -233,11 +233,11 @@ namespace GameLogic
             var kingEnemyCastle = new Castle(piece.Color.Change(), CastleType.King);
             var queenEnemyCastle = new Castle(piece.Color.Change(), CastleType.Queen);
             // Initial rook cells.
-            var y = piece.Color == Color.White ? 0: 7;
+            var y = piece.Color == Color.White ? 0 : 7;
             var kingRookInitialCell = new Cell(7, y);
             var queenRookInitialCell = new Cell(0, y);
             // Initial enemy rook cells.
-            var yEnemy = piece.Color == Color.White ? 7: 0;
+            var yEnemy = piece.Color == Color.White ? 7 : 0;
             var kingEnemyRookInitialCell = new Cell(7, yEnemy);
             var queenEnemyRookInitialCell = new Cell(0, yEnemy);
 
@@ -269,7 +269,7 @@ namespace GameLogic
             return nextCastles;
         }
 
-        private static Cell? GetEnPassantCellAfterMove(StandardBoard board, 
+        private static Cell? GetEnPassantCellAfterMove(StandardBoard board,
                                                        Move move)
         {
             //  Get en passant cell after the move is performed.
@@ -285,15 +285,15 @@ namespace GameLogic
 
             var piece = (Piece)board[move.StartCell];
             var deltaY = move.EndCell.Y - move.StartCell.Y;
-            
+
             // Return en passant cell if the pawn moves forward on two cells.
             if (piece.Type == PieceType.Pawn &&
                 Math.Abs(deltaY) == 2)
             {
-                var enPassantY = (move.StartCell.Y + move.EndCell.Y) / 2; 
+                var enPassantY = (move.StartCell.Y + move.EndCell.Y) / 2;
                 return new Cell(move.StartCell.X, enPassantY);
             }
-                  
+
             return null;
         }
     }

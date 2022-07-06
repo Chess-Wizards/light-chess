@@ -8,12 +8,12 @@ namespace GameLogic
     {
         // The class aims to find the array of all moves. Moves cannot be valid.
         // This class does not consider checks, en passant moves, and castles.
-        
+
         /// </param>
         /// <returns>
         /// A list containing moves produced by piece at cell |cell|. 
         /// </returns>
-        public static List<Move> GetMoves(Cell cell, 
+        public static List<Move> GetMoves(Cell cell,
                                           StandardBoard board)
         {
             // Finds moves produced by piece at cell |cell|.
@@ -26,22 +26,22 @@ namespace GameLogic
             // Returns
             // -------
             // A list containing moves produced by piece at cell |cell|.       
-    
+
             var piece = board[cell];
-    
+
             // Return an empty list if the cell is empty.
             if (piece == null)
             {
-                return new List<Move>(){};
+                return new List<Move>() { };
             }
 
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: (Color)piece?.Color);
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
 
-            var mappingPieceTypeToMethod = new Dictionary<PieceType, 
-                                                          Func<Cell, List<Cell>, 
-                                                          List<Cell>, 
+            var mappingPieceTypeToMethod = new Dictionary<PieceType,
+                                                          Func<Cell, List<Cell>,
+                                                          List<Cell>,
                                                           Func<Cell, bool>,
                                                           Color,
                                                           List<Cell>>>()
@@ -54,8 +54,8 @@ namespace GameLogic
                 {PieceType.Pawn, GetNextCellsPawn}
             };
 
-            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell, 
-                                            pieceCells, 
+            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
+                                            pieceCells,
                                             enemyPieceCells,
                                             board.OnBoard,
                                             (Color)piece?.Color)
@@ -63,8 +63,8 @@ namespace GameLogic
                 .ToList();
         }
 
-        public static List<Cell> GetNextCellsRook(Cell cell, 
-                                                  List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsRook(Cell cell,
+                                                  List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
                                                   Func<Cell, bool> OnBoard,
                                                   Color activeColor)
@@ -83,15 +83,15 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by rook at cell |cell|. 
 
-            return CellsUnderThreat.GetCellsUnderThreatRook(cell, 
-                                                            pieceCells, 
-                                                            enemyPieceCells, 
-                                                            OnBoard, 
+            return CellsUnderThreat.GetCellsUnderThreatRook(cell,
+                                                            pieceCells,
+                                                            enemyPieceCells,
+                                                            OnBoard,
                                                             activeColor);
         }
 
-        public static List<Cell> GetNextCellsKnight(Cell cell, 
-                                                    List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsKnight(Cell cell,
+                                                    List<Cell> pieceCells,
                                                     List<Cell> enemyPieceCells,
                                                     Func<Cell, bool> OnBoard,
                                                     Color activeColor)
@@ -110,15 +110,15 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by knight at cell |cell|.
 
-            return CellsUnderThreat.GetCellsUnderThreatKnight(cell, 
+            return CellsUnderThreat.GetCellsUnderThreatKnight(cell,
                                                               pieceCells,
-                                                              enemyPieceCells, 
-                                                              OnBoard, 
+                                                              enemyPieceCells,
+                                                              OnBoard,
                                                               activeColor);
         }
 
-        public static List<Cell> GetNextCellsBishop(Cell cell, 
-                                                    List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsBishop(Cell cell,
+                                                    List<Cell> pieceCells,
                                                     List<Cell> enemyPieceCells,
                                                     Func<Cell, bool> OnBoard,
                                                     Color activeColor)
@@ -137,15 +137,15 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by bishop at cell |cell|.
 
-            return CellsUnderThreat.GetCellsUnderThreatBishop(cell, 
-                                                              pieceCells, 
-                                                              enemyPieceCells, 
-                                                              OnBoard, 
+            return CellsUnderThreat.GetCellsUnderThreatBishop(cell,
+                                                              pieceCells,
+                                                              enemyPieceCells,
+                                                              OnBoard,
                                                               activeColor);
         }
 
-        public static List<Cell> GetNextCellsQueen(Cell cell, 
-                                                   List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsQueen(Cell cell,
+                                                   List<Cell> pieceCells,
                                                    List<Cell> enemyPieceCells,
                                                    Func<Cell, bool> OnBoard,
                                                    Color activeColor)
@@ -164,15 +164,15 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by queen at cell |cell|.
 
-            return CellsUnderThreat.GetCellsUnderThreatQueen(cell, 
-                                                             pieceCells, 
-                                                             enemyPieceCells, 
-                                                             OnBoard, 
+            return CellsUnderThreat.GetCellsUnderThreatQueen(cell,
+                                                             pieceCells,
+                                                             enemyPieceCells,
+                                                             OnBoard,
                                                              activeColor);
         }
 
-        public static List<Cell> GetNextCellsKing(Cell cell, 
-                                                  List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsKing(Cell cell,
+                                                  List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
                                                   Func<Cell, bool> OnBoard,
                                                   Color activeColor)
@@ -191,15 +191,15 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by king at cell |cell|.
 
-            return CellsUnderThreat.GetCellsUnderThreatKing(cell, 
-                                                            pieceCells, 
-                                                            enemyPieceCells, 
-                                                            OnBoard, 
+            return CellsUnderThreat.GetCellsUnderThreatKing(cell,
+                                                            pieceCells,
+                                                            enemyPieceCells,
+                                                            OnBoard,
                                                             activeColor);
         }
 
-        public static List<Cell> GetNextCellsPawn(Cell cell, 
-                                                  List<Cell> pieceCells, 
+        public static List<Cell> GetNextCellsPawn(Cell cell,
+                                                  List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
                                                   Func<Cell, bool> OnBoard,
                                                   Color activeColor)
@@ -218,10 +218,10 @@ namespace GameLogic
             // -------
             // A list containing next/move cells produced by pawn at cell |cell|.
 
-            var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell, 
-                                                                     pieceCells, 
-                                                                     enemyPieceCells, 
-                                                                     OnBoard, 
+            var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell,
+                                                                     pieceCells,
+                                                                     enemyPieceCells,
+                                                                     OnBoard,
                                                                      activeColor);
 
             // Shift depends on color.            
@@ -229,7 +229,7 @@ namespace GameLogic
 
             var cellOneMoveForward = cell + shift;
             // One move forward.
-            if (!pieceCells.Contains(cellOneMoveForward) 
+            if (!pieceCells.Contains(cellOneMoveForward)
                 && !enemyPieceCells.Contains(cellOneMoveForward))
             {
                 cellsNext.Add(cellOneMoveForward);
@@ -238,8 +238,8 @@ namespace GameLogic
             // Two moves forward.
             var celltwoMovesForward = cellOneMoveForward + shift;
             var startRow = activeColor == Color.White ? 1 : 6;
-            var notTouchedPawn =  cell.Y == startRow;
-            if (notTouchedPawn 
+            var notTouchedPawn = cell.Y == startRow;
+            if (notTouchedPawn
                 && !pieceCells.Contains(cellOneMoveForward)
                 && !enemyPieceCells.Contains(celltwoMovesForward))
             {

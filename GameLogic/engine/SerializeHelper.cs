@@ -21,23 +21,23 @@ namespace GameLogic
                 {'q', new Piece(Color.Black, PieceType.Queen)},
                 {'k', new Piece(Color.Black, PieceType.King)}
             };
-        public static Dictionary<Piece, char> mappingPieceToNotation = mappingNotationToPiece.ToDictionary(x => x.Value, x=> x.Key);
+        public static Dictionary<Piece, char> mappingPieceToNotation = mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
         public static Dictionary<char, Castle> mappingNotationToCastle = new Dictionary<char, Castle>()
             {
                 {'K', new Castle(Color.White, CastleType.King)},
-                {'Q', new Castle(Color.White, CastleType.Queen)}, 
+                {'Q', new Castle(Color.White, CastleType.Queen)},
                 {'k', new Castle(Color.Black, CastleType.King)},
-                {'q', new Castle(Color.Black, CastleType.Queen)},              
+                {'q', new Castle(Color.Black, CastleType.Queen)},
             };
-        public static Dictionary<Castle, char> mappingCastleToNotation = mappingNotationToCastle.ToDictionary(x => x.Value, x=> x.Key);
+        public static Dictionary<Castle, char> mappingCastleToNotation = mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
         public static Dictionary<char, Color> mappingNotationToColor = new Dictionary<char, Color>()
             {
                 {'w', Color.White},
-                {'b', Color.Black}           
+                {'b', Color.Black}
             };
-        public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x=> x.Key);
+        public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
         static public StandardBoard NotationToBoard(string notation)
         {
@@ -64,7 +64,7 @@ namespace GameLogic
             // Iterate over height from up (7) to bottom (0). 
             foreach (var row in rows)
             {
-                var x=0;
+                var x = 0;
                 // Iterate over width from left (a) to right (h).
                 foreach (var character in row)
                 {
@@ -74,7 +74,7 @@ namespace GameLogic
                         var cell = new Cell(x, y);
                         board[cell] = mappingNotationToPiece[character];
                         x += 1;
-                    } 
+                    }
                     // Increment |x| by number of empty cells.
                     else
                     {
@@ -108,31 +108,31 @@ namespace GameLogic
             var rows = new List<string>();
 
             // Iterate over height from up (7) to bottom (0).
-            for (int y=board.Height-1;y>-1;y--)
+            for (int y = board.Height - 1; y > -1; y--)
             {
                 var row = new List<char>();
                 int numberEmptyCells = 0;
                 // Iterate over width from left (a) to right (h).
-                for(int x=0; x<board.Width;x++)
+                for (int x = 0; x < board.Width; x++)
                 {
                     var cell = new Cell(x, y);
                     // Increment |numberEmptyCells| by 1.
                     if (board.IsEmpty(cell))
                     {
-                        numberEmptyCells += 1;   
+                        numberEmptyCells += 1;
                     }
                     // Add |numberEmptyCells| (if not zero) and piece to notation.
                     // Set |numberEmptyCells| to zero.
                     else
                     {
-                        if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells+48));
+                        if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
                         row.Add(mappingPieceToNotation[(Piece)board[cell]]);
                         numberEmptyCells = 0;
                     }
                 }
                 // Add the most right |numberEmptyCells| (if not zero) cells to |row|
-                if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells+48));
- 
+                if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
+
                 rows.Add(String.Join("", row));
             }
 
@@ -198,7 +198,7 @@ namespace GameLogic
             return notation.Where((castle) => (castle != '-'))
                            .Select((castle) => (mappingNotationToCastle[castle]))
                            .ToList();
-            
+
         }
 
         static public string CastleToNotation(List<Castle> castles)
@@ -218,7 +218,7 @@ namespace GameLogic
             // -------
             // The serialized castles.
 
-            var notation = String.Join("", 
+            var notation = String.Join("",
                         castles.Select((castle) => mappingCastleToNotation[castle])
                                .ToList()
                        );
@@ -246,9 +246,9 @@ namespace GameLogic
                 if (notation.Length != 2)
                     throw new ArgumentException("Invalid length of the cell notation");
                 // Char letter to integer. Example: 'a' -> 0.
-                var x = (int)notation[0]-97;
+                var x = (int)notation[0] - 97;
                 // Char digit to integer. Example: '8' -> 7.
-                var y = Int32.Parse(notation[1].ToString())-1;
+                var y = Int32.Parse(notation[1].ToString()) - 1;
                 return new Cell(x, y);
             }
             return null;
@@ -269,9 +269,9 @@ namespace GameLogic
             if (cell != null)
             {
                 // Integer to letter char. Example: 0 -> 'a'.
-                var x = (char)(((Cell)cell).X+97);
+                var x = (char)(((Cell)cell).X + 97);
                 // Integer to digit char. Example: 8 -> '7'.
-                var y = ((Cell)cell).Y+1;
+                var y = ((Cell)cell).Y + 1;
                 return $"{x}{y}";
             }
             return "-";

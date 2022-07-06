@@ -15,7 +15,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var gameStateFENNotationOutput = new StandardGame().SerializeToFEN(gameState);
 
-            Assert.AreEqual(gameFENNotation, gameStateFENNotationOutput);
+            Assert.That(gameStateFENNotationOutput, Is.EqualTo(gameFENNotation));
         }
     }
 }
