@@ -5,9 +5,7 @@ namespace GameLogic
 {
     public interface IStandardGameLogic
     {
-        /*
-            The interface represents the logic of chess game. 
-        */
+        // The interface represents the logic of chess game. 
 
         // Checks if the mate occurs at current game state.
         bool IsMate(StandardGameState gameState);

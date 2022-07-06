@@ -4,9 +4,7 @@ namespace GameLogic
 {
     public enum PieceType
     {
-        /*
-            The enumeration contains possible piece types.
-        */
+        // The enumeration contains possible piece types.
         
         Rook,
         Knight,
