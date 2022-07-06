@@ -5,9 +5,7 @@ namespace LightChess
 {
     public interface IBoard
     {
-        /*
-            The interface represents the required board functionality.  
-        */
+        // The interface represents the required board functionality.  
 
         // The method checks if cell coordinates are valid.
         bool OnBoard(Cell cell);

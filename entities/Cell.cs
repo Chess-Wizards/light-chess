@@ -4,11 +4,11 @@ namespace LightChess
 {
     public struct Cell
     {
-        /*
-            The structure contains possible cell coordinates. 
-            Each cell can be uniquely identified by pair of 
-            coordinates X and Y.
-        */
+    
+        // The structure contains possible cell coordinates. 
+        // Each cell can be uniquely identified by pair of 
+        // coordinates X and Y.
+        
         
         public readonly int X {get; }
         public readonly int Y {get; }

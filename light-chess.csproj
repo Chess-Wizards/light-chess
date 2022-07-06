@@ -54,6 +54,6 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435"/>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118"/>
   </ItemGroup>
 </Project>
