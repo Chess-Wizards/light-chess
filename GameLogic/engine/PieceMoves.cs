@@ -51,7 +51,7 @@ namespace GameLogic
             return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
                                             pieceCells,
                                             enemyPieceCells,
-                                            board.OnBoard,
+                                            board.IsOnBoard,
                                             (Color)piece?.Color)
                 .Select(nextCell => new Move(cell, nextCell))
                 .ToList();
@@ -64,7 +64,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The rook color.
         //
         // Returns
@@ -73,13 +73,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsRook(Cell cell,
                                                   List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> OnBoard,
+                                                  Func<Cell, bool> IsOnBoard,
                                                   Color activeColor)
         {
             return CellsUnderThreat.GetCellsUnderThreatRook(cell,
                                                             pieceCells,
                                                             enemyPieceCells,
-                                                            OnBoard,
+                                                            IsOnBoard,
                                                             activeColor);
         }
 
@@ -90,7 +90,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The knight color.
         //
         // Returns
@@ -99,13 +99,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsKnight(Cell cell,
                                                     List<Cell> pieceCells,
                                                     List<Cell> enemyPieceCells,
-                                                    Func<Cell, bool> OnBoard,
+                                                    Func<Cell, bool> IsOnBoard,
                                                     Color activeColor)
         {
             return CellsUnderThreat.GetCellsUnderThreatKnight(cell,
                                                               pieceCells,
                                                               enemyPieceCells,
-                                                              OnBoard,
+                                                              IsOnBoard,
                                                               activeColor);
         }
 
@@ -116,7 +116,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The bishop color.
         //
         // Returns
@@ -125,13 +125,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsBishop(Cell cell,
                                                     List<Cell> pieceCells,
                                                     List<Cell> enemyPieceCells,
-                                                    Func<Cell, bool> OnBoard,
+                                                    Func<Cell, bool> IsOnBoard,
                                                     Color activeColor)
         {
             return CellsUnderThreat.GetCellsUnderThreatBishop(cell,
                                                               pieceCells,
                                                               enemyPieceCells,
-                                                              OnBoard,
+                                                              IsOnBoard,
                                                               activeColor);
         }
 
@@ -142,7 +142,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The queen color.
         //
         // Returns
@@ -151,13 +151,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsQueen(Cell cell,
                                                    List<Cell> pieceCells,
                                                    List<Cell> enemyPieceCells,
-                                                   Func<Cell, bool> OnBoard,
+                                                   Func<Cell, bool> IsOnBoard,
                                                    Color activeColor)
         {
             return CellsUnderThreat.GetCellsUnderThreatQueen(cell,
                                                              pieceCells,
                                                              enemyPieceCells,
-                                                             OnBoard,
+                                                             IsOnBoard,
                                                              activeColor);
         }
 
@@ -168,7 +168,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The king color.
         //
         // Returns
@@ -177,13 +177,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsKing(Cell cell,
                                                   List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> OnBoard,
+                                                  Func<Cell, bool> IsOnBoard,
                                                   Color activeColor)
         {
             return CellsUnderThreat.GetCellsUnderThreatKing(cell,
                                                             pieceCells,
                                                             enemyPieceCells,
-                                                            OnBoard,
+                                                            IsOnBoard,
                                                             activeColor);
         }
 
@@ -194,7 +194,7 @@ namespace GameLogic
         // cell: The cell.
         // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
         // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // OnBoard: A function to decide on where the cell is on board.
+        // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The pawn color.
         //
         // Returns
@@ -203,13 +203,13 @@ namespace GameLogic
         public static List<Cell> GetNextCellsPawn(Cell cell,
                                                   List<Cell> pieceCells,
                                                   List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> OnBoard,
+                                                  Func<Cell, bool> IsOnBoard,
                                                   Color activeColor)
         {
             var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell,
                                                                      pieceCells,
                                                                      enemyPieceCells,
-                                                                     OnBoard,
+                                                                     IsOnBoard,
                                                                      activeColor);
 
             // Shift depends on color.            

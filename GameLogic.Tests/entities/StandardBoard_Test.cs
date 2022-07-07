@@ -39,7 +39,7 @@ namespace GameLogic.Tests
 
             var board = new StandardBoard();
             var cell = new Cell(x, y);
-            Assert.That(cellOnBoard, Is.EqualTo(board.OnBoard(cell)));
+            Assert.That(cellOnBoard, Is.EqualTo(board.IsOnBoard(cell)));
         }
 
 

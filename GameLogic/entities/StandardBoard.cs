@@ -48,13 +48,13 @@ namespace GameLogic
             // ----------
             // ArgumentOutOfRangeException: Invalid coordinates.
 
-            if (!OnBoard(cell))
+            if (!IsOnBoard(cell))
             {
                 throw new ArgumentOutOfRangeException($"Invalid cell coordinates {cell.X} and {cell.Y}");
             }
         }
 
-        public bool OnBoard(Cell cell)
+        public bool IsOnBoard(Cell cell)
         {
             // Checks if the cell is on board.
             //

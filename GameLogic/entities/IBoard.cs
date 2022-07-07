@@ -7,7 +7,7 @@ namespace GameLogic
     public interface IBoard
     {
         // The method checks if cell coordinates are valid.
-        bool OnBoard(Cell cell);
+        bool IsOnBoard(Cell cell);
 
         // The method checks if the cell contains a piece.
         bool IsEmpty(Cell cell);
