@@ -36,7 +36,7 @@ namespace GameLogic
 
         public override bool Equals(object obj)
         {
-            var cell = (Cell) obj;
+            var cell = (Cell)obj;
             return X == cell.X && Y == cell.Y;
         }
 
