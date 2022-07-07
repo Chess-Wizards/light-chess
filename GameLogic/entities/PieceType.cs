@@ -5,11 +5,11 @@ namespace GameLogic
     // The enumeration contains possible piece types.
     public enum PieceType
     {
-        Rook,
+        Pawn,
         Knight,
         Bishop,
+        Rook,
         Queen,
-        King,
-        Pawn
+        King
     }
 }
