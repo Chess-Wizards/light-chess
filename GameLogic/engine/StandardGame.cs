@@ -99,7 +99,7 @@ namespace GameLogic
             // Extract only one king cell.
             var kingCell = kingCells[0];
 
-            foreach (var cell in FindAllCellsUndeThreat(gameState))
+            foreach (var cell in FindAllCellsUnderThreat(gameState))
             {
                 if (cell.Equals(kingCell)) return true;
             }
@@ -137,7 +137,7 @@ namespace GameLogic
         /// <summary>
         /// TODO: not finished.
         /// </summary>
-        public List<Cell> FindAllCellsUndeThreat(StandardGameState gameState)
+        public List<Cell> FindAllCellsUnderThreat(StandardGameState gameState)
         {
             throw new NotImplementedException();
         }

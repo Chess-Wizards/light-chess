@@ -19,10 +19,10 @@ namespace GameLogic
         // Checks if the game state is possible.
         bool IsGameStateValid(StandardGameState gameState);
 
-        // Find all moves. Moves can be not valid.
+        // Find all moves. Moves can be invalid.
         List<Move> FindAllMoves(StandardGameState gameState);
 
         // Find all cells under threat produced by enemy
-        List<Cell> FindAllCellsUndeThreat(StandardGameState gameState);
+        List<Cell> FindAllCellsUnderThreat(StandardGameState gameState);
     }
 }
