@@ -4,15 +4,14 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
+    // This class represents the game state. Game state can be uniquely identified by FEN notation.
+    // In addition, the + operator is overloaded to get the next game state after move.
+    //
+    // Please refer to FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 
+    //
+    // TODO: pawn promotion is not implemented
     public class StandardGameState : GameState
     {
-        // This class represents the game state. Game state can be uniquely identified by FEN notation.
-        // In addition, the + operator is overloaded to get the next game state after move.
-        //
-        // Please refer to FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 
-        //
-        // TODO: pawn promotion is not implemented
-
         public StandardBoard Board;
         public Color ActiveColor;
         public Color EnemyColor;
@@ -39,20 +38,19 @@ namespace GameLogic
             FullmoveNumber = fullmoveNumber;
         }
 
+        // Get next game state.
+        // 
+        // Parameters
+        // ----------
+        // gameState: The start/initial game state.
+        // move: The move to perform. The move must be valid/possible.
+        //
+        // Returns
+        // -------
+        // The next game state.
         public static StandardGameState operator +(StandardGameState gameState,
                                                   Move move)
         {
-            // Get next game state.
-            // 
-            // Parameters
-            // ----------
-            // gameState: The start/initial game state.
-            // move: The move to perform. The move must be valid/possible.
-            //
-            // Returns
-            // -------
-            // The next game state.
-
             var piece = (Piece)gameState.Board[move.StartCell];
             var deltaX = move.EndCell.X - move.StartCell.X;
             StandardBoard nextBoard;
@@ -101,20 +99,19 @@ namespace GameLogic
             );
         }
 
+        // Perform castle. The castle must be possible/valid.
+        //
+        // Parameters
+        // ----------
+        // board: The start/initial board.
+        // move: The move to perform.
+        // 
+        // Returns
+        // -------
+        // The next board with performed move.
         private static StandardBoard PerformCastle(StandardBoard board,
                                                    Move move)
         {
-            // Perform castle. The castle must be possible/valid.
-            //
-            // Parameters
-            // ----------
-            // board: The start/initial board.
-            // move: The move to perform.
-            // 
-            // Returns
-            // -------
-            // The next board with performed move.
-
             // Get a new board.
             var nextBoard = board.ShallowCopy();
 
@@ -154,20 +151,19 @@ namespace GameLogic
             return nextBoard;
         }
 
+        // Perform en passant move. The en passant move must be possible/valid.
+        //
+        // Parameters
+        // ----------
+        // board: The start/initial board.
+        // move: The move to perform.
+        //
+        // Returns
+        // -------
+        // The next board with performed move.
         private static StandardBoard PerformEnPassantMove(StandardBoard board,
                                                           Move move)
         {
-            // Perform en passant move. The en passant move must be possible/valid.
-            //
-            // Parameters
-            // ----------
-            // board: The start/initial board.
-            // move: The move to perform.
-            //
-            // Returns
-            // -------
-            // The next board with performed move.
-
             // Get a new board.
             var nextBoard = board.ShallowCopy();
             var piece = (Piece)board[move.StartCell];
@@ -183,20 +179,19 @@ namespace GameLogic
             return nextBoard;
         }
 
+        // Perform the simple move. The move must be possible/valid.
+        //
+        // Parameters
+        // ----------
+        // board: The start/initial board.
+        // move: The move to perform.
+        //
+        // Returns
+        // -------
+        // The next board with performed move.
         private static StandardBoard PerformMove(StandardBoard board,
                                                  Move move)
         {
-            // Perform the simple move. The move must be possible/valid.
-            //
-            // Parameters
-            // ----------
-            // board: The start/initial board.
-            // move: The move to perform.
-            //
-            // Returns
-            // -------
-            // The next board with performed move.
-
             // Get a new board.
             var nextBoard = board.ShallowCopy();
             var piece = (Piece)nextBoard[move.StartCell];
@@ -208,22 +203,21 @@ namespace GameLogic
             return nextBoard;
         }
 
+        // Get a list of possible castles after the move is performed.
+        //
+        // Parameters
+        // ----------
+        // board: The start/initial board.
+        // move: The move to perform.
+        // castles: A list of possible castles at start/initial board.
+        //
+        // Returns
+        // -------
+        // A list of possible castles after the move is performed.
         private static List<Castle> GetCastlesAfterMove(StandardBoard board,
                                                         Move move,
                                                         List<Castle> castles)
         {
-            // Get a list of possible castles after the move is performed.
-            //
-            // Parameters
-            // ----------
-            // board: The start/initial board.
-            // move: The move to perform.
-            // castles: A list of possible castles at start/initial board.
-            //
-            // Returns
-            // -------
-            // A list of possible castles after the move is performed.
-
             var nextCastles = new List<Castle>(castles);
             var piece = (Piece)board[move.StartCell];
             // Castles.
@@ -269,20 +263,19 @@ namespace GameLogic
             return nextCastles;
         }
 
+        // Get en passant cell after the move is performed.
+        // 
+        // Parameters
+        // ----------
+        // board: The start/initial board.
+        // move: The move to perform.
+        //
+        // Returns
+        // -------
+        // The en passant cell after the move is performed.
         private static Cell? GetEnPassantCellAfterMove(StandardBoard board,
                                                        Move move)
         {
-            //  Get en passant cell after the move is performed.
-            // 
-            // Parameters
-            // ----------
-            // board: The start/initial board.
-            // move: The move to perform.
-            //
-            // Returns
-            // -------
-            // The en passant cell after the move is performed.
-
             var piece = (Piece)board[move.StartCell];
             var deltaY = move.EndCell.Y - move.StartCell.Y;
 

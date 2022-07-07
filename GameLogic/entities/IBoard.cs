@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
+    // The interface represents the required board functionality. 
     public interface IBoard
     {
-        // The interface represents the required board functionality.  
-
         // The method checks if cell coordinates are valid.
         bool OnBoard(Cell cell);
 

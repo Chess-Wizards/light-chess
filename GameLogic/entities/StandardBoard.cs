@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
+    // The class represents the board containing piece's locations/cells. 
+    // The width means A-H, while height - 1-8.
     public class StandardBoard : IBoard
     {
-        // The class represents the board containing piece's locations/cells. 
-        // The width means A-H, while height - 1-8.
         public int Width = 8;
         public int Height = 8;
 

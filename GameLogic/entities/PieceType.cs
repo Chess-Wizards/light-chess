@@ -2,10 +2,9 @@ using System;
 
 namespace GameLogic
 {
+    // The enumeration contains possible piece types.
     public enum PieceType
     {
-        // The enumeration contains possible piece types.
-
         Rook,
         Knight,
         Bishop,

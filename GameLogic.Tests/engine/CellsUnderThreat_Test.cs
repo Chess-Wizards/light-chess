@@ -9,12 +9,10 @@ namespace GameLogic.Tests
     public class CellsUnderThreat_Test
     {
 
+        // Creates board position and per each cell checks if piece produces the correct cells under threat.
         [Test]
         public void CellsUnderThreatAllPieces()
         {
-            /* Creates board position and per each cell checks of piece produces the correct cells under threat.
-             */
-
             var correctCellsUnderThreat = new Dictionary<string, List<string>>
             {
                 {"a8", new List<string>(){"b8"}},

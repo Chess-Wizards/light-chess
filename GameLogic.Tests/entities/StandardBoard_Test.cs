@@ -6,13 +6,11 @@ namespace GameLogic.Tests
     [TestFixture]
     public class StandardBoard_Test
     {
+        // Create a board and then shallow copy using constructor and method. Finally,
+        // check if the change in the initial board influences shallow copies.
         [Test]
         public void ShallowCopyPieces()
         {
-            /* Create a board and then shallow copy using constructor and method. Finally,
-            check if the change in the initial board influences shallow copies.
-            */
-
             var board = new StandardBoard();
             var boardShallowCopyConstructor = new StandardBoard(board.PositionToPiece);
             var boardShallowCopy = board.ShallowCopy();

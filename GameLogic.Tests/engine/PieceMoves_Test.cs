@@ -8,12 +8,10 @@ namespace GameLogic.Tests
     [TestFixture]
     public class PieceMoves_Test
     {
+        // Creates board position and per each cell checks if piece produces the correct moves.
         [Test]
         public void MovesAllPieces()
         {
-            /* Creates board position and per each cell checks of piece produces the correct moves.
-             */
-
             var correctCells = new Dictionary<string, List<string>>
             {
                 {"a8", new List<string>(){"b8"}},
@@ -79,8 +77,6 @@ namespace GameLogic.Tests
                     }
                 }
             }
-
-
         }
     }
 }

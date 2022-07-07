@@ -39,24 +39,23 @@ namespace GameLogic
             };
         public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
+        // Deserializes board FEN notation.
+        //
+        // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
+        // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
+        // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
+        // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
+        // corresponding to the number of squares.
+        //
+        // Parameters
+        // ----------
+        // notation: The board FEN notation.
+        //
+        // Returns
+        // -------
+        // The deserialized board.
         static public StandardBoard NotationToBoard(string notation)
         {
-            // Deserializes board FEN notation.
-            //
-            // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
-            // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
-            // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
-            // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
-            // corresponding to the number of squares.
-            //
-            // Parameters
-            // ----------
-            // notation: The board FEN notation.
-            //
-            // Returns
-            // -------
-            // The deserialized board.
-
             var board = new StandardBoard();
 
             var rows = notation.Split('/');
@@ -87,24 +86,23 @@ namespace GameLogic
             return board;
         }
 
+        // Serialize board to FEN notation.
+        //
+        // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
+        // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
+        // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
+        // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
+        // corresponding to the number of squares.
+        //
+        // Parameters
+        // ----------
+        // board: The board to serialize.
+        //
+        // Returns
+        // -------
+        // The serialized board.
         static public string BoardToNotation(StandardBoard board)
         {
-            // Serialize board to FEN notation.
-            //
-            // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
-            // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
-            // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
-            // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
-            // corresponding to the number of squares.
-            //
-            // Parameters
-            // ----------
-            // board: The board to serialize.
-            //
-            // Returns
-            // -------
-            // The serialized board.
-
             var rows = new List<string>();
 
             // Iterate over height from up (7) to bottom (0).
@@ -142,82 +140,78 @@ namespace GameLogic
             return notation;
         }
 
+        // Deserialize color FEN notation.
+        //
+        // "w" means that White is to move; "b" means that Black is to move.
+        //
+        // Parameters
+        // ----------
+        // notation: The notation to deserialize.
+        //
+        // Returns
+        // -------
+        // The deserialized color.
         static public Color NotationToColor(string notation)
         {
-            // Deserialize color FEN notation.
-            //
-            // "w" means that White is to move; "b" means that Black is to move.
-            //
-            // Parameters
-            // ----------
-            // notation: The notation to deserialize.
-            //
-            // Returns
-            // -------
-            // The deserialized color.
-
             if (notation.Length != 1)
                 throw new ArgumentException();
             return mappingNotationToColor[notation[0]];
         }
 
+        // Serialize color to the FEN notation.
+        //
+        // "w" means that White is to move; "b" means that Black is to move.
+        //
+        // Parameters
+        // ----------
+        // color: The color to serialize.
+        //
+        // Returns
+        // -------
+        // The serialized color.
         static public string ColorToNotation(Color color)
         {
-            // Serialize color to the FEN notation.
-            //
-            // "w" means that White is to move; "b" means that Black is to move.
-            //
-            // Parameters
-            // ----------
-            // color: The color to serialize.
-            //
-            // Returns
-            // -------
-            // The serialized color.
-
             return mappingColorToNotation[color].ToString();
         }
 
+        // Deserialize castle FEN notation.
+        //
+        // If neither side has the ability to castle, this field uses the character "-". 
+        // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
+        // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
+        // A situation that temporarily prevents castling does not prevent the use of this notation.
+        //
+        // Parameters
+        // ----------
+        // notation: The notation to deserialize.
+        //
+        // Returns
+        // -------
+        // The deserialized castles.
         static public List<Castle> NotationToCastle(string notation)
         {
-            // Deserialize castle FEN notation.
-            //
-            // If neither side has the ability to castle, this field uses the character "-". 
-            // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
-            // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
-            // A situation that temporarily prevents castling does not prevent the use of this notation.
-            //
-            // Parameters
-            // ----------
-            // notation: The notation to deserialize.
-            //
-            // Returns
-            // -------
-            // The deserialized castles.
-
             return notation.Where((castle) => (castle != '-'))
                            .Select((castle) => (mappingNotationToCastle[castle]))
                            .ToList();
 
         }
 
+        // Serialize castles to the FEN notation.
+        //
+        // If neither side has the ability to castle, this field uses the character "-". 
+        // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
+        // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
+        // A situation that temporarily prevents castling does not prevent the use of this notation.
+        //
+        // Parameters
+        // ----------
+        // castles: A list of castles.
+        //
+        // Returns
+        // -------
+        // The serialized castles.
         static public string CastleToNotation(List<Castle> castles)
         {
-            // Serialize castles to the FEN notation.
-            //
-            // If neither side has the ability to castle, this field uses the character "-". 
-            // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
-            // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
-            // A situation that temporarily prevents castling does not prevent the use of this notation.
-            //
-            // Parameters
-            // ----------
-            // castles: A list of castles.
-            //
-            // Returns
-            // -------
-            // The serialized castles.
-
             var notation = String.Join("",
                         castles.Select((castle) => mappingCastleToNotation[castle])
                                .ToList()
@@ -225,22 +219,21 @@ namespace GameLogic
             return notation.Length == 0 ? "-" : notation;
         }
 
+        // Deserialize cell FEN notation.
+        //
+        // Parameters
+        // ----------
+        // notation: The notation to deserialize or '-'.
+        //
+        // Exceptions
+        // ----------
+        // ArgumentException: The length of notation is not equal to two.
+        //
+        // Returns
+        // -------
+        // The deserialized cell or null.
         static public Cell? NotationToCell(string notation)
         {
-            // Deserialize cell FEN notation.
-            //
-            // Parameters
-            // ----------
-            // notation: The notation to deserialize or '-'.
-            //
-            // Exceptions
-            // ----------
-            // ArgumentException: The length of notation is not equal to two.
-            //
-            // Returns
-            // -------
-            // The deserialized cell or null.
-
             if (notation != "-")
             {
                 if (notation.Length != 2)
@@ -254,18 +247,17 @@ namespace GameLogic
             return null;
         }
 
+        // Serialize cell to the FEN notation.
+        //
+        // Parameters
+        // ----------
+        // cell: The cell to serialize or null.
+        //
+        // Returns
+        // -------
+        // The serialized cell or '-'. 
         static public string CellToNotation(Cell? cell)
         {
-            // Serialize cell to the FEN notation.
-            //
-            // Parameters
-            // ----------
-            // cell: The cell to serialize or null.
-            //
-            // Returns
-            // -------
-            // The serialized cell or '-'. 
-
             if (cell != null)
             {
                 // Integer to letter char. Example: 0 -> 'a'.
