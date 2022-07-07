@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace GameLogic.Tests
 {
     [TestFixture]
-    public class StandardGameState_Test
+    public class MoveApplier_Test
     {
         [Test]
         // 1. White moves
@@ -93,7 +93,7 @@ namespace GameLogic.Tests
             // Perform move.
             var move = new Move((Cell)SerializeHelper.NotationToCell(startCell),
                                 (Cell)SerializeHelper.NotationToCell(endCell));
-            var endGameState = startGameState + move;
+            var endGameState = MoveApplier.GetNextGameState(startGameState, move);
 
             // Deserialize.
             var gameStateFENNotationOutput = new StandardGame().SerializeToFEN(endGameState);

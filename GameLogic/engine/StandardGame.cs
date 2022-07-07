@@ -112,7 +112,7 @@ namespace GameLogic
         /// </summary>
         public StandardGameState? MakeMove(StandardGameState gameState, Move move)
         {
-            var nextGameState = gameState + move;
+            var nextGameState = MoveApplier.GetNextGameState(gameState, move);
             return (IsGameStateValid(nextGameState)) ? nextGameState : null;
         }
 
