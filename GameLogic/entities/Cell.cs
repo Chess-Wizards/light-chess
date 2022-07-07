@@ -36,12 +36,13 @@ namespace GameLogic
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            var cell = (Cell) obj;
+            return X == cell.X && Y == cell.Y;
         }
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return X.GetHashCode() ^ Y.GetHashCode();
         }
     }
 }

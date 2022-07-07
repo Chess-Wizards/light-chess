@@ -73,7 +73,7 @@ namespace GameLogic.Tests
                     // Check if the cell is empty.
                     else
                     {
-                        Assert.That(null, Is.EqualTo(board[cell]));
+                        Assert.Null(board[cell]);
                     }
                 }
             }
