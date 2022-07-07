@@ -19,7 +19,7 @@ namespace GameLogic
         // The list contains available castles.
         List<Castle> AvaialbleCastles;
 
-        // The list contains avaialble enpassant moves.
+        // The list contains available enpassant moves.
         List<Move> EnPassantMoves;
 
         // The number of half moves since the last capture or pawn advance.
