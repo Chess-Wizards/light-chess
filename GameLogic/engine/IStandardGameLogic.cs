@@ -12,7 +12,7 @@ namespace GameLogic
         // Checks if the check occurs at current game state.
         bool IsCheck(StandardGameState gameState);
 
-        // Makes a move if possible, otherwise return null.
+        // Applies the move and returns a new instance of StandardGameState, if the move is valid. Otherwise, returns null.
         StandardGameState MakeMove(StandardGameState? gameState,
                                    Move move);
 
