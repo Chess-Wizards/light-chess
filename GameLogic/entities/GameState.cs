@@ -11,21 +11,21 @@ namespace GameLogic
     public class GameState
     {
         // The board contains the piece locations/cells.
-        StandardBoard board;
+        public StandardBoard Board;
 
         // The color defines the current turn.
-        Color ActiveColor;
+        public Color ActiveColor;
 
         // The list contains available castles.
-        List<Castle> AvaialbleCastles;
+        public List<Castle> AvaialbleCastleMoves;
 
-        // The list contains available enpassant moves.
-        List<Move> EnPassantMoves;
+        // The en passsant cell.
+        public Cell? EnPassantCell;
 
         // The number of half moves since the last capture or pawn advance.
-        int HalfmoveNumber;
+        public int HalfmoveNumber;
 
         // The number of the full move. It starts at 1 and is incremented after Black's move.
-        int FullmoveNumber;
+        public int FullmoveNumber;
     }
 }

@@ -12,18 +12,12 @@ namespace GameLogic
     // TODO: pawn promotion is not implemented
     public class StandardGameState : GameState
     {
-        public StandardBoard Board;
-        public Color ActiveColor;
         public Color EnemyColor;
-        public List<Castle> AvaialbleCastles;
-        public Cell? EnPassantCell;
-        public int HalfmoveNumber;
-        public int FullmoveNumber;
 
         public StandardGameState(
             StandardBoard board,
             Color color,
-            List<Castle> avaialbleCastles,
+            List<Castle> avaialbleCastleMoves,
             Cell? enPassantCell,
             int halfmoveNumber,
             int fullmoveNumber
@@ -32,7 +26,7 @@ namespace GameLogic
             Board = board;
             ActiveColor = color;
             EnemyColor = color.Change();
-            AvaialbleCastles = avaialbleCastles;
+            AvaialbleCastleMoves = avaialbleCastleMoves;
             EnPassantCell = enPassantCell;
             HalfmoveNumber = halfmoveNumber;
             FullmoveNumber = fullmoveNumber;
@@ -73,9 +67,9 @@ namespace GameLogic
             }
 
             // Next castles.
-            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board,
-                                                           move,
-                                                           gameState.AvaialbleCastles);
+            var nextAvaialbleCastleMoves = GetCastlesAfterMove(gameState.Board,
+                                                               move,
+                                                               gameState.AvaialbleCastleMoves);
 
             // Next cells. 
             var nextEnPassantCell = GetEnPassantCellAfterMove(gameState.Board, move);
@@ -92,7 +86,7 @@ namespace GameLogic
             return new StandardGameState(
                 nextBoard,
                 gameState.EnemyColor,
-                nextAvaialbleCastles,
+                nextAvaialbleCastleMoves,
                 nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber

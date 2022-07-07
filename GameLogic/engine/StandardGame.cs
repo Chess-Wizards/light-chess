@@ -27,7 +27,7 @@ namespace GameLogic
             {
             SerializeHelper.BoardToNotation(objectToSerialize.Board),
             SerializeHelper.ColorToNotation(objectToSerialize.ActiveColor),
-            SerializeHelper.CastleToNotation(objectToSerialize.AvaialbleCastles),
+            SerializeHelper.CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
             SerializeHelper.CellToNotation(objectToSerialize.EnPassantCell),
             objectToSerialize.HalfmoveNumber.ToString(),
             objectToSerialize.FullmoveNumber.ToString()
