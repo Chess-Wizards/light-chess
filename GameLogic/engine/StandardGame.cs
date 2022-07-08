@@ -72,7 +72,6 @@ namespace GameLogic
         /// </summary>
         public bool IsMate(StandardGameState gameState)
         {
-
             foreach (var move in FindAllMoves(gameState))
             {
                 var nextGameState = MakeMove(gameState, move);
