@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C2C2C3A7-F241-47A9-A59E-B10F894311CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2C2C3A7-F241-47A9-A59E-B10F894311CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2C2C3A7-F241-47A9-A59E-B10F894311CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2C2C3A7-F241-47A9-A59E-B10F894311CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2C2C3A7-F241-47A9-A59E-B10F894311CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
