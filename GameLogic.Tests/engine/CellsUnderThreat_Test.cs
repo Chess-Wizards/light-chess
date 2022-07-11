@@ -8,7 +8,6 @@ namespace GameLogic.Tests
     [TestFixture]
     public class CellsUnderThreat_Test
     {
-
         // Creates board position and per each cell checks if piece produces the correct cells under threat.
         [Test]
         public void CellsUnderThreatAllPieces()
@@ -47,7 +46,7 @@ namespace GameLogic.Tests
             };
 
             var fenBoardNotation = "r1b1k1nr/p2p1pNp/n2B4/1p1NP2P/6P1/1p1P1Q2/P1P1K3/q5b1";
-            var board = SerializeHelper.NotationToBoard(fenBoardNotation);
+            var board = StandardFENSerializer.NotationToBoard(fenBoardNotation);
 
             // Iterate over width.
             for (int x = 0; x < board.Height; x++)
@@ -56,13 +55,13 @@ namespace GameLogic.Tests
                 for (int y = 0; y < board.Width; y++)
                 {
                     var cell = new Cell(x, y);
-                    var cellNotation = SerializeHelper.CellToNotation(cell);
+                    var cellNotation = StandardFENSerializer.CellToNotation(cell);
 
                     // Check if piece produces the correct cells under threat.
                     if (correctCellsUnderThreat.ContainsKey(cellNotation))
                     {
                         var cellsUnderThreat = CellsUnderThreat.GetCellsUnderThreat(cell, board)
-                                                   .Select((cell) => SerializeHelper.CellToNotation(cell))
+                                                   .Select((cell) => StandardFENSerializer.CellToNotation(cell))
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();
                         var expectedCellsUnderThreat = correctCellsUnderThreat[cellNotation]

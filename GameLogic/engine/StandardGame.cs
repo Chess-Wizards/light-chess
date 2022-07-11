@@ -8,64 +8,22 @@ namespace GameLogic
 {
     public class StandardGame : IStandardGameLogic, IFENSerializable<StandardGameState>
     {
-        /*
-        This class contains a game logic.
-        */
+        // This class is the entry point for all commands coming to the GameLogic project.
+        // It is responsible for initial instantiation of the game from FEN notation.
 
-        /// <summary>
-        /// Serialize game object to FEN notation.
-        /// </summary>
-        /// <param name="objectToSerialize">
-        /// The game to serialize.
-        /// </param>        
-        /// <returns>
-        /// The game FEN notation. 
-        /// </returns>        
-        public string SerializeToFEN(StandardGameState objectToSerialize)
+        public StandardGameState gameState;
+        public string FENNotation 
         {
-            var splitFenNotation = new string[6]
+            get 
             {
-            SerializeHelper.BoardToNotation(objectToSerialize.Board),
-            SerializeHelper.ColorToNotation(objectToSerialize.ActiveColor),
-            SerializeHelper.CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
-            SerializeHelper.CellToNotation(objectToSerialize.EnPassantCell),
-            objectToSerialize.HalfmoveNumber.ToString(),
-            objectToSerialize.FullmoveNumber.ToString()
-            };
-
-            return String.Join(" ", splitFenNotation);
+                return StandardFENSerializer.SerializeToFEN(gameState);
+            } 
         }
 
-        /// <summary>
-        /// Deserialize FEN notation to game object.
-        /// </summary>
-        /// <param name="fenNotation">
-        /// The game FEN notation.
-        /// </param>        
-        /// <exception 
-        ///cref="ArgumentException">Invalid |fenNotation|.
-        ///</exception>
-        /// <returns>
-        /// The game. 
-        /// </returns>  
-        public StandardGameState DeserializeFromFEN(string fenNotation)
+        public StandardGame(string fenNotation)
         {
-            var splitFenNotation = fenNotation.Split(' ');
-
-            if (splitFenNotation.Count() != 6)
-                throw new ArgumentException("Invalid FEN notation.");
-
-            var gameState = new StandardGameState(
-                SerializeHelper.NotationToBoard(splitFenNotation[0]),
-                SerializeHelper.NotationToColor(splitFenNotation[1]),
-                SerializeHelper.NotationToCastle(splitFenNotation[2]),
-                SerializeHelper.NotationToCell(splitFenNotation[3]),
-                Int32.Parse(splitFenNotation[4]),
-                Int32.Parse(splitFenNotation[5])
-            );
-            return gameState;
+            gameState = StandardFENSerializer.DeserializeFromFEN(fenNotation);
         }
-
 
         /// <summary>
         /// TODO: not finished.

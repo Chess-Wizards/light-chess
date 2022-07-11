@@ -4,16 +4,26 @@ using NUnit.Framework;
 namespace GameLogic.Tests
 {
     [TestFixture]
-    public class SerializeHelper_Test
+    public class StandardFENSerializer_Test
     {
+        [Test]
+        [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+        public void GameNotationNotChanged(string gameFENNotation)
+        {
+            // Serialize.
+            var gameState = StandardFENSerializer.DeserializeFromFEN(gameFENNotation);
+            // Deserialize.
+            var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(gameState);
+        }
+
         [Test]
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")]
         public void BoardNotationNotChanged(string boardFENNotation)
         {
             // Serialize.
-            var board = SerializeHelper.NotationToBoard(boardFENNotation);
+            var board = StandardFENSerializer.NotationToBoard(boardFENNotation);
             // Deserialize.
-            var boardFENNotationOutput = SerializeHelper.BoardToNotation(board);
+            var boardFENNotationOutput = StandardFENSerializer.BoardToNotation(board);
 
             Assert.That(boardFENNotationOutput, Is.EqualTo(boardFENNotation));
         }
@@ -24,9 +34,9 @@ namespace GameLogic.Tests
         public void ColorNotationNotChanged(string colorFENNotation)
         {
             // Serialize.
-            var color = SerializeHelper.NotationToColor(colorFENNotation);
+            var color = StandardFENSerializer.NotationToColor(colorFENNotation);
             // Deserialize.
-            var colorFENNotationOutput = SerializeHelper.ColorToNotation(color);
+            var colorFENNotationOutput = StandardFENSerializer.ColorToNotation(color);
 
             Assert.That(colorFENNotationOutput, Is.EqualTo(colorFENNotation));
         }
@@ -40,9 +50,9 @@ namespace GameLogic.Tests
         public void CastleNotationNotChanged(string castleFENNotation)
         {
             // Serialize.
-            var castle = SerializeHelper.NotationToCastle(castleFENNotation);
+            var castle = StandardFENSerializer.NotationToCastle(castleFENNotation);
             // Deserialize.
-            var castleFENNotationOutput = SerializeHelper.CastleToNotation(castle);
+            var castleFENNotationOutput = StandardFENSerializer.CastleToNotation(castle);
 
             Assert.That(castleFENNotationOutput, Is.EqualTo(castleFENNotation));
         }
@@ -59,9 +69,9 @@ namespace GameLogic.Tests
         public void CellNotationNotChanged(string cellFENNotation)
         {
             // Serialize.
-            var cell = SerializeHelper.NotationToCell(cellFENNotation);
+            var cell = StandardFENSerializer.NotationToCell(cellFENNotation);
             // Deserialize.
-            var cellFENNotationOutput = SerializeHelper.CellToNotation(cell);
+            var cellFENNotationOutput = StandardFENSerializer.CellToNotation(cell);
 
             Assert.That(cellFENNotationOutput, Is.EqualTo(cellFENNotation));
         }

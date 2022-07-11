@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public static class SerializeHelper
+    public static class StandardFENSerializer
     {
+        // The class represents the serialization/deserialization to/from FEN notation.
+        // Please refer to the FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
+
         public static Dictionary<char, Piece> mappingNotationToPiece = new Dictionary<char, Piece>()
             {
                 {'P', new Piece(Color.White, PieceType.Pawn)},
@@ -37,6 +40,65 @@ namespace GameLogic
                 {'w', Color.White},
                 {'b', Color.Black}
             };
+
+        // Serialize object to FEN notation.
+        //
+        // Parameters
+        // ----------
+        // objectToSerialize: The object to serializer.
+        // 
+        // Returns
+        // -------
+        // The FEN notation.
+        public static string SerializeToFEN(StandardGameState objectToSerialize)
+        {
+
+            var splitFenNotation = new string[6]
+            {
+            BoardToNotation(objectToSerialize.Board),
+            ColorToNotation(objectToSerialize.ActiveColor),
+            CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
+            CellToNotation(objectToSerialize.EnPassantCell),
+            objectToSerialize.HalfmoveNumber.ToString(),
+            objectToSerialize.FullmoveNumber.ToString()
+            };
+
+            var fenNotation = String.Join(" ", splitFenNotation);
+            return fenNotation;
+        }
+
+        // Deserialize FEN notation to object.
+        //
+        // Parameters
+        // ----------
+        // fenNotation: The FEN notation.
+        //
+        // Exceptions
+        // ----------
+        // ArgumentException: Invalid FEN notation.
+        // 
+        // Returns
+        // -------
+        // The game. 
+        public static StandardGameState DeserializeFromFEN(string fenNotation)
+        {
+            var splitFenNotation = fenNotation.Split(' ');
+
+            if (splitFenNotation.Count() != 6)
+                throw new ArgumentException("Invalid FEN notation.");
+
+            var gameState = new StandardGameState(
+                NotationToBoard(splitFenNotation[0]),
+                NotationToColor(splitFenNotation[1]),
+                NotationToCastle(splitFenNotation[2]),
+                NotationToCell(splitFenNotation[3]),
+                Int32.Parse(splitFenNotation[4]),
+                Int32.Parse(splitFenNotation[5])
+            );
+
+            return gameState;
+        }
+
         public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
         // Deserializes board FEN notation.
@@ -54,7 +116,7 @@ namespace GameLogic
         // Returns
         // -------
         // The deserialized board.
-        static public StandardBoard NotationToBoard(string notation)
+        public static StandardBoard NotationToBoard(string notation)
         {
             var board = new StandardBoard();
 
@@ -101,7 +163,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized board.
-        static public string BoardToNotation(StandardBoard board)
+        public static string BoardToNotation(StandardBoard board)
         {
             var rows = new List<string>();
 
@@ -151,7 +213,7 @@ namespace GameLogic
         // Returns
         // -------
         // The deserialized color.
-        static public Color NotationToColor(string notation)
+        public static Color NotationToColor(string notation)
         {
             if (notation.Length != 1)
                 throw new ArgumentException();
@@ -169,7 +231,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized color.
-        static public string ColorToNotation(Color color)
+        public static string ColorToNotation(Color color)
         {
             return mappingColorToNotation[color].ToString();
         }
@@ -188,7 +250,7 @@ namespace GameLogic
         // Returns
         // -------
         // The deserialized castles.
-        static public List<Castle> NotationToCastle(string notation)
+        public static List<Castle> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
                            .Select((castle) => (mappingNotationToCastle[castle]))
@@ -210,7 +272,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized castles.
-        static public string CastleToNotation(List<Castle> castles)
+        public static string CastleToNotation(List<Castle> castles)
         {
             var notation = String.Join("",
                         castles.Select((castle) => mappingCastleToNotation[castle])
@@ -232,7 +294,7 @@ namespace GameLogic
         // Returns
         // -------
         // The deserialized cell or null.
-        static public Cell? NotationToCell(string notation)
+        public static Cell? NotationToCell(string notation)
         {
             if (notation != "-")
             {
@@ -256,7 +318,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized cell or '-'. 
-        static public string CellToNotation(Cell? cell)
+        public static string CellToNotation(Cell? cell)
         {
             if (cell != null)
             {

@@ -88,15 +88,15 @@ namespace GameLogic.Tests
                                 string endCell)
         {
             // Serialize.
-            var startGameState = new StandardGame().DeserializeFromFEN(startGameStateNotation);
+            var startGameState = StandardFENSerializer.DeserializeFromFEN(startGameStateNotation);
 
             // Perform move.
-            var move = new Move((Cell)SerializeHelper.NotationToCell(startCell),
-                                (Cell)SerializeHelper.NotationToCell(endCell));
+            var move = new Move((Cell)StandardFENSerializer.NotationToCell(startCell),
+                                (Cell)StandardFENSerializer.NotationToCell(endCell));
             var endGameState = MoveApplier.GetNextGameState(startGameState, move);
 
             // Deserialize.
-            var gameStateFENNotationOutput = new StandardGame().SerializeToFEN(endGameState);
+            var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(endGameState);
 
             Assert.That(gameStateFENNotationOutput, Is.EqualTo(endGameStateNotation));
         }
