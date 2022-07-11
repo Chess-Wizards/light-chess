@@ -10,9 +10,11 @@ namespace GameLogic.Tests
     {
         [Test]
         [TestCase("r1r5/1k6/8/8/8/8/1K6/R1R5 w KkQq - 2 20",
-                  "a1a2 a1a3 a1a4 a1a5 a1a6 a1a7 a1a8 a1b1 c1c2 c1c3 c1c4 c1c5 c1c6 c1c7 c1c8 c1b1 c1d1 c1e1 c1f1 c1g1 c1h1 b2b1 b2b3")]
+                  "a1a2 a1a3 a1a4 a1a5 a1a6 a1a7 a1a8 a1b1 c1c2 c1c3 c1c4 c1c5 c1c6 "
+                  + "c1c7 c1c8 c1b1 c1d1 c1e1 c1f1 c1g1 c1h1 b2b1 b2b3")]
         [TestCase("r1r5/1k6/8/8/8/8/1K6/R1R5 b KkQq - 2 20",
-                  "a8a1 a8a2 a8a3 a8a4 a8a5 a8a6 a8a7 a8b8 c8c1 c8c2 c8c3 c8c4 c8c5 c8c6 c8c7 c8b8 c8d8 c8e8 c8f8 c8g8 c8h8 b7b6 b7b8")]
+                  "a8a1 a8a2 a8a3 a8a4 a8a5 a8a6 a8a7 a8b8 c8c1 c8c2 c8c3 c8c4 c8c5 "
+                  + "c8c6 c8c7 c8b8 c8d8 c8e8 c8f8 c8g8 c8h8 b7b6 b7b8")]
         public void FindAllValidMovesCorrect(string board,
                                              string cellsUnderThreatNotParsed)
         {
@@ -21,7 +23,8 @@ namespace GameLogic.Tests
                                                                .ToList();
 
             var cellsToMove = new StandardGame(board).FindAllValidMoves()
-                                                     .Select(move => $"{StandardFENSerializer.CellToNotation(move.StartCell)}{StandardFENSerializer.CellToNotation(move.EndCell)}")
+                                                     .Select(move => $"{StandardFENSerializer.CellToNotation(move.StartCell)}"
+                                                                     + $"{StandardFENSerializer.CellToNotation(move.EndCell)}")
                                                      .OrderBy(notation => notation)
                                                      .ToList();
 
