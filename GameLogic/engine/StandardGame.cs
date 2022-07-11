@@ -13,12 +13,12 @@ namespace GameLogic
         // Game state must be valid!!!
 
         public StandardGameState gameState;
-        public string FENNotation 
+        public string FENNotation
         {
-            get 
+            get
             {
                 return StandardFENSerializer.SerializeToFEN(gameState);
-            } 
+            }
         }
 
         public StandardGame(string fenNotation)
@@ -39,7 +39,7 @@ namespace GameLogic
         // true, if the mate occurs. Otherwise, false.
         public bool IsMate()
         {
-            return IsCheck() 
+            return IsCheck()
                    && FindAllValidMoves().Count == 0;
         }
 
@@ -90,15 +90,15 @@ namespace GameLogic
 
             var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                    filterByPieceType: PieceType.King) // Extract king location.
-                                               .First();         
-            var checkToEnemyKing = FindAllCellsUnderThreat(filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);                                                                                                    
+                                               .First();
+            var checkToEnemyKing = FindAllCellsUnderThreat(filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
 
             // Pawns cannot be located on first and last lines of the height (y-axis).
-            var invalidHeights = new List<int>{0, 7};
+            var invalidHeights = new List<int> { 0, 7 };
             var pawnsOnInvalidCells = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
                                                      .Any(cell => invalidHeights.Contains(cell.Y));
 
-            return onlyOneEnemyKing 
+            return onlyOneEnemyKing
                    && onlyOneKing
                    && !checkToEnemyKing
                    && !pawnsOnInvalidCells;
@@ -135,7 +135,7 @@ namespace GameLogic
         // A list containing all cells.
         private List<Cell> FindAllCellsUnderThreat(Color filterByColor)
         {
-            return gameState.Board.GetCellsWithPieces(filterByColor:filterByColor)
+            return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))
                                   .Distinct()
                                   .ToList();
