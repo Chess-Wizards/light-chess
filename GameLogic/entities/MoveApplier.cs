@@ -23,11 +23,10 @@ namespace GameLogic
                                                          Move move)
         {
             var piece = (Piece)gameState.Board[move.StartCell];
-            var deltaX = move.EndCell.X - move.StartCell.X;
+            var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
             StandardBoard nextBoard;
-
             // Castle.
-            if (piece.Type == PieceType.King || deltaX >= 2)
+            if (piece.Type == PieceType.King && deltaX == 2)
             {
                 nextBoard = PerformCastle(gameState.Board, move);
             }

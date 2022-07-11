@@ -61,9 +61,9 @@ namespace GameLogic.Tests
                     if (correctCellsUnderThreat.ContainsKey(cellNotation))
                     {
                         var cellsUnderThreat = CellsUnderThreat.GetCellsUnderThreat(cell, board)
-                                                   .Select((cell) => StandardFENSerializer.CellToNotation(cell))
-                                                   .OrderBy((notation) => (notation))
-                                                   .ToList();
+                                                               .Select((cell) => StandardFENSerializer.CellToNotation(cell))
+                                                               .OrderBy((notation) => (notation))
+                                                               .ToList();
                         var expectedCellsUnderThreat = correctCellsUnderThreat[cellNotation]
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();

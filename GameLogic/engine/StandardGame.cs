@@ -40,7 +40,7 @@ namespace GameLogic
         public bool IsMate()
         {
             return IsCheck() 
-                   && FindAllMoves().All(move => MakeMove(move).IsCheck());
+                   && FindAllValidMoves().Count == 0;
         }
 
         // Checks if the check occurs at the current game state.
@@ -123,8 +123,8 @@ namespace GameLogic
         // A list containing valid moves.
         public List<Move> FindAllValidMoves()
         {
-            return FindAllMoves().Where(move => MakeMove(move).IsValid())
-                                .ToList();
+            return FindAllMoves().Where(move => MakeMove(move) != null)
+                                 .ToList();
         }
 
         // Find all cells 'under threat' produced by |filterByColor| color.
@@ -137,6 +137,7 @@ namespace GameLogic
         {
             return gameState.Board.GetCellsWithPieces(filterByColor:filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))
+                                  .Distinct()
                                   .ToList();
         }
     }
