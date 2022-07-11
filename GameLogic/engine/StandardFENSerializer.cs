@@ -52,15 +52,14 @@ namespace GameLogic
         // The FEN notation.
         public static string SerializeToFEN(StandardGameState objectToSerialize)
         {
-
             var splitFenNotation = new string[6]
             {
-            BoardToNotation(objectToSerialize.Board),
-            ColorToNotation(objectToSerialize.ActiveColor),
-            CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
-            CellToNotation(objectToSerialize.EnPassantCell),
-            objectToSerialize.HalfmoveNumber.ToString(),
-            objectToSerialize.FullmoveNumber.ToString()
+                BoardToNotation(objectToSerialize.Board),
+                ColorToNotation(objectToSerialize.ActiveColor),
+                CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
+                CellToNotation(objectToSerialize.EnPassantCell),
+                objectToSerialize.HalfmoveNumber.ToString(),
+                objectToSerialize.FullmoveNumber.ToString()
             };
 
             var fenNotation = String.Join(" ", splitFenNotation);
