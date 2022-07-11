@@ -76,12 +76,12 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing cells under threat produced by piece at cell |cell|. 
-        public static List<Cell> FindCells(Cell cell,
-                                           List<Cell> shifts,
-                                           List<Cell> pieceCells,
-                                           List<Cell> enemyPieceCells,
-                                           Func<Cell, bool> IsOnBoard,
-                                           bool oneShift = false)
+        private static List<Cell> FindCells(Cell cell,
+                                            List<Cell> shifts,
+                                            List<Cell> pieceCells,
+                                            List<Cell> enemyPieceCells,
+                                            Func<Cell, bool> IsOnBoard,
+                                            bool oneShift = false)
         {
             // List to save cells 'under threat'
             var cellsUnderThreat = new List<Cell>();
