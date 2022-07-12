@@ -51,9 +51,9 @@ namespace GameLogic
         // true, if the check occurs. Otherwise, false.
         public bool IsCheck()
         {
-
+            // Extract king location.
             var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                              filterByPieceType: PieceType.King) // Extract king location.
+                                                              filterByPieceType: PieceType.King) 
                                           .First();
 
             return FindAllCellsUnderThreat(filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
