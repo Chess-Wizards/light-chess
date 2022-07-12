@@ -10,7 +10,7 @@ namespace Communication.Protocols.UCI
         {
             if (minAllowed > maxAllowed)
             {
-                throw new UCIProtocolException($"Minimum allowed value '{minAllowed}' cannot be bigger then the maximum value '{maxAllowed}'.");
+                throw new UCIProtocolException($"Minimum allowed value '{minAllowed}' cannot be bigger than the maximum value '{maxAllowed}'.");
             }
 
             this.minAllowed = minAllowed;
@@ -28,7 +28,7 @@ namespace Communication.Protocols.UCI
         {
             if (value < minAllowed || value > maxAllowed)
             {
-                throw new UCIProtocolException("$Option value '{value}' must be in range [{this.minAllowed}, {this.maxAllowed}].");
+                throw new UCIProtocolException($"Option value '{value}' must be in range [{this.minAllowed}, {this.maxAllowed}].");
             }
         }
 

@@ -2,7 +2,7 @@ namespace Communication
 {
     // BotCommunicator is the entry point for all commands coming to the bot.
     // It is responsible for initial instantiation of the provided protocol and
-    // and further communication proxying.
+    // further communication proxying.
     public class BotCommunicator
     {
         private Protocols.IProtocol? initializedProtocol;
