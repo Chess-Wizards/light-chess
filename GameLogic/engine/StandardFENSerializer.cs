@@ -121,11 +121,11 @@ namespace GameLogic
 
             var rows = notation.Split('/');
             int y = rows.Count() - 1;
-            // Iterate over height from up (7) to bottom (0). 
+            // Iterate over ranks from up (7) to bottom (0). 
             foreach (var row in rows)
             {
                 var x = 0;
-                // Iterate over width from left (a) to right (h).
+                // Iterate over files from left (a) to right (h).
                 foreach (var character in row)
                 {
                     // Set piece to board and increment |x| by 1 .

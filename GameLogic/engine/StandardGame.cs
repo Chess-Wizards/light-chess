@@ -53,7 +53,7 @@ namespace GameLogic
         {
             // Extract king location.
             var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                              filterByPieceType: PieceType.King) 
+                                                              filterByPieceType: PieceType.King)
                                           .First();
 
             return FindAllCellsUnderThreat(filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
@@ -93,15 +93,15 @@ namespace GameLogic
                                                .First();
             var checkToEnemyKing = FindAllCellsUnderThreat(filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
 
-            // Pawns cannot be located on first and last lines of the height (y-axis).
-            var invalidHeights = new List<int> { 0, 7 };
-            var pawnsOnInvalidCells = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
-                                                     .Any(cell => invalidHeights.Contains(cell.Y));
+            // Pawns cannot be located on first and last ranks.
+            var invalidPawnRanks = new List<int> { 0, 7 };
+            var pawnsOnInvalidRanks = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
+                                                     .Any(cell => invalidPawnRanks.Contains(cell.Y));
 
             return onlyOneEnemyKing
                    && onlyOneKing
                    && !checkToEnemyKing
-                   && !pawnsOnInvalidCells;
+                   && !pawnsOnInvalidRanks;
         }
 
         // Find all moves. Moves might be not valid.
