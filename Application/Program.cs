@@ -1,4 +1,4 @@
-﻿using GameLogic;
+﻿using Communication;
 
-var printer = new HelloWorldPrinter();
-printer.Print();
+BotCommunicator botCommunicator = new BotCommunicator();
+botCommunicator.Start();
