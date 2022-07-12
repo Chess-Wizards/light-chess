@@ -42,6 +42,8 @@ namespace GameLogic
                     && lastPawnRanks.Contains(move.EndCell.Y))
             {
                 nextBoard = PerformMove(gameState.Board, move);
+                
+                // Replace pawn with piece after promotion
                 var pieceAfterPromotion = new Piece(piece.Color, (PieceType)move.EndPieceType);
                 nextBoard[move.EndCell] = pieceAfterPromotion;
             }
