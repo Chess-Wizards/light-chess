@@ -360,5 +360,22 @@ namespace GameLogic
                                 .ToArray();
             return new Move(cells[0], cells[1]);
         }
+
+        // Deserialize move by passing start and end cells.
+        //
+        // Parameters
+        // ----------
+        // startCellNotation: The notation of the start cell.
+        // endCellNotation: The notation of the end cell.
+        //
+        // Returns
+        // -------
+        // The deserialized move.
+        public static Move NotationToMove(string startCellNotation,
+                                          string endCellNotation)
+        {
+            var notation = $"{startCellNotation}-{endCellNotation}";
+            return NotationToMove(notation);
+        }
     }
 }

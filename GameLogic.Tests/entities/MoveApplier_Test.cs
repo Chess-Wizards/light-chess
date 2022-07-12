@@ -91,8 +91,8 @@ namespace GameLogic.Tests
             var startGameState = StandardFENSerializer.DeserializeFromFEN(startGameStateNotation);
 
             // Perform move.
-            var move = new Move((Cell)StandardFENSerializer.NotationToCell(startCell),
-                                (Cell)StandardFENSerializer.NotationToCell(endCell));
+            var moveNotation = $"{startCell}-{endCell}";
+            var move = StandardFENSerializer.NotationToMove(moveNotation);
             var endGameState = MoveApplier.GetNextGameState(startGameState, move);
 
             // Deserialize.
