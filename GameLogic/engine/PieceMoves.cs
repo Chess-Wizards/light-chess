@@ -40,11 +40,11 @@ namespace GameLogic
                                                           Color,
                                                           List<Cell>>>()
             {
-                {PieceType.Rook, GetNextCellsRook},
-                {PieceType.Knight, GetNextCellsKnight},
-                {PieceType.Bishop, GetNextCellsBishop},
-                {PieceType.Queen, GetNextCellsQueen},
-                {PieceType.King, GetNextCellsKing},
+                {PieceType.Rook, CellsUnderThreat.GetCellsUnderThreatRook},
+                {PieceType.Knight, CellsUnderThreat.GetCellsUnderThreatKnight},
+                {PieceType.Bishop, CellsUnderThreat.GetCellsUnderThreatBishop},
+                {PieceType.Queen, CellsUnderThreat.GetCellsUnderThreatQueen},
+                {PieceType.King, CellsUnderThreat.GetCellsUnderThreatKing},
                 {PieceType.Pawn, GetNextCellsPawn}
             };
 
@@ -57,135 +57,6 @@ namespace GameLogic
                 .ToList();
         }
 
-        // Finds next/move cells produced by rook at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The rook color.
-        //
-        // Returns
-        // -------
-        // A list containing next/move cells produced by rook at cell |cell|. 
-        public static List<Cell> GetNextCellsRook(Cell cell,
-                                                  List<Cell> pieceCells,
-                                                  List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> IsOnBoard,
-                                                  Color activeColor)
-        {
-            return CellsUnderThreat.GetCellsUnderThreatRook(cell,
-                                                            pieceCells,
-                                                            enemyPieceCells,
-                                                            IsOnBoard,
-                                                            activeColor);
-        }
-
-        // Finds next/move cells produced by knight at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The knight color.
-        //
-        // Returns
-        // -------
-        // A list containing next/move cells produced by knight at cell |cell|.
-        public static List<Cell> GetNextCellsKnight(Cell cell,
-                                                    List<Cell> pieceCells,
-                                                    List<Cell> enemyPieceCells,
-                                                    Func<Cell, bool> IsOnBoard,
-                                                    Color activeColor)
-        {
-            return CellsUnderThreat.GetCellsUnderThreatKnight(cell,
-                                                              pieceCells,
-                                                              enemyPieceCells,
-                                                              IsOnBoard,
-                                                              activeColor);
-        }
-
-        // Finds next/move cells produced by bishop at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The bishop color.
-        //
-        // Returns
-        // -------
-        // A list containing next/move cells produced by bishop at cell |cell|.
-        public static List<Cell> GetNextCellsBishop(Cell cell,
-                                                    List<Cell> pieceCells,
-                                                    List<Cell> enemyPieceCells,
-                                                    Func<Cell, bool> IsOnBoard,
-                                                    Color activeColor)
-        {
-            return CellsUnderThreat.GetCellsUnderThreatBishop(cell,
-                                                              pieceCells,
-                                                              enemyPieceCells,
-                                                              IsOnBoard,
-                                                              activeColor);
-        }
-
-        // Finds next/move cells produced by queen at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The queen color.
-        //
-        // Returns
-        // -------
-        // A list containing next/move cells produced by queen at cell |cell|.
-        public static List<Cell> GetNextCellsQueen(Cell cell,
-                                                   List<Cell> pieceCells,
-                                                   List<Cell> enemyPieceCells,
-                                                   Func<Cell, bool> IsOnBoard,
-                                                   Color activeColor)
-        {
-            return CellsUnderThreat.GetCellsUnderThreatQueen(cell,
-                                                             pieceCells,
-                                                             enemyPieceCells,
-                                                             IsOnBoard,
-                                                             activeColor);
-        }
-
-        // Finds next/move cells produced by king at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The king color.
-        //
-        // Returns
-        // -------
-        // A list containing next/move cells produced by king at cell |cell|.
-        public static List<Cell> GetNextCellsKing(Cell cell,
-                                                  List<Cell> pieceCells,
-                                                  List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> IsOnBoard,
-                                                  Color activeColor)
-        {
-            return CellsUnderThreat.GetCellsUnderThreatKing(cell,
-                                                            pieceCells,
-                                                            enemyPieceCells,
-                                                            IsOnBoard,
-                                                            activeColor);
-        }
 
         // Finds next/move cells produced by pawn at cell |cell|.
         //
@@ -200,11 +71,11 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing next/move cells produced by pawn at cell |cell|.
-        public static List<Cell> GetNextCellsPawn(Cell cell,
-                                                  List<Cell> pieceCells,
-                                                  List<Cell> enemyPieceCells,
-                                                  Func<Cell, bool> IsOnBoard,
-                                                  Color activeColor)
+        private static List<Cell> GetNextCellsPawn(Cell cell,
+                                                   List<Cell> pieceCells,
+                                                   List<Cell> enemyPieceCells,
+                                                   Func<Cell, bool> IsOnBoard,
+                                                   Color activeColor)
         {
             var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell,
                                                                      pieceCells,

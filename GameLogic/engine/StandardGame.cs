@@ -6,180 +6,132 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public class StandardGame : IStandardGameLogic, IFENSerializable<StandardGameState>
+    public class StandardGame : IGameLogic<StandardGame>
     {
-        /*
-        This class contains a game logic.
-        */
+        // This class is the entry point for all commands coming to the GameLogic project.
+        // It is responsible for initial instantiation of the game from FEN notation.
+        // Game state must be valid!!!
 
-        /// <summary>
-        /// Serialize game object to FEN notation.
-        /// </summary>
-        /// <param name="objectToSerialize">
-        /// The game to serialize.
-        /// </param>        
-        /// <returns>
-        /// The game FEN notation. 
-        /// </returns>        
-        public string SerializeToFEN(StandardGameState objectToSerialize)
+        public StandardGameState gameState;
+
+        public StandardGame(string fenNotation)
         {
-            var splitFenNotation = new string[6]
-            {
-            SerializeHelper.BoardToNotation(objectToSerialize.Board),
-            SerializeHelper.ColorToNotation(objectToSerialize.ActiveColor),
-            SerializeHelper.CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
-            SerializeHelper.CellToNotation(objectToSerialize.EnPassantCell),
-            objectToSerialize.HalfmoveNumber.ToString(),
-            objectToSerialize.FullmoveNumber.ToString()
-            };
-
-            return String.Join(" ", splitFenNotation);
+            this.gameState = StandardFENSerializer.DeserializeFromFEN(fenNotation);
         }
 
-        /// <summary>
-        /// Deserialize FEN notation to game object.
-        /// </summary>
-        /// <param name="fenNotation">
-        /// The game FEN notation.
-        /// </param>        
-        /// <exception 
-        ///cref="ArgumentException">Invalid |fenNotation|.
-        ///</exception>
-        /// <returns>
-        /// The game. 
-        /// </returns>  
-        public StandardGameState DeserializeFromFEN(string fenNotation)
+        public StandardGame(StandardGameState gameState)
         {
-            var splitFenNotation = fenNotation.Split(' ');
-
-            if (splitFenNotation.Count() != 6)
-                throw new ArgumentException("Invalid FEN notation.");
-
-            var gameState = new StandardGameState(
-                SerializeHelper.NotationToBoard(splitFenNotation[0]),
-                SerializeHelper.NotationToColor(splitFenNotation[1]),
-                SerializeHelper.NotationToCastle(splitFenNotation[2]),
-                SerializeHelper.NotationToCell(splitFenNotation[3]),
-                Int32.Parse(splitFenNotation[4]),
-                Int32.Parse(splitFenNotation[5])
-            );
-            return gameState;
+            this.gameState = gameState;
         }
 
-
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public bool IsMate(StandardGameState gameState)
+        // Checks if the mate occurs at the current game state.
+        // Enemy color mates/wins the active color.
+        // 
+        // Returns
+        // -------
+        // true, if the mate occurs. Otherwise, false.
+        public bool IsMate()
         {
-            foreach (var move in FindAllMoves(gameState))
-            {
-                var nextGameState = MakeMove(gameState, move);
-                if (!IsCheck(nextGameState))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public bool IsCheck(StandardGameState gameState)
-        {
-            // Extract king location(s). 
-            var kingCells = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                               filterByPieceType: PieceType.King);
-            if (kingCells.Count != 1)
-            {
-                throw new InvalidOperationException("Invalid game state. There is only one king on standard board.");
-            }
-
-            // Extract only one king cell.
-            var kingCell = kingCells[0];
-
-            foreach (var cell in FindAllCellsUnderThreat(gameState))
-            {
-                if (cell.Equals(kingCell)) return true;
-            }
-            return false;
+            return IsCheck()
+                   && FindAllValidMoves().Count == 0;
         }
 
+        // Checks if the check occurs at the current game state.
+        // Enemy color checks the active color.
+        //
+        // Returns
+        // -------
+        // true, if the check occurs. Otherwise, false.
+        public bool IsCheck()
+        {
+            // Extract king location.
+            var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
+                                                              filterByPieceType: PieceType.King)
+                                          .First();
 
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public StandardGameState? MakeMove(StandardGameState gameState, Move move)
+            return FindAllCellsUnderThreat(filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
+        }
+
+        // Applies the move.
+        //
+        // Parameters
+        // ----------
+        // move: The move to apply.
+        // 
+        // Returns
+        // -------
+        // A new instance of StandardGame, if the move is valid. Otherwise, returns null.
+        public StandardGame? MakeMove(Move move)
         {
             var nextGameState = MoveApplier.GetNextGameState(gameState, move);
-            return (IsGameStateValid(nextGameState)) ? nextGameState : null;
+            var nextGame = new StandardGame(nextGameState);
+            return nextGame.IsValid() ? nextGame : null;
         }
 
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public bool IsGameStateValid(StandardGameState gameState)
+        // Check if the current game state is valid.
+        //
+        // Returns
+        // -------
+        // true, if the current game state is valid. Otherwise, returns false.
+        public bool IsValid()
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                       filterByPieceType: PieceType.King).Count == 1;
-            return onlyOneEnemyKing && !IsCheck(gameState);
+
+            var onlyOneKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
+                                                                 filterByPieceType: PieceType.King).Count == 1;
+
+            var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
+                                                                   filterByPieceType: PieceType.King) // Extract king location.
+                                               .First();
+            var checkToEnemyKing = FindAllCellsUnderThreat(filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
+
+            // Pawns cannot be located on first and last ranks.
+            var invalidPawnRanks = new List<int> { 0, 7 };
+            var pawnsOnInvalidRanks = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
+                                                     .Any(cell => invalidPawnRanks.Contains(cell.Y));
+
+            return onlyOneEnemyKing
+                   && onlyOneKing
+                   && !checkToEnemyKing
+                   && !pawnsOnInvalidRanks;
         }
 
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public List<Move> FindAllMoves(StandardGameState gameState)
+        // Find all moves. Moves might be not valid.
+        //
+        // Returns
+        // -------
+        // A list containing all moves.
+        private List<Move> FindAllMoves()
         {
-            throw new NotImplementedException();
+            return gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
+                                  .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
+                                  .ToList();
         }
 
-        /// <summary>
-        /// TODO: not finished.
-        /// </summary>
-        public List<Cell> FindAllCellsUnderThreat(StandardGameState gameState)
+        // Find all valid moves.
+        //
+        // Returns
+        // -------
+        // A list containing valid moves.
+        public List<Move> FindAllValidMoves()
         {
-            throw new NotImplementedException();
+            return FindAllMoves().Where(move => MakeMove(move) != null)
+                                 .ToList();
         }
 
-        // public List<Move> FindAllMoves(StandardGameState gameState)
-        // {
-        //     var cellsWithEnemyPieces = gameState.Board.GetCellsWithPieces(filterByColor:gameState.ActiveColor,
-        //                                                                   filterByPieceType:PieceType.King);
-        //     var items = new List<T>();
-        //     // Iterate over enemy cells/pieces. Per each iteration find
-        //     // items produced by enemy cell/piece.
-        //     foreach(var cell in cellsWithEnemyPieces)
-        //     {
-        //         var piece = (Piece)gameState.Board[cell];
-        //         items.AddRange(Get(piece, cell, gameState));
-        //     }
-        //     return items;
-
-
-
-        //     return FindAll<Move>(gameState, PieceMoves.GetMoves);
-        // }
-
-        // public List<Cell> FindAllCellsUndeThreat(StandardGameState gameState)
-        // {
-        //     return FindAll<Cell>(gameState, CellsUnderThreat.GetCellsUnderThreat);
-        // }
-
-        // public List<T> FindAll<T>(StandardGameState gameState, Func<Piece, Cell, StandardGameState, List<T>> Get)
-        // {            
-        //     var cellsWithEnemyPieces = gameState.Board.GetCellsWithPieces(filterByColor:gameState.EnemyColor,
-        //                                                                   filterByPieceType:PieceType.King);
-        //     var items = new List<T>();
-        //     // Iterate over enemy cells/pieces. Per each iteration find
-        //     // items produced by enemy cell/piece.
-        //     foreach(var cell in cellsWithEnemyPieces)
-        //     {
-        //         var piece = (Piece)gameState.Board[cell];
-        //         items.AddRange(Get(piece, cell, gameState));
-        //     }
-        //     return items;
-
-        // }
-
+        // Find all cells 'under threat' produced by |filterByColor| color.
+        // 'under threat' means all cells at which the enemy king cannot stand because of the check.
+        //
+        // Returns
+        // -------
+        // A list containing all cells.
+        private List<Cell> FindAllCellsUnderThreat(Color filterByColor)
+        {
+            return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
+                                  .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))
+                                  .Distinct()
+                                  .ToList();
+        }
     }
 }
