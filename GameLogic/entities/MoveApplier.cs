@@ -24,6 +24,7 @@ namespace GameLogic
         {
             var piece = (Piece)gameState.Board[move.StartCell];
             var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
+            var lastPawnRanks = new List<int> { 0, 7 };
             StandardBoard nextBoard;
             // Castle.
             if (piece.Type == PieceType.King && deltaX == 2)
@@ -35,6 +36,14 @@ namespace GameLogic
                     && move.EndCell == (Cell)gameState.EnPassantCell)
             {
                 nextBoard = PerformEnPassantMove(gameState.Board, move);
+            }
+            // Pawn promomtion
+            else if (piece.Type == PieceType.Pawn
+                    && lastPawnRanks.Contains(move.EndCell.Y))
+            {
+                nextBoard = PerformMove(gameState.Board, move);
+                var pieceAfterPromotion = new Piece(piece.Color, (PieceType)move.EndPieceType);
+                nextBoard[move.EndCell] = pieceAfterPromotion;
             }
             // Simple move.
             else
