@@ -75,5 +75,22 @@ namespace GameLogic.Tests
 
             Assert.That(cellFENNotationOutput, Is.EqualTo(cellFENNotation));
         }
+
+        [Test]
+        [TestCase("a1-a8")]
+        [TestCase("h1-h8")]
+        [TestCase("b1-b4")]
+        [TestCase("e5-f7")]
+        [TestCase("h1-g1")]
+        [TestCase("e6-e8")]
+        public void MoveNotationNotChanged(string moveFENNotation)
+        {
+            // Serialize.
+            var move = StandardFENSerializer.NotationToMove(moveFENNotation);
+            // Deserialize.
+            var moveFENNotationOutput = StandardFENSerializer.MoveToNotation(move);
+
+            Assert.That(moveFENNotationOutput, Is.EqualTo(moveFENNotation));
+        }
     }
 }

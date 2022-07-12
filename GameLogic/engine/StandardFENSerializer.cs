@@ -329,5 +329,36 @@ namespace GameLogic
             }
             return "-";
         }
+
+        // Serialize move to the notation.
+        //
+        // Parameters
+        // ----------
+        // move: The move to serialize.
+        //
+        // Returns
+        // -------
+        // The serialized move. 
+        public static string MoveToNotation(Move move)
+        {
+            return $"{CellToNotation(move.StartCell)}-{CellToNotation(move.EndCell)}";
+        }
+
+        // Deserialize move.
+        //
+        // Parameters
+        // ----------
+        // notation: The notation to deserialize.
+        //
+        // Returns
+        // -------
+        // The deserialized move.
+        public static Move NotationToMove(string notation)
+        {
+            var cells = notation.Split("-")
+                                .Select(cellNotation => (Cell)NotationToCell(cellNotation))
+                                .ToArray();
+            return new Move(cells[0], cells[1]);
+        }
     }
 }
