@@ -125,7 +125,7 @@ namespace GameLogic
             foreach (var row in rows)
             {
                 var x = 0;
-                // Iterate over files from left (a) to right (h).
+                // Iterate over cells from left (a) to right (h) in rank.
                 foreach (var character in row)
                 {
                     // Set piece to board and increment |x| by 1 .
@@ -166,12 +166,12 @@ namespace GameLogic
         {
             var rows = new List<string>();
 
-            // Iterate over height from up (7) to bottom (0).
+            // Iterate over cells from up (7) to bottom (0) in file.
             for (int y = board.Height - 1; y > -1; y--)
             {
                 var row = new List<char>();
                 int numberEmptyCells = 0;
-                // Iterate over width from left (a) to right (h).
+                // Iterate over cells from left (a) to right (h) in rank.
                 for (int x = 0; x < board.Width; x++)
                 {
                     var cell = new Cell(x, y);

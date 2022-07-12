@@ -13,13 +13,6 @@ namespace GameLogic
         // Game state must be valid!!!
 
         public StandardGameState gameState;
-        public string FENNotation
-        {
-            get
-            {
-                return StandardFENSerializer.SerializeToFEN(gameState);
-            }
-        }
 
         public StandardGame(string fenNotation)
         {

@@ -125,8 +125,8 @@ namespace GameLogic
                                                          Func<Cell, bool> IsOnBoard,
                                                          Color activeColor)
         {
-            // up and down - y-axis or height
-            // right and left - x-axis or width
+            // up and down over y-axis or files
+            // right and left - x-axis or ranks
             var upShift = new Cell(0, 1);
             var rightShift = new Cell(1, 0);
             var downShift = new Cell(0, -1);
@@ -205,8 +205,8 @@ namespace GameLogic
                                                            Color activeColor)
 
         {
-            // up and down - y-axis or height.
-            // right and left - x-axis or width.
+            // up and down over cells in file.
+            // right and left over cells in rank.
             var upRightShift = new Cell(1, 1);
             var downRightShift = new Cell(1, -1);
             var downLeftShift = new Cell(-1, -1);
