@@ -56,7 +56,7 @@ namespace GameLogic
                                                               filterByPieceType: PieceType.King) // Extract king location.
                                           .First();
 
-            return FindAllCellsUnderThreat(filterByColor: gameState.EnemyColor).Any(cell => kingCell == cell);
+            return FindAllCellsUnderThreat(filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
         }
 
         // Applies the move.
