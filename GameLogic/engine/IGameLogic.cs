@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GameLogic
 {
     // The interface represents the logic of chess game. 
-    public interface IStandardGameLogic<T>
+    public interface IGameLogic<T>
     {
         // Checks if the mate occurs at the current game state.
         bool IsMate();

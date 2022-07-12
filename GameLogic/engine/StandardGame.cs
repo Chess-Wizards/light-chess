@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-    public class StandardGame : IStandardGameLogic<StandardGame>
+    public class StandardGame : IGameLogic<StandardGame>
     {
         // This class is the entry point for all commands coming to the GameLogic project.
         // It is responsible for initial instantiation of the game from FEN notation.
