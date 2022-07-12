@@ -3,7 +3,7 @@ using System;
 namespace GameLogic
 {
     // The structure defines move. Each move can
-    // be uniquely identified by triplet of start cell, end cell, and end piece type.
+    // be uniquely identified by a triplet of start cell, end cell, and end piece type.
     // For example, the pawn can be promoted to another piece. Therefore, the piece type is required.
     public struct Move
     {

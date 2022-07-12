@@ -37,7 +37,7 @@ namespace GameLogic
             {
                 nextBoard = PerformEnPassantMove(gameState.Board, move);
             }
-            // Pawn promomtion
+            // Pawn promotion
             else if (piece.Type == PieceType.Pawn
                     && lastPawnRanks.Contains(move.EndCell.Y))
             {
