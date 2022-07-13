@@ -22,7 +22,7 @@ namespace GameLogic.Tests
                 {"a7", new List<string>(){}},
                 {"d7", new List<string>(){}},
                 {"f7", new List<string>(){"f6", "f5"}},
-                {"g7", new List<string>(){"e6", "f5", "e8"}},
+                {"g7", new List<string>(){"h8r", "h8n", "h8q", "h8b"}},
                 {"h7", new List<string>(){"h6"}},
                 {"a6", new List<string>(){"b8", "c7", "c5", "b4"}},
                 {"d6", new List<string>(){"b8", "c7", "e7", "f8", "c5", "b4", "a3"}},
@@ -39,13 +39,14 @@ namespace GameLogic.Tests
                 {"a2", new List<string>(){"b3", "a3", "a4"}},
                 {"c2", new List<string>(){"b3", "c3", "c4"}},
                 {"e2", new List<string>(){"e3", "d2", "f2", "d1", "e1", "f1"}},
+                {"h2", new List<string>(){"h1r", "h1n", "h1q", "h1b"}},
                 {"a1", new List<string>(){"a2",
                                           "b2", "c3", "d4", "e5",
                                           "b1", "c1", "d1", "e1", "f1"}},
-                {"g1", new List<string>(){"f2", "e3", "d4", "c5", "b6", "h2"}}
+                {"g1", new List<string>(){"f2", "e3", "d4", "c5", "b6"}}
             };
 
-            var fenBoardNotation = "r1b1k1nr/p2p1pNp/n2B4/1p1NP2P/6P1/1p1P1Q2/P1P1K3/q5b1";
+            var fenBoardNotation = "r1b1k1nr/p2p1pPp/n2B4/1p1NP2P/6P1/1p1P1Q2/P1P1K2p/q5b1";
             var board = StandardFENSerializer.NotationToBoard(fenBoardNotation);
 
             // Iterate over width.
@@ -61,12 +62,12 @@ namespace GameLogic.Tests
                     if (correctCells.ContainsKey(cellNotation))
                     {
                         var cells = PieceMoves.GetMoves(cell, board)
-                                                   .Select((move) => StandardFENSerializer.CellToNotation(move.EndCell))
-                                                   .OrderBy((notation) => (notation))
-                                                   .ToList();
-                        var expectedCells = correctCells[cellNotation]
-                                                   .OrderBy((notation) => (notation))
-                                                   .ToList();
+                                              .Select((move) => StandardFENSerializer.MoveToNotation(move))
+                                              .OrderBy((notation) => (notation))
+                                              .ToList();
+                        var expectedCells = correctCells[cellNotation].Select(suffixNotation => $"{cellNotation}{suffixNotation}")
+                                                                      .OrderBy((notation) => (notation))
+                                                                      .ToList();
 
                         Assert.That(expectedCells, Is.EqualTo(cells).AsCollection);
                     }

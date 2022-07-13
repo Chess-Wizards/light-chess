@@ -29,6 +29,12 @@ namespace GameLogic
                 return new List<Move>() { };
             }
 
+            var lastPawnRanks = new List<int> { 0, 7 };
+            var possiblePromotionPieceTypes = new List<PieceType>{PieceType.Knight,
+                                                                  PieceType.Bishop,
+                                                                  PieceType.Rook,
+                                                                  PieceType.Queen};
+
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: (Color)piece?.Color);
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
@@ -53,10 +59,12 @@ namespace GameLogic
                                             enemyPieceCells,
                                             board.IsOnBoard,
                                             (Color)piece?.Color)
-                .Select(nextCell => new Move(cell, nextCell))
+                // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
+                .SelectMany(nextCell => ((Piece)piece).Type == PieceType.Pawn && lastPawnRanks.Contains(nextCell.Y)
+                                        ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
+                                        : new List<Move>() { new Move(cell, nextCell) })
                 .ToList();
         }
-
 
         // Finds next/move cells produced by pawn at cell |cell|.
         //
