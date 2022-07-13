@@ -104,9 +104,74 @@ namespace GameLogic
         // A list containing all moves.
         private List<Move> FindAllMoves()
         {
-            return gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
-                                  .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
-                                  .ToList();
+            var enPassantMoves = GetEnPassantMoves();
+            var castleMoves = GetCastleMoves();
+            var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
+                                           .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
+                                           .ToList();
+            // Combine moves.
+            return enPassantMoves.Concat(castleMoves)
+                                 .Concat(restMoves)
+                                 .ToList();
+        }
+
+        // Find all en passant moves.
+        //
+        // Returns
+        // -------
+        // A list containing en passant moves.
+        private List<Move> GetEnPassantMoves()
+        {
+            var enPassantMoves = new List<Move>() { };
+
+            if (gameState.EnPassantCell != null)
+            {
+                var yShift = gameState.ActiveColor == Color.White ? -1 : 1;
+                var xShifts = new List<int>() { -1, 1 };
+
+                // Check possible pawns which can perform an en passant move.
+                enPassantMoves = xShifts.Select(xShift => (Cell)gameState.EnPassantCell + new Cell(xShift, yShift))
+                                        .Where(cell => gameState.Board.IsOnBoard(cell)
+                                                       && !gameState.Board.IsEmpty(cell)
+                                                       && gameState.Board[cell]?.Type == PieceType.Pawn
+                                                       && gameState.Board[cell]?.Color == gameState.ActiveColor)
+                                        .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
+                                        .ToList();
+            }
+
+            return enPassantMoves;
+        }
+
+        // Find all castle moves.
+        //
+        // This function should not check the location of the rook and king.
+        // gameState contains this information implicitly in |AvaialbleCastles| field.
+        //
+        // Returns
+        // -------
+        // A list containing castle moves.
+        private List<Move> GetCastleMoves()
+        {
+            var mappingCatleToMoveNotation = new Dictionary<Castle, string>
+            {
+                {new Castle(Color.White, CastleType.King), "e1g1"},
+                {new Castle(Color.White, CastleType.Queen), "e1c1"},
+                {new Castle(Color.Black, CastleType.King), "e8g8"},
+                {new Castle(Color.Black, CastleType.Queen), "e8c8"}
+            };
+            var emptyCellNotations = new Dictionary<Castle, List<string>>
+            {
+                {new Castle(Color.White, CastleType.King), new List<string>(){"f1", "g1"}},
+                {new Castle(Color.White, CastleType.Queen), new List<string>(){"b1", "c1", "d1"}},
+                {new Castle(Color.Black, CastleType.King), new List<string>(){"f8", "g8"}},
+                {new Castle(Color.Black, CastleType.Queen), new List<string>(){"b8", "c8", "d8"}}
+            };
+
+            return gameState.AvaialbleCastles
+                            .Where(castle => castle.Color == gameState.ActiveColor
+                                             && emptyCellNotations[castle].All(notation => gameState.Board.IsEmpty((Cell)StandardFENSerializer.NotationToCell(notation))))
+                            .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]))
+                            .ToList();
         }
 
         // Find all valid moves.

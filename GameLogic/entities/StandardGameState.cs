@@ -15,7 +15,7 @@ namespace GameLogic
         // The color defines the current turn.
         public Color ActiveColor;
         // The list contains available castles.
-        public List<Castle> AvaialbleCastleMoves;
+        public List<Castle> AvaialbleCastles;
         // The en passsant cell.
         public Cell? EnPassantCell;
         // The number of half moves since the last capture or pawn advance.
@@ -31,7 +31,7 @@ namespace GameLogic
         public StandardGameState(
             StandardBoard board,
             Color color,
-            List<Castle> avaialbleCastleMoves,
+            List<Castle> avaialbleCastles,
             Cell? enPassantCell,
             int halfmoveNumber,
             int fullmoveNumber
@@ -39,7 +39,7 @@ namespace GameLogic
         {
             Board = board;
             ActiveColor = color;
-            AvaialbleCastleMoves = avaialbleCastleMoves;
+            AvaialbleCastles = avaialbleCastles;
             EnPassantCell = enPassantCell;
             HalfmoveNumber = halfmoveNumber;
             FullmoveNumber = fullmoveNumber;

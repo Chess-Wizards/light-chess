@@ -54,9 +54,9 @@ namespace GameLogic
             }
 
             // Next castles.
-            var nextAvaialbleCastleMoves = GetCastlesAfterMove(gameState.Board,
-                                                               move,
-                                                               gameState.AvaialbleCastleMoves);
+            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board,
+                                                           move,
+                                                           gameState.AvaialbleCastles);
 
             // Next cells. 
             var nextEnPassantCell = GetEnPassantCellAfterMove(gameState.Board, move);
@@ -73,7 +73,7 @@ namespace GameLogic
             return new StandardGameState(
                 nextBoard,
                 gameState.EnemyColor,
-                nextAvaialbleCastleMoves,
+                nextAvaialbleCastles,
                 nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber
