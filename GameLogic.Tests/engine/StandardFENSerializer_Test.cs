@@ -77,16 +77,16 @@ namespace GameLogic.Tests
         }
 
         [Test]
-        [TestCase("a1-a8")]
-        [TestCase("h1-h8")]
-        [TestCase("b1-b4")]
-        [TestCase("e5-f7")]
-        [TestCase("h1-g1")]
-        [TestCase("e6-e8")]
-        [TestCase("e7-e8r")]
-        [TestCase("e7-e8n")]
-        [TestCase("e7-e8q")]
-        [TestCase("e7-e8b")]
+        [TestCase("a1a8")]
+        [TestCase("h1h8")]
+        [TestCase("b1b4")]
+        [TestCase("e5f7")]
+        [TestCase("h1g1")]
+        [TestCase("e6e8")]
+        [TestCase("e7e8r")]
+        [TestCase("e7e8n")]
+        [TestCase("e7e8q")]
+        [TestCase("e7e8b")]
         public void MoveNotationNotChanged(string moveFENNotation)
         {
             // Serialize.
