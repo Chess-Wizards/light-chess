@@ -351,8 +351,8 @@ namespace GameLogic
         // The serialized move. {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            var endPieceTypeNotation = move.EndPieceType == null ? "" : mappingPieceTypeToNotation[(PieceType)move.EndPieceType].ToString();
-            return $"{CellToNotation(move.StartCell)}-{CellToNotation(move.EndCell)}{endPieceTypeNotation}";
+            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
+            return $"{CellToNotation(move.StartCell)}-{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
         // Deserialize move.
@@ -379,7 +379,7 @@ namespace GameLogic
             var cells = notation.Split("-")
                                 .Select(cellNotation => (Cell)NotationToCell(cellNotation))
                                 .ToArray();
-            return new Move(cells[0], cells[1], endPieceType: pieceType);
+            return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }
 
         // Deserialize move by passing start and end cells.

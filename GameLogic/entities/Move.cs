@@ -9,16 +9,16 @@ namespace GameLogic
     {
         public readonly Cell StartCell { get; }
         public readonly Cell EndCell { get; }
-        public readonly PieceType? EndPieceType { get; }
+        public readonly PieceType? PromotionPieceType { get; }
 
 
         public Move(Cell startCell,
                     Cell endCell,
-                    PieceType? endPieceType = null)
+                    PieceType? promotionPieceType = null)
         {
             StartCell = startCell;
             EndCell = endCell;
-            EndPieceType = endPieceType;
+            PromotionPieceType = promotionPieceType;
         }
     }
 }
