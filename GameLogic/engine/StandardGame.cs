@@ -17,11 +17,13 @@ namespace GameLogic
         public StandardGame(string fenNotation)
         {
             this.gameState = StandardFENSerializer.DeserializeFromFEN(fenNotation);
+            IsValid();
         }
 
         public StandardGame(StandardGameState gameState)
         {
             this.gameState = gameState;
+            IsValid();
         }
 
         // Checks if the mate occurs at the current game state.
