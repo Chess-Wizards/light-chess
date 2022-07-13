@@ -51,19 +51,19 @@ namespace GameLogic.Tests
         // Pawn promotion to queen 
         [TestCase("K1k2r1r/6P1/8/8/8/8/8/8 w - - 2 20",
                   "K1k2Q1r/8/8/8/8/8/8/8 b - - 0 21",
-                  "g7-f8Q")]
+                  "g7-f8q")]
         // Pawn promotion to rook
         [TestCase("K1k2r1r/6P1/8/8/8/8/8/8 w - - 2 20",
                   "K1k2rRr/8/8/8/8/8/8/8 b - - 0 21",
-                  "g7-g8R")]
+                  "g7-g8r")]
         // Pawn promotion to bishop
         [TestCase("K1k2r1r/6P1/8/8/8/8/8/8 w - - 2 20",
                   "K1k2r1B/8/8/8/8/8/8/8 b - - 0 21",
-                  "g7-h8B")]
+                  "g7-h8b")]
         // Pawn promotion to knight
         [TestCase("K1k2r1r/6P1/8/8/8/8/8/8 w - - 2 20",
                   "K1k2r1N/8/8/8/8/8/8/8 b - - 0 21",
-                  "g7-h8N")]
+                  "g7-h8n")]
 
         // 2. Black moves
         // King castle.       
@@ -101,19 +101,19 @@ namespace GameLogic.Tests
         // Pawn promotion to queen 
         [TestCase("K1k5/8/8/8/8/8/6p1/5R1R b - - 2 20",
                   "K1k5/8/8/8/8/8/8/5q1R w - - 0 21",
-                  "g2-f1Q")]
+                  "g2-f1q")]
         // Pawn promotion to rook
         [TestCase("K1k5/8/8/8/8/8/6p1/5R1R b - - 2 20",
                   "K1k5/8/8/8/8/8/8/5RrR w - - 0 21",
-                  "g2-g1R")]
+                  "g2-g1r")]
         // Pawn promotion to bishop
         [TestCase("K1k5/8/8/8/8/8/6p1/5R1R b - - 2 20",
                   "K1k5/8/8/8/8/8/8/5R1b w - - 0 21",
-                  "g2-h1B")]
+                  "g2-h1b")]
         // Pawn promotion to knight
         [TestCase("K1k5/8/8/8/8/8/6p1/5R1R b - - 2 20",
                   "K1k5/8/8/8/8/8/8/5R1n w - - 0 21",
-                  "g2-h1N")]
+                  "g2-h1n")]
         public void PerformMove(string startGameStateNotation,
                                 string endGameStateNotation,
                                 string moveNotation)

@@ -43,10 +43,10 @@ namespace GameLogic
 
         public static Dictionary<char, PieceType> mappingNotationToPieceType = new Dictionary<char, PieceType>()
             {
-                {'N', PieceType.Knight},
-                {'B', PieceType.Bishop},
-                {'R', PieceType.Rook},
-                {'Q', PieceType.Queen}
+                {'n', PieceType.Knight},
+                {'b', PieceType.Bishop},
+                {'r', PieceType.Rook},
+                {'q', PieceType.Queen}
             };
         public static Dictionary<PieceType, char> mappingPieceTypeToNotation = mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
 

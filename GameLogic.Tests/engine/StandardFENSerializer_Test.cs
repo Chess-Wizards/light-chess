@@ -83,10 +83,10 @@ namespace GameLogic.Tests
         [TestCase("e5-f7")]
         [TestCase("h1-g1")]
         [TestCase("e6-e8")]
-        [TestCase("e7-e8R")]
-        [TestCase("e7-e8N")]
-        [TestCase("e7-e8Q")]
-        [TestCase("e7-e8B")]
+        [TestCase("e7-e8r")]
+        [TestCase("e7-e8n")]
+        [TestCase("e7-e8q")]
+        [TestCase("e7-e8b")]
         public void MoveNotationNotChanged(string moveFENNotation)
         {
             // Serialize.
