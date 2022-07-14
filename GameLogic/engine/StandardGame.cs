@@ -17,13 +17,15 @@ namespace GameLogic
         public StandardGame(string fenNotation)
         {
             this.gameState = StandardFENSerializer.DeserializeFromFEN(fenNotation);
-            IsValid();
+            if (!IsValid())
+            {
+                throw new ArgumentException("Invalid input FEN notation.");
+            }
         }
 
-        public StandardGame(StandardGameState gameState)
+        private StandardGame(StandardGameState gameState)
         {
             this.gameState = gameState;
-            IsValid();
         }
 
         // Checks if the mate occurs at the current game state.
@@ -75,7 +77,7 @@ namespace GameLogic
         // Returns
         // -------
         // true, if the current game state is valid. Otherwise, returns false.
-        public bool IsValid()
+        private bool IsValid()
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                       filterByPieceType: PieceType.King).Count == 1;
