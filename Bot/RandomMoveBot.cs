@@ -2,18 +2,14 @@ using GameLogic;
 
 namespace Bot
 {
+    // This class inputs a FEN notation and suggest a random move from a list of valid moves.
     public class RandomMoveBot: IBot
     {
-        public StandardGameState gameState;
+        public string gameStateNotation;
 
-        public RandomMoveBot(string fenNotation)
+        public RandomMoveBot(string gameStateNotation)
         {
-            this.gameState = StandardFENSerializer.DeserializeFromFEN(fenNotation);
-        }
-
-        public RandomMoveBot(StandardGameState gameState)
-        {
-            this.gameState = gameState;
+            this.gameStateNotation = gameStateNotation;
         }
 
         // Suggest a move.
@@ -23,7 +19,8 @@ namespace Bot
         // A random move or null.
         public Move? SuggestMove()
         {
-            var moves = new StandardGame(gameState).FindAllValidMoves();
+            // A list containing valid moves.
+            var moves = new StandardGame(gameStateNotation).FindAllValidMoves();
 
             if (moves.Count == 0)
             {
