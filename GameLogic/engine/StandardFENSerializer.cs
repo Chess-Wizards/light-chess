@@ -41,6 +41,16 @@ namespace GameLogic
                 {'b', Color.Black}
             };
 
+        public static Dictionary<char, PieceType> mappingNotationToPieceType = new Dictionary<char, PieceType>()
+            {
+                {'n', PieceType.Knight},
+                {'b', PieceType.Bishop},
+                {'r', PieceType.Rook},
+                {'q', PieceType.Queen}
+            };
+        public static Dictionary<PieceType, char> mappingPieceTypeToNotation = mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
+
+
         // Serialize object to FEN notation.
         //
         // Parameters
@@ -56,7 +66,7 @@ namespace GameLogic
             {
                 BoardToNotation(objectToSerialize.Board),
                 ColorToNotation(objectToSerialize.ActiveColor),
-                CastleToNotation(objectToSerialize.AvaialbleCastleMoves),
+                CastleToNotation(objectToSerialize.AvaialbleCastles),
                 CellToNotation(objectToSerialize.EnPassantCell),
                 objectToSerialize.HalfmoveNumber.ToString(),
                 objectToSerialize.FullmoveNumber.ToString()
@@ -338,27 +348,40 @@ namespace GameLogic
         //
         // Returns
         // -------
-        // The serialized move. 
+        // The serialized move. The notation follows UCI (Universal Chess Interface 
+        // {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            return $"{CellToNotation(move.StartCell)}-{CellToNotation(move.EndCell)}";
+            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
+            return $"{CellToNotation(move.StartCell)}{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
         // Deserialize move.
         //
         // Parameters
         // ----------
-        // notation: The notation to deserialize.
+        // notation: The notation to deserialize. The notation follows UCI (Universal Chess Interface)
+        // {StartCell}{EndCell}{PieceType or Empty}
         //
         // Returns
         // -------
         // The deserialized move.
         public static Move NotationToMove(string notation)
         {
-            var cells = notation.Split("-")
-                                .Select(cellNotation => (Cell)NotationToCell(cellNotation))
-                                .ToArray();
-            return new Move(cells[0], cells[1]);
+            PieceType? pieceType = null;
+            var lastIndex = notation.Length - 1;
+            // Check if the last character is piece type
+            if (mappingNotationToPieceType.ContainsKey(notation[lastIndex]))
+            {
+                pieceType = mappingNotationToPieceType[notation[lastIndex]];
+                // Remove piece type from |notation|
+                notation = notation.Remove(lastIndex);
+            }
+
+            var cells = notation.Chunk(2)
+                                .Select(cellNotation => (Cell)NotationToCell(new string(cellNotation)))
+                                .ToArray(); ;
+            return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }
 
         // Deserialize move by passing start and end cells.
@@ -367,14 +390,17 @@ namespace GameLogic
         // ----------
         // startCellNotation: The notation of the start cell.
         // endCellNotation: The notation of the end cell.
+        // pieceTypeNotation: The notation of the piece type or empty.
         //
         // Returns
         // -------
         // The deserialized move.
         public static Move NotationToMove(string startCellNotation,
-                                          string endCellNotation)
+                                          string endCellNotation,
+                                          string pieceTypeNotation = "")
         {
-            var notation = $"{startCellNotation}-{endCellNotation}";
+            // The notation follows UCI (Universal Chess Interface)
+            var notation = $"{startCellNotation}{endCellNotation}{pieceTypeNotation}";
             return NotationToMove(notation);
         }
     }

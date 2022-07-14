@@ -24,6 +24,7 @@ namespace GameLogic
         {
             var piece = (Piece)gameState.Board[move.StartCell];
             var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
+            var lastPawnRanks = new List<int> { 0, 7 };
             StandardBoard nextBoard;
             // Castle.
             if (piece.Type == PieceType.King && deltaX == 2)
@@ -36,6 +37,16 @@ namespace GameLogic
             {
                 nextBoard = PerformEnPassantMove(gameState.Board, move);
             }
+            // Pawn promotion
+            else if (piece.Type == PieceType.Pawn
+                    && lastPawnRanks.Contains(move.EndCell.Y))
+            {
+                nextBoard = PerformMove(gameState.Board, move);
+
+                // Replace pawn with piece after promotion
+                var pieceAfterPromotion = new Piece(piece.Color, (PieceType)move.PromotionPieceType);
+                nextBoard[move.EndCell] = pieceAfterPromotion;
+            }
             // Simple move.
             else
             {
@@ -43,9 +54,9 @@ namespace GameLogic
             }
 
             // Next castles.
-            var nextAvaialbleCastleMoves = GetCastlesAfterMove(gameState.Board,
-                                                               move,
-                                                               gameState.AvaialbleCastleMoves);
+            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board,
+                                                           move,
+                                                           gameState.AvaialbleCastles);
 
             // Next cells. 
             var nextEnPassantCell = GetEnPassantCellAfterMove(gameState.Board, move);
@@ -62,7 +73,7 @@ namespace GameLogic
             return new StandardGameState(
                 nextBoard,
                 gameState.EnemyColor,
-                nextAvaialbleCastleMoves,
+                nextAvaialbleCastles,
                 nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber
