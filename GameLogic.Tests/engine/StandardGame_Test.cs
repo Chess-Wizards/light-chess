@@ -64,10 +64,17 @@ namespace GameLogic.Tests
         [TestCase("r1r5/1k6/8/8/8/8/1K5K/R1R5 w - - 2 20", false)]
         // Number of enemy kings
         [TestCase("r1r5/1k5k/8/8/8/8/1K6/R1R5 w - - 2 20", false)]
-        public void IsValidCorrect(string board,
+        public void IsValidCorrect(string gameState,
                                    bool isValid)
         {
-            Assert.That(new StandardGame(board).IsValid(), Is.EqualTo(isValid));
+            try
+            {
+                new StandardGame(gameState);
+            }
+            catch (ArgumentException)
+            {
+                Assert.False(isValid);
+            }
         }
 
         [Test]

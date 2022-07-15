@@ -16,9 +16,6 @@ namespace GameLogic
         // if the move is valid. Otherwise, returns null.
         T? MakeMove(Move move);
 
-        // Checks if the current game state is valid.
-        bool IsValid();
-
         // Find all valid moves. 
         List<Move> FindAllValidMoves();
     }
