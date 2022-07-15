@@ -10,5 +10,3 @@ Console.WriteLine(StandardFENSerializer.MoveToNotation(move));
 
 BotCommunicator botCommunicator = new BotCommunicator();
 botCommunicator.Start();
-
-
