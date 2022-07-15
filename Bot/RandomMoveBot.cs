@@ -14,11 +14,11 @@ namespace Bot
         //
         // Returns
         // -------
-        // A random move or null (There are no valid moves.).
+        // A random move or null (There are no valid moves).
         public Move? SuggestMove(StandardGameState gameState)
         {
             // A list containing valid moves.
-            var moves = new StandardGame(gameState).FindAllValidMoves();
+            var moves = new StandardGame().FindAllValidMoves(gameState);
 
             if (moves.Count == 0)
             {
