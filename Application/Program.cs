@@ -9,5 +9,5 @@ var randomBot = new RandomMoveBot();
 var move = (Move)randomBot.SuggestMove(gameState);
 Console.WriteLine(StandardFENSerializer.MoveToNotation(move));
 
-// BotCommunicator botCommunicator = new BotCommunicator();
-// botCommunicator.Start();
+BotCommunicator botCommunicator = new BotCommunicator();
+botCommunicator.Start();
