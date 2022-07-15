@@ -5,22 +5,20 @@ namespace Bot
     // This class inputs a FEN notation and suggest a random move from a list of valid moves.
     public class RandomMoveBot: IBot
     {
-        public string gameStateNotation;
-
-        public RandomMoveBot(string gameStateNotation)
-        {
-            this.gameStateNotation = gameStateNotation;
-        }
 
         // Suggest a move.
         //
+        // Parameters
+        // ----------
+        // gameState: A standard game state.
+        //
         // Returns
         // -------
-        // A random move or null.
-        public Move? SuggestMove()
+        // A random move or null (There are no valid moves.).
+        public Move? SuggestMove(StandardGameState gameState)
         {
             // A list containing valid moves.
-            var moves = new StandardGame(gameStateNotation).FindAllValidMoves();
+            var moves = new StandardGame(gameState).FindAllValidMoves();
 
             if (moves.Count == 0)
             {
