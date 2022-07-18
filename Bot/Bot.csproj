@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
-    <ProjectReference Include="..\Communication\Communication.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
