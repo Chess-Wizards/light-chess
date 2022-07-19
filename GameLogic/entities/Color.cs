@@ -1,15 +1,12 @@
-using System;
-
 namespace GameLogic
 {
-    // The enumeration contains possible colors.
+    // Player colors.
     public enum Color
     {
         White,
         Black
     }
 
-    // The class contains an extension method for Color enum.
     static class ColorExtension
     {
         public static Color Change(this Color color)

@@ -1,42 +1,37 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace GameLogic
+namespace GameLogic.Entities.Boards
 {
-    // The class represents the board containing piece's locations/cells. 
+    // Represents the board containing piece's locations/cells. 
     // The width means A-H, while height - 1-8.
-    public class StandardBoard : IBoard
+    public class StandardBoard : IRectangularBoard
     {
-        public int Width = 8;
-        public int Height = 8;
+        private const int StandardBoardSize = 8;
+
+        public int Width { get; }
+        public int Height { get; }
 
         // Dictionary to save pieces by cell.
-        public Dictionary<Cell, Piece> PositionToPiece;
+        private readonly Dictionary<Cell, Piece> positionToPiece;
 
         public StandardBoard()
         {
-            PositionToPiece = new Dictionary<Cell, Piece>();
+            Width = StandardBoardSize;
+            Height = StandardBoardSize;
+            positionToPiece = new Dictionary<Cell, Piece>();
         }
 
-        public StandardBoard(Dictionary<Cell, Piece> positionToPiece)
+        private StandardBoard(Dictionary<Cell, Piece> positionToPiece): this()
         {
             // Shallow copy of dictionary.
-            PositionToPiece = new Dictionary<Cell, Piece>(positionToPiece);
+            positionToPiece = new Dictionary<Cell, Piece>(positionToPiece);
         }
 
-        public StandardBoard ShallowCopy()
+        // Creates a shallow copy of the board.
+        public StandardBoard Copy()
         {
-            // Deep copy of the standard board.
-            //
-            // Returns
-            // -------
-            // The board with pieces equal to the current/this board.
-
-            return new StandardBoard(PositionToPiece);
+            return new StandardBoard(positionToPiece);
         }
 
-        private void CheckCell(Cell cell)
+        private void EnsureCellIsOnBoard(Cell cell)
         {
             // Checks if the cell is valid.
             //
@@ -66,10 +61,8 @@ namespace GameLogic
             // -------
             // true if the cell is on board, otherwise false.
 
-            return 0 <= cell.X &&
-                   cell.X < Width &&
-                   0 <= cell.Y &&
-                   cell.Y < Height;
+            return 0 <= cell.X && cell.X < Width &&
+                   0 <= cell.Y && cell.Y < Height;
         }
 
         public bool IsEmpty(Cell cell)
@@ -84,8 +77,8 @@ namespace GameLogic
             // -------
             // true if the cell contains a piece, otherwise false.
 
-            CheckCell(cell);
-            return !PositionToPiece.ContainsKey(cell);
+            EnsureCellIsOnBoard(cell);
+            return !positionToPiece.ContainsKey(cell);
         }
 
         public Piece? GetPiece(Cell cell)
@@ -100,14 +93,16 @@ namespace GameLogic
             // -------
             // piece if exists, otherwise null. 
 
-            CheckCell(cell);
-            if (PositionToPiece.ContainsKey(cell))
-                return PositionToPiece[cell];
-            return null;
+            EnsureCellIsOnBoard(cell);
+            if (IsEmpty(cell))
+            {
+                return null;
+            }
+
+            return positionToPiece[cell];
         }
 
-        public void SetPiece(Cell cell,
-                             Piece piece)
+        public void SetPiece(Cell cell, Piece piece)
         {
             // Set piece at cell.
             //
@@ -115,8 +110,8 @@ namespace GameLogic
             // ----------
             // cell: The cell.
 
-            CheckCell(cell);
-            PositionToPiece[cell] = piece;
+            EnsureCellIsOnBoard(cell);
+            positionToPiece[cell] = piece;
         }
 
         public void RemovePiece(Cell cell)
@@ -127,8 +122,8 @@ namespace GameLogic
             // ----------
             // cell: The cell.  
 
-            CheckCell(cell);
-            PositionToPiece.Remove(cell);
+            EnsureCellIsOnBoard(cell);
+            positionToPiece.Remove(cell);
         }
 
         public Piece? this[Cell cell]
@@ -145,7 +140,7 @@ namespace GameLogic
             }
         }
 
-        public List<Cell> GetCellsWithPieces(Color? filterByColor = null,
+        public IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null,
                                              PieceType? filterByPieceType = null)
         {
             // Finds all piece's cells/locations by color and piece type.
@@ -159,13 +154,13 @@ namespace GameLogic
             // -------
             // A list containing piece's cells/locations.
 
-            var cells = PositionToPiece.Keys
+            var cells = positionToPiece.Keys
                         .Where((cell) => filterByColor == null
                                           ? true
-                                        : PositionToPiece[cell].Color == filterByColor)
+                                        : positionToPiece[cell].Color == filterByColor)
                         .Where((cell) => filterByPieceType == null
                                         ? true
-                                        : PositionToPiece[cell].Type == filterByPieceType)
+                                        : positionToPiece[cell].Type == filterByPieceType)
                         .ToList();
 
             return cells;
