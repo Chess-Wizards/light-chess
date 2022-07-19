@@ -5,19 +5,20 @@ namespace Communication.Protocols.UCI
 {
     public class UCIProtocol : IProtocol
     {
-        private int Id {get; set;}
-        private IBot Bot {get; set;}
-        private StandardGameState GameState {get; set;}
+        private readonly int Id;
+        private string NextMoveNotation { get; set; }
+        private IBot Bot { get; set; }
+        private StandardGameState GameState { get; set; }
         private const string InitialFENGameState = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-        List<IOption> options = new List<IOption>{
-            new StringOption("MainDeveloper_TestStringOption", "SherlockKA"),
-            new SpinOption("TargetELORating_TestStringOption", 1000, 2000, 1500)
+        List<IOption> options = new List<IOption>
+        {
         };
 
         public UCIProtocol(IBot bot)
         {
             Bot = bot;
+            Id = GeneratePositiveIntegerNumber();
         }
 
         // Generate a random positive integer number 
@@ -38,6 +39,10 @@ namespace Communication.Protocols.UCI
             {
                 return HandleInitialUCICommand();
             }
+            else if (splitInput[0] == "ucinewgame")
+            {
+                return HandleUCINewGameCommand();
+            }
             else if (splitInput[0] == "isready")
             {
                 return HandleIsReadyCommand();
@@ -45,6 +50,10 @@ namespace Communication.Protocols.UCI
             else if (splitInput[0] == "go")
             {
                 return HandleGoCommand();
+            }
+            else if (splitInput[0] == "stop")
+            {
+                return HandleStopCommand();
             }
             else if (splitInput[0] == "quit")
             {
@@ -64,11 +73,11 @@ namespace Communication.Protocols.UCI
         // http://wbec-ridderkerk.nl/html/UCIProtocol.html
         private IEnumerable<string> HandleInitialUCICommand()
         {
-            Id = GeneratePositiveIntegerNumber();
             GameState = GetInitialGameState();
 
             yield return $"id name Lightchess {Id}";
             yield return $"id author the Lightchess developers";
+            yield return "";
 
             foreach (var option in options)
             {
@@ -76,6 +85,15 @@ namespace Communication.Protocols.UCI
             }
 
             yield return "uciok";
+        }
+
+        // As part of the initial 'uci' command the bot has to do following:
+        // 1. Create a new game.
+        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
+        private IEnumerable<string> HandleUCINewGameCommand()
+        {
+            GameState = GetInitialGameState();
+            yield break;
         }
 
         // As part of the initial 'uci' command the bot has to do following:
@@ -92,7 +110,15 @@ namespace Communication.Protocols.UCI
         private IEnumerable<string> HandleGoCommand()
         {
             var move = (Move)Bot.SuggestMove(GameState);
-            yield return StandardFENSerializer.MoveToNotation(move);
+            NextMoveNotation = StandardFENSerializer.MoveToNotation(move);
+            yield return $"bestmove {NextMoveNotation}";
+        }
+        // As part of the initial 'uci' command the bot has to do following:
+        // 1. Return a move.
+        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
+        private IEnumerable<string> HandleStopCommand()
+        {
+            yield return NextMoveNotation;
         }
 
         // As part of the initial 'uci' command the bot has to do following:
@@ -112,7 +138,7 @@ namespace Communication.Protocols.UCI
 
             var firstFENNotationIndex = 2;
             var notationLength = 6;
-            GameState = startposUsed ? GetInitialGameState() 
+            GameState = startposUsed ? GetInitialGameState()
                                      : StandardFENSerializer.DeserializeFromFEN(string.Join(" ", splitInput.Skip(firstFENNotationIndex).Take(notationLength)));
 
             var firstMoveIndex = startposUsed ? 3 : 9;

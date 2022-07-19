@@ -3,7 +3,7 @@ using GameLogic;
 namespace Bot
 {
     // This class inputs a FEN notation and suggest a random move from a list of valid moves.
-    public class RandomMoveBot: IBot
+    public class RandomMoveBot : IBot
     {
 
         // Suggest a move.

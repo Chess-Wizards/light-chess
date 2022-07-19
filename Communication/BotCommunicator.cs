@@ -1,4 +1,5 @@
 using Bot;
+using System.IO;
 
 namespace Communication
 {
@@ -24,6 +25,7 @@ namespace Communication
             while (true)
             {
                 string? input = Console.ReadLine();
+                File.AppendAllText("light_chess_log.txt", input + "\n");
                 if (input == null)
                 {
                     throw new InvalidOperationException("Failed to read input.");
@@ -41,10 +43,13 @@ namespace Communication
                     initializedProtocol = availableCommunicationProtocols[input](bot);
                 }
 
+
+
                 IEnumerable<string> commandOutput = initializedProtocol.HandleCommand(input);
-                bool isTerminated = false; 
+                bool isTerminated = false;
                 foreach (string output in commandOutput)
                 {
+
                     if (output == "quit")
                     {
                         isTerminated = true;
@@ -53,7 +58,7 @@ namespace Communication
 
                     Console.WriteLine(output);
                 }
-                
+
                 if (isTerminated)
                 {
                     break;
