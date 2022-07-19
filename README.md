@@ -9,7 +9,7 @@
 * `dotnet format` for code refactoring 
 * `dotnet sln add Bot/Bot.csproj` for including Bot project into solution file. 
 
-### How to run a bot on lichess:
+### How to run the bot on lichess:
 
 1) Run `dotnet run --project Application` for building the current project
 2) Clone https://github.com/ShailChoksi/lichess-bot and follow instructions to set up an environment and create `config.yml`
