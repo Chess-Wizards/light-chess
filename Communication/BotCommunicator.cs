@@ -25,7 +25,7 @@ namespace Communication
             while (true)
             {
                 string? input = Console.ReadLine();
-                File.AppendAllText("light_chess_log.txt", input + "\n");
+
                 if (input == null)
                 {
                     throw new InvalidOperationException("Failed to read input.");
