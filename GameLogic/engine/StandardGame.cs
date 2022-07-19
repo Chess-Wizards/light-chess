@@ -63,7 +63,7 @@ namespace GameLogic
             {
                 throw new ArgumentException("Invalid FEN notation.");
             }
-            
+
             var nextGameState = MoveApplier.GetNextGameState(gameState, move);
             return IsValid(nextGameState) ? nextGameState : null;
         }
