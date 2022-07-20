@@ -4,19 +4,19 @@ using GameLogic.Entities.States;
 namespace GameLogic.Engine
 {
     // The interface represents the logic of chess game. 
-    public interface IGameLogic
+    public interface IGameLogic<TGameState>
     {
         // Checks if the mate occurs at the current game state.
-        bool IsMate(IStandardGameState gameState);
+        bool IsMate(TGameState gameState);
 
         // Checks if the check occurs at the current game state.
-        bool IsCheck(IStandardGameState gameState);
+        bool IsCheck(TGameState gameState);
 
         // Applies the move and returns a new instance of a class implementing the IStandardGameLogic interface, 
         // if the move is valid. Otherwise, returns null.
-        IStandardGameState? MakeMove(IStandardGameState gameState, Move move);
+        TGameState? MakeMove(TGameState gameState, Move move);
 
         // Find all valid moves. 
-        IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState);
+        IEnumerable<Move> FindAllValidMoves(TGameState gameState);
     }
 }

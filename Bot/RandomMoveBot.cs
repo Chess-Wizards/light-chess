@@ -20,7 +20,7 @@ namespace Bot
         public Move? SuggestMove(StandardGameState gameState)
         {
             // A list containing valid moves.
-            var moves = new StandardGame().FindAllValidMoves(gameState);
+            var moves = new StandardGame().FindAllValidMoves(gameState).ToList();
 
             if (moves.Count == 0)
             {

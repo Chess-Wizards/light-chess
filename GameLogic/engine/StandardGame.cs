@@ -6,7 +6,7 @@ namespace GameLogic.Engine
     // This class is the entry point for all commands coming to the GameLogic project.
     // It is responsible for initial instantiation of the game.
     // Game state must be valid!!!
-    public class StandardGame : IGameLogic
+    public class StandardGame : IGameLogic<IStandardGameState>
     {
         // Checks if the mate occurs at the current game state.
         // Enemy color mates/wins the active color.
