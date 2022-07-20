@@ -34,7 +34,7 @@ namespace GameLogic.Entities
             {
                 nextBoard = _PerformCastle(gameState.Board, move);
             }
-            // Enpassant move.
+            // En passant move.
             else if (gameState.EnPassantCell != null
                     && move.EndCell == (Cell)gameState.EnPassantCell)
             {
@@ -57,7 +57,7 @@ namespace GameLogic.Entities
             }
 
             // Next castles.
-            var nextAvaialbleCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
+            var nextAvailableCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
 
             // Next cells. 
             var nextEnPassantCell = _GetEnPassantCellAfterMove(gameState.Board, move);
@@ -74,7 +74,7 @@ namespace GameLogic.Entities
             return new StandardGameState(
                 nextBoard,
                 gameState.EnemyColor,
-                nextAvaialbleCastles,
+                nextAvailableCastles,
                 nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber

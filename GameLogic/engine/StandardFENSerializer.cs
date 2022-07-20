@@ -10,7 +10,7 @@ namespace GameLogic.Engine
         // The class represents the serialization/deserialization to/from FEN notation.
         // Please refer to the FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
 
-        public static Dictionary<char, Piece> mappingNotationToPiece = new Dictionary<char, Piece>()
+        private static Dictionary<char, Piece> _mappingNotationToPiece = new Dictionary<char, Piece>()
             {
                 {'P', new Piece(Color.White, PieceType.Pawn)},
                 {'N', new Piece(Color.White, PieceType.Knight)},
@@ -25,31 +25,31 @@ namespace GameLogic.Engine
                 {'q', new Piece(Color.Black, PieceType.Queen)},
                 {'k', new Piece(Color.Black, PieceType.King)}
             };
-        public static Dictionary<Piece, char> mappingPieceToNotation = mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
+        private static Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
-        public static Dictionary<char, Castle> mappingNotationToCastle = new Dictionary<char, Castle>()
+        private static Dictionary<char, Castle> _mappingNotationToCastle = new Dictionary<char, Castle>()
             {
                 {'K', new Castle(Color.White, CastleType.King)},
                 {'Q', new Castle(Color.White, CastleType.Queen)},
                 {'k', new Castle(Color.Black, CastleType.King)},
                 {'q', new Castle(Color.Black, CastleType.Queen)},
             };
-        public static Dictionary<Castle, char> mappingCastleToNotation = mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
+        private static Dictionary<Castle, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
-        public static Dictionary<char, Color> mappingNotationToColor = new Dictionary<char, Color>()
+        private static Dictionary<char, Color> _mappingNotationToColor = new Dictionary<char, Color>()
             {
                 {'w', Color.White},
                 {'b', Color.Black}
             };
 
-        public static Dictionary<char, PieceType> mappingNotationToPieceType = new Dictionary<char, PieceType>()
+        private static Dictionary<char, PieceType> _mappingNotationToPieceType = new Dictionary<char, PieceType>()
             {
                 {'n', PieceType.Knight},
                 {'b', PieceType.Bishop},
                 {'r', PieceType.Rook},
                 {'q', PieceType.Queen}
             };
-        public static Dictionary<PieceType, char> mappingPieceTypeToNotation = mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
+        public static Dictionary<PieceType, char> _mappingPieceTypeToNotation = _mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
 
 
         // Serialize object to FEN notation.
@@ -109,7 +109,7 @@ namespace GameLogic.Engine
             return gameState;
         }
 
-        public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
+        public static Dictionary<Color, char> mappingColorToNotation = _mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
         // Deserializes board FEN notation.
         //
@@ -140,10 +140,10 @@ namespace GameLogic.Engine
                 foreach (var character in row)
                 {
                     // Set piece to board and increment |x| by 1 .
-                    if (mappingNotationToPiece.ContainsKey(character))
+                    if (_mappingNotationToPiece.ContainsKey(character))
                     {
                         var cell = new Cell(x, y);
-                        board.SetPiece(cell, mappingNotationToPiece[character]);
+                        board.SetPiece(cell, _mappingNotationToPiece[character]);
                         x += 1;
                     }
                     // Increment |x| by number of empty cells.
@@ -196,7 +196,7 @@ namespace GameLogic.Engine
                     else
                     {
                         if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
-                        row.Add(mappingPieceToNotation[(Piece)board.GetPiece(cell)]);
+                        row.Add(_mappingPieceToNotation[(Piece)board.GetPiece(cell)]);
                         numberEmptyCells = 0;
                     }
                 }
@@ -227,7 +227,7 @@ namespace GameLogic.Engine
         {
             if (notation.Length != 1)
                 throw new ArgumentException();
-            return mappingNotationToColor[notation[0]];
+            return _mappingNotationToColor[notation[0]];
         }
 
         // Serialize color to the FEN notation.
@@ -263,7 +263,7 @@ namespace GameLogic.Engine
         public static List<Castle> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
-                           .Select((castle) => (mappingNotationToCastle[castle]))
+                           .Select((castle) => (_mappingNotationToCastle[castle]))
                            .ToList();
 
         }
@@ -285,7 +285,7 @@ namespace GameLogic.Engine
         public static string CastleToNotation(IEnumerable<Castle> castles)
         {
             var notation = String.Join("",
-                        castles.Select((castle) => mappingCastleToNotation[castle])
+                        castles.Select((castle) => _mappingCastleToNotation[castle])
                                .ToList()
                        );
             return notation.Length == 0 ? "-" : notation;
@@ -353,7 +353,7 @@ namespace GameLogic.Engine
         // {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
+            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : _mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
             return $"{CellToNotation(move.StartCell)}{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
@@ -372,9 +372,9 @@ namespace GameLogic.Engine
             PieceType? pieceType = null;
             var lastIndex = notation.Length - 1;
             // Check if the last character is piece type
-            if (mappingNotationToPieceType.ContainsKey(notation[lastIndex]))
+            if (_mappingNotationToPieceType.ContainsKey(notation[lastIndex]))
             {
-                pieceType = mappingNotationToPieceType[notation[lastIndex]];
+                pieceType = _mappingNotationToPieceType[notation[lastIndex]];
                 // Remove piece type from |notation|
                 notation = notation.Remove(lastIndex);
             }

@@ -16,12 +16,12 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing moves produced by piece at cell |cell|.   
+        // A IEnumerable collection containing moves produced by piece at cell |cell|.   
         public static IEnumerable<Move> GetMoves(Cell cell, IRectangularBoard board)
         {
             var piece = board.GetPiece(cell);
 
-            // Return an empty list if the cell is empty.
+            // Return an empty IEnumerable collection if the cell is empty.
             if (piece == null)
             {
                 return new List<Move>() { };
@@ -38,30 +38,29 @@ namespace GameLogic.Engine
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
 
             var mappingPieceTypeToMethod = new Dictionary<PieceType,
-                                                          Func<Cell, List<Cell>,
-                                                          List<Cell>,
+                                                          Func<Cell, IEnumerable<Cell>,
+                                                          IEnumerable<Cell>,
                                                           Func<Cell, bool>,
                                                           Color,
-                                                          List<Cell>>>()
+                                                          IEnumerable<Cell>>>()
             {
                 {PieceType.Rook, CellsUnderThreat.GetCellsUnderThreatRook},
                 {PieceType.Knight, CellsUnderThreat.GetCellsUnderThreatKnight},
                 {PieceType.Bishop, CellsUnderThreat.GetCellsUnderThreatBishop},
                 {PieceType.Queen, CellsUnderThreat.GetCellsUnderThreatQueen},
                 {PieceType.King, CellsUnderThreat.GetCellsUnderThreatKing},
-                {PieceType.Pawn, GetNextCellsPawn}
+                {PieceType.Pawn, _GetNextCellsPawn}
             };
 
             return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
-                                            pieceCells.ToList(),
-                                            enemyPieceCells.ToList(),
+                                            pieceCells,
+                                            enemyPieceCells,
                                             board.IsOnBoard,
                                             (Color)piece?.Color)
                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
                 .SelectMany(nextCell => ((Piece)piece).Type == PieceType.Pawn && lastPawnRanks.Contains(nextCell.Y)
                                         ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
-                                        : new List<Move>() { new Move(cell, nextCell) })
-                .ToList();
+                                        : new List<Move>() { new Move(cell, nextCell) });
         }
 
         // Finds next/move cells produced by pawn at cell |cell|.
@@ -69,25 +68,25 @@ namespace GameLogic.Engine
         // Parameters
         // ----------
         // cell: The cell.
-        // pieceCells: A list containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A list containing pieces that belong to the enemy color.
+        // pieceCells: A IEnumerable collection containing pieces that belong to the same color as the piece at cell |cell|.
+        // enemyPieceCells: A IEnumerable collection containing pieces that belong to the enemy color.
         // IsOnBoard: A function to decide on where the cell is on board.
         // activeColor: The pawn color.
         //
         // Returns
         // -------
-        // A list containing next/move cells produced by pawn at cell |cell|.
-        private static List<Cell> GetNextCellsPawn(Cell cell,
-                                                   List<Cell> pieceCells,
-                                                   List<Cell> enemyPieceCells,
-                                                   Func<Cell, bool> IsOnBoard,
-                                                   Color activeColor)
+        // A IEnumerable collection containing next/move cells produced by pawn at cell |cell|.
+        private static IEnumerable<Cell> _GetNextCellsPawn(Cell cell,
+                                                           IEnumerable<Cell> pieceCells,
+                                                           IEnumerable<Cell> enemyPieceCells,
+                                                           Func<Cell, bool> IsOnBoard,
+                                                           Color activeColor)
         {
             var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell,
                                                                      pieceCells,
                                                                      enemyPieceCells,
                                                                      IsOnBoard,
-                                                                     activeColor);
+                                                                     activeColor).ToList();
 
             // Shift depends on color.            
             var shift = activeColor == Color.White ? new Cell(0, 1) : new Cell(0, -1);
@@ -101,14 +100,14 @@ namespace GameLogic.Engine
             }
 
             // Two moves forward.
-            var celltwoMovesForward = cellOneMoveForward + shift;
+            var cellTwoMovesForward = cellOneMoveForward + shift;
             var startRow = activeColor == Color.White ? 1 : 6;
             var notTouchedPawn = cell.Y == startRow;
             if (notTouchedPawn
                 && !pieceCells.Contains(cellOneMoveForward)
-                && !enemyPieceCells.Contains(celltwoMovesForward))
+                && !enemyPieceCells.Contains(cellTwoMovesForward))
             {
-                cellsNext.Add(celltwoMovesForward);
+                cellsNext.Add(cellTwoMovesForward);
             }
 
             return cellsNext;

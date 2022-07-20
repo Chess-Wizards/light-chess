@@ -21,7 +21,7 @@ namespace GameLogic.Engine
         public bool IsMate(IStandardGameState gameState)
         {
             return IsCheck(gameState)
-                   && FindAllValidMoves(gameState).Count == 0;
+                   && FindAllValidMoves(gameState).ToList().Count == 0;
         }
 
         // Checks if the check occurs at the current game state.
@@ -106,18 +106,17 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing all moves.
-        private List<Move> FindAllMoves(IStandardGameState gameState)
+        // A IEnumerable collection containing all moves.
+        private IEnumerable<Move> FindAllMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = GetEnPassantMoves(gameState);
-            var castleMoves = GetCastleMoves(gameState);
+            var enPassantMoves = GetEnPassantMoves(gameState).ToList(); ;
+            var castleMoves = GetCastleMoves(gameState).ToList(); ;
             var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
                                            .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
                                            .ToList();
             // Combine moves.
             return enPassantMoves.Concat(castleMoves)
-                                 .Concat(restMoves)
-                                 .ToList();
+                                 .Concat(restMoves);
         }
 
         // Find all en passant moves.
@@ -128,8 +127,8 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing en passant moves.
-        private List<Move> GetEnPassantMoves(IStandardGameState gameState)
+        // A IEnumerable collection containing en passant moves.
+        private IEnumerable<Move> GetEnPassantMoves(IStandardGameState gameState)
         {
             var enPassantMoves = new List<Move>() { };
 
@@ -154,7 +153,7 @@ namespace GameLogic.Engine
         // Find all castle moves.
         //
         // This function should not check the location of the rook and king.
-        // gameState contains this information implicitly in |AvaialbleCastles| field.
+        // gameState contains this information implicitly in |AvailableCastles| field.
         //
         // Parameters
         // ----------
@@ -162,8 +161,8 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing castle moves.
-        private List<Move> GetCastleMoves(IStandardGameState gameState)
+        // A IEnumerable collection containing castle moves.
+        private IEnumerable<Move> GetCastleMoves(IStandardGameState gameState)
         {
             var mappingCatleToMoveNotation = new Dictionary<Castle, string>
             {
@@ -172,7 +171,7 @@ namespace GameLogic.Engine
                 {new Castle(Color.Black, CastleType.King), "e8g8"},
                 {new Castle(Color.Black, CastleType.Queen), "e8c8"}
             };
-            var emptyCellNotations = new Dictionary<Castle, List<string>>
+            var emptyCellNotations = new Dictionary<Castle, IEnumerable<string>>
             {
                 {new Castle(Color.White, CastleType.King), new List<string>(){"f1", "g1"}},
                 {new Castle(Color.White, CastleType.Queen), new List<string>(){"b1", "c1", "d1"}},
@@ -183,8 +182,7 @@ namespace GameLogic.Engine
             return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor
                                              && emptyCellNotations[castle].All(notation => gameState.Board.IsEmpty((Cell)StandardFENSerializer.NotationToCell(notation))))
-                            .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]))
-                            .ToList();
+                            .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]));
         }
 
         // Find all valid moves.
@@ -195,16 +193,15 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing valid moves.
-        public List<Move> FindAllValidMoves(IStandardGameState gameState)
+        // A IEnumerable collection containing valid moves.
+        public IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState)
         {
             if (!IsValid(gameState))
             {
                 throw new ArgumentException("Invalid FEN notation.");
             }
 
-            return FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null)
-                                          .ToList();
+            return FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null);
         }
 
         // Find all cells 'under threat' produced by |filterByColor| color.
@@ -216,13 +213,12 @@ namespace GameLogic.Engine
         //
         // Returns
         // -------
-        // A list containing all cells.
-        private List<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
+        // A IEnumerable collection containing all cells.
+        private IEnumerable<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
         {
             return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))
-                                  .Distinct()
-                                  .ToList();
+                                  .Distinct();
         }
     }
 }

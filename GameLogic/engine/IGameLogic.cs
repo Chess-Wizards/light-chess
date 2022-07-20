@@ -17,6 +17,6 @@ namespace GameLogic.Engine
         IStandardGameState? MakeMove(IStandardGameState gameState, Move move);
 
         // Find all valid moves. 
-        List<Move> FindAllValidMoves(IStandardGameState gameState);
+        IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState);
     }
 }
