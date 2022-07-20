@@ -3,7 +3,7 @@ using GameLogic.Entities.Boards;
 namespace GameLogic.Entities.States
 {
     // Represents state functionality. 
-    public interface IStandardGameState: IGameState<IRectangularBoard>
+    public interface IStandardGameState : IGameState<IRectangularBoard>
     {
         IEnumerable<Castle> AvailableCastles { get; }
         Cell? EnPassantCell { get; }
