@@ -1,11 +1,11 @@
-namespace GameLogic
+namespace GameLogic.Entities
 {
-    // The structure contains possible cell coordinates. 
+    // Contains possible cell coordinates. 
     // Each cell can be uniquely identified by pair of coordinates X and Y.
     public struct Cell
     {
-        public readonly int X { get; }
-        public readonly int Y { get; }
+        public int X { get; }
+        public int Y { get; }
 
         public Cell(int x, int y)
         {

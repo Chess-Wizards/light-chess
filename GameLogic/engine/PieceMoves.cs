@@ -1,8 +1,7 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using GameLogic.Entities;
+using GameLogic.Entities.Boards;
 
-namespace GameLogic
+namespace GameLogic.Engine
 {
     // The class aims to find the array of all moves. Moves cannot be valid.
     // This class does not consider checks, en passant moves, and castles.
@@ -18,10 +17,9 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing moves produced by piece at cell |cell|.   
-        public static List<Move> GetMoves(Cell cell,
-                                          StandardBoard board)
+        public static IEnumerable<Move> GetMoves(Cell cell, IRectangularBoard board)
         {
-            var piece = board[cell];
+            var piece = board.GetPiece(cell);
 
             // Return an empty list if the cell is empty.
             if (piece == null)
@@ -55,8 +53,8 @@ namespace GameLogic
             };
 
             return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
-                                            pieceCells,
-                                            enemyPieceCells,
+                                            pieceCells.ToList(),
+                                            enemyPieceCells.ToList(),
                                             board.IsOnBoard,
                                             (Color)piece?.Color)
                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.

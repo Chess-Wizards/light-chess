@@ -1,6 +1,6 @@
-namespace GameLogic
+namespace GameLogic.Entities
 {
-    // Castle type.
+    // Castle types.
     public enum CastleType
     {
         // Castle to the king side.

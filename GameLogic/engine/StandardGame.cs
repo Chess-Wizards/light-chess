@@ -1,10 +1,7 @@
-// This class is not yet done.
+using GameLogic.Entities;
+using GameLogic.Entities.States;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace GameLogic
+namespace GameLogic.Engine
 {
     // This class is the entry point for all commands coming to the GameLogic project.
     // It is responsible for initial instantiation of the game.
@@ -21,7 +18,7 @@ namespace GameLogic
         // Returns
         // -------
         // true, if the mate occurs. Otherwise, false.
-        public bool IsMate(StandardGameState gameState)
+        public bool IsMate(IStandardGameState gameState)
         {
             return IsCheck(gameState)
                    && FindAllValidMoves(gameState).Count == 0;
@@ -37,7 +34,7 @@ namespace GameLogic
         // Returns
         // -------
         // true, if the check occurs. Otherwise, false.
-        public bool IsCheck(StandardGameState gameState)
+        public bool IsCheck(IStandardGameState gameState)
         {
             // Extract king location.
             var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
@@ -57,7 +54,7 @@ namespace GameLogic
         // Returns
         // -------
         // A new instance of StandardGame, if the move is valid. Otherwise, returns null.
-        public StandardGameState? MakeMove(StandardGameState gameState, Move move)
+        public IStandardGameState? MakeMove(IStandardGameState gameState, Move move)
         {
             if (!IsValid(gameState))
             {
@@ -77,13 +74,13 @@ namespace GameLogic
         // Returns
         // -------
         // true, if the current game state is valid. Otherwise, returns false.
-        private bool IsValid(StandardGameState gameState)
+        private bool IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
-                                                                      filterByPieceType: PieceType.King).Count == 1;
+                                                                      filterByPieceType: PieceType.King).ToList().Count == 1;
 
             var onlyOneKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                                 filterByPieceType: PieceType.King).Count == 1;
+                                                                 filterByPieceType: PieceType.King).ToList().Count == 1;
 
             var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                    filterByPieceType: PieceType.King) // Extract king location.
@@ -110,7 +107,7 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing all moves.
-        private List<Move> FindAllMoves(StandardGameState gameState)
+        private List<Move> FindAllMoves(IStandardGameState gameState)
         {
             var enPassantMoves = GetEnPassantMoves(gameState);
             var castleMoves = GetCastleMoves(gameState);
@@ -132,7 +129,7 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing en passant moves.
-        private List<Move> GetEnPassantMoves(StandardGameState gameState)
+        private List<Move> GetEnPassantMoves(IStandardGameState gameState)
         {
             var enPassantMoves = new List<Move>() { };
 
@@ -145,8 +142,8 @@ namespace GameLogic
                 enPassantMoves = xShifts.Select(xShift => (Cell)gameState.EnPassantCell + new Cell(xShift, yShift))
                                         .Where(cell => gameState.Board.IsOnBoard(cell)
                                                        && !gameState.Board.IsEmpty(cell)
-                                                       && gameState.Board[cell]?.Type == PieceType.Pawn
-                                                       && gameState.Board[cell]?.Color == gameState.ActiveColor)
+                                                       && gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn
+                                                       && gameState.Board.GetPiece(cell)?.Color == gameState.ActiveColor)
                                         .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
                                         .ToList();
             }
@@ -166,7 +163,7 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing castle moves.
-        private List<Move> GetCastleMoves(StandardGameState gameState)
+        private List<Move> GetCastleMoves(IStandardGameState gameState)
         {
             var mappingCatleToMoveNotation = new Dictionary<Castle, string>
             {
@@ -183,7 +180,7 @@ namespace GameLogic
                 {new Castle(Color.Black, CastleType.Queen), new List<string>(){"b8", "c8", "d8"}}
             };
 
-            return gameState.AvaialbleCastles
+            return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor
                                              && emptyCellNotations[castle].All(notation => gameState.Board.IsEmpty((Cell)StandardFENSerializer.NotationToCell(notation))))
                             .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]))
@@ -199,7 +196,7 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing valid moves.
-        public List<Move> FindAllValidMoves(StandardGameState gameState)
+        public List<Move> FindAllValidMoves(IStandardGameState gameState)
         {
             if (!IsValid(gameState))
             {
@@ -220,7 +217,7 @@ namespace GameLogic
         // Returns
         // -------
         // A list containing all cells.
-        private List<Cell> FindAllCellsUnderThreat(StandardGameState gameState, Color filterByColor)
+        private List<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
         {
             return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))

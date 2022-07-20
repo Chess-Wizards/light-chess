@@ -21,5 +21,8 @@ namespace GameLogic.Entities.Boards
         // Returns non-empty cells.
         IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null,
                                       PieceType? filterByPieceType = null);
+
+        // Copy the board.
+        StandardBoard Copy();
     }
 }

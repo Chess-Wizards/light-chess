@@ -1,4 +1,5 @@
-using GameLogic;
+using GameLogic.Entities;
+using GameLogic.Entities.States;
 
 namespace Bot
 {

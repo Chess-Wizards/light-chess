@@ -1,8 +1,9 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using GameLogic.Entities;
+using GameLogic.Entities.Boards;
+using GameLogic.Entities.States;
 
-namespace GameLogic
+
+namespace GameLogic.Engine
 {
     public static class StandardFENSerializer
     {
@@ -60,13 +61,13 @@ namespace GameLogic
         // Returns
         // -------
         // The FEN notation.
-        public static string SerializeToFEN(StandardGameState objectToSerialize)
+        public static string SerializeToFEN(IStandardGameState objectToSerialize)
         {
             var splitFenNotation = new string[6]
             {
                 BoardToNotation(objectToSerialize.Board),
                 ColorToNotation(objectToSerialize.ActiveColor),
-                CastleToNotation(objectToSerialize.AvaialbleCastles),
+                CastleToNotation(objectToSerialize.AvailableCastles),
                 CellToNotation(objectToSerialize.EnPassantCell),
                 objectToSerialize.HalfmoveNumber.ToString(),
                 objectToSerialize.FullmoveNumber.ToString()
@@ -142,7 +143,7 @@ namespace GameLogic
                     if (mappingNotationToPiece.ContainsKey(character))
                     {
                         var cell = new Cell(x, y);
-                        board[cell] = mappingNotationToPiece[character];
+                        board.SetPiece(cell, mappingNotationToPiece[character]);
                         x += 1;
                     }
                     // Increment |x| by number of empty cells.
@@ -172,7 +173,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized board.
-        public static string BoardToNotation(StandardBoard board)
+        public static string BoardToNotation(IRectangularBoard board)
         {
             var rows = new List<string>();
 
@@ -195,7 +196,7 @@ namespace GameLogic
                     else
                     {
                         if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
-                        row.Add(mappingPieceToNotation[(Piece)board[cell]]);
+                        row.Add(mappingPieceToNotation[(Piece)board.GetPiece(cell)]);
                         numberEmptyCells = 0;
                     }
                 }
@@ -281,7 +282,7 @@ namespace GameLogic
         // Returns
         // -------
         // The serialized castles.
-        public static string CastleToNotation(List<Castle> castles)
+        public static string CastleToNotation(IEnumerable<Castle> castles)
         {
             var notation = String.Join("",
                         castles.Select((castle) => mappingCastleToNotation[castle])

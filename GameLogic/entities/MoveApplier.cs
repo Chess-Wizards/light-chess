@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
+using GameLogic.Entities.Boards;
+using GameLogic.Entities.States;
 
-
-namespace GameLogic
+namespace GameLogic.Entities
 {
-    // This class applies a move.
+    // Applies a move.
 
     public static class MoveApplier
     {
 
         // Get next game state.
-        // 
+        //
         // Parameters
         // ----------
         // gameState: The start/initial game state.
@@ -19,47 +18,49 @@ namespace GameLogic
         // Returns
         // -------
         // The next game state.
-        public static StandardGameState GetNextGameState(StandardGameState gameState,
-                                                         Move move)
+        public static IStandardGameState GetNextGameState(IStandardGameState gameState, Move move)
         {
-            var piece = (Piece)gameState.Board[move.StartCell];
+            if (gameState.Board.IsEmpty(move.StartCell))
+            {
+                throw new ArgumentException("The start/initial cell does not contain a piece.");
+            }
+
+            var piece = (Piece)gameState.Board.GetPiece(move.StartCell);
             var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
             var lastPawnRanks = new List<int> { 0, 7 };
             StandardBoard nextBoard;
             // Castle.
             if (piece.Type == PieceType.King && deltaX == 2)
             {
-                nextBoard = PerformCastle(gameState.Board, move);
+                nextBoard = _PerformCastle(gameState.Board, move);
             }
             // Enpassant move.
             else if (gameState.EnPassantCell != null
                     && move.EndCell == (Cell)gameState.EnPassantCell)
             {
-                nextBoard = PerformEnPassantMove(gameState.Board, move);
+                nextBoard = _PerformEnPassantMove(gameState.Board, move);
             }
             // Pawn promotion
             else if (piece.Type == PieceType.Pawn
                     && lastPawnRanks.Contains(move.EndCell.Y))
             {
-                nextBoard = PerformMove(gameState.Board, move);
+                nextBoard = _PerformMove(gameState.Board, move);
 
                 // Replace pawn with piece after promotion
                 var pieceAfterPromotion = new Piece(piece.Color, (PieceType)move.PromotionPieceType);
-                nextBoard[move.EndCell] = pieceAfterPromotion;
+                nextBoard.SetPiece(move.EndCell, pieceAfterPromotion);
             }
             // Simple move.
             else
             {
-                nextBoard = PerformMove(gameState.Board, move);
+                nextBoard = _PerformMove(gameState.Board, move);
             }
 
             // Next castles.
-            var nextAvaialbleCastles = GetCastlesAfterMove(gameState.Board,
-                                                           move,
-                                                           gameState.AvaialbleCastles);
+            var nextAvaialbleCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
 
             // Next cells. 
-            var nextEnPassantCell = GetEnPassantCellAfterMove(gameState.Board, move);
+            var nextEnPassantCell = _GetEnPassantCellAfterMove(gameState.Board, move);
 
             // Next HalfmoveNumber.
             var movePawn = piece.Type == PieceType.Pawn;
@@ -90,14 +91,14 @@ namespace GameLogic
         // Returns
         // -------
         // The next board with performed move.
-        private static StandardBoard PerformCastle(StandardBoard board,
-                                                   Move move)
+        private static StandardBoard _PerformCastle(IBoard board,
+                                                    Move move)
         {
             // Get a new board.
-            var nextBoard = board.ShallowCopy();
+            var nextBoard = board.Copy();
 
             var deltaX = move.EndCell.X - move.StartCell.X;
-            var y = board[move.StartCell]?.Color == Color.White ? 0 : 7;
+            var y = board.GetPiece(move.StartCell)?.Color == Color.White ? 0 : 7;
             int nextXKing;
             int nextXRook;
             int xRook;
@@ -122,12 +123,12 @@ namespace GameLogic
                                         y);
             var rookCell = new Cell(xRook, y);
             // Perform castle.
-            var kingPiece = nextBoard[move.StartCell];
-            var rookPiece = nextBoard[rookCell];
-            nextBoard[move.StartCell] = null;
-            nextBoard[rookCell] = null;
-            nextBoard[nextKingCell] = kingPiece;
-            nextBoard[nextRookCell] = rookPiece;
+            var kingPiece = (Piece)nextBoard.GetPiece(move.StartCell);
+            var rookPiece = (Piece)nextBoard.GetPiece(rookCell);
+            nextBoard.RemovePiece(move.StartCell);
+            nextBoard.RemovePiece(rookCell);
+            nextBoard.SetPiece(nextKingCell, kingPiece);
+            nextBoard.SetPiece(nextRookCell, rookPiece);
 
             return nextBoard;
         }
@@ -142,20 +143,20 @@ namespace GameLogic
         // Returns
         // -------
         // The next board with performed move.
-        private static StandardBoard PerformEnPassantMove(StandardBoard board,
-                                                          Move move)
+        private static StandardBoard _PerformEnPassantMove(IBoard board,
+                                                           Move move)
         {
             // Get a new board.
-            var nextBoard = board.ShallowCopy();
-            var piece = (Piece)board[move.StartCell];
+            var nextBoard = board.Copy();
+            var piece = (Piece)board.GetPiece(move.StartCell);
 
             // Move own pawn.
-            nextBoard[move.EndCell] = piece;
-            nextBoard[move.StartCell] = null;
+            nextBoard.SetPiece(move.EndCell, piece);
+            nextBoard.RemovePiece(move.StartCell);
 
             // Capture enemy pawn.
             var enemyCellWithPawn = new Cell(move.EndCell.X, move.StartCell.Y);
-            nextBoard[enemyCellWithPawn] = null;
+            nextBoard.RemovePiece(enemyCellWithPawn);
 
             return nextBoard;
         }
@@ -170,16 +171,16 @@ namespace GameLogic
         // Returns
         // -------
         // The next board with performed move.
-        private static StandardBoard PerformMove(StandardBoard board,
-                                                 Move move)
+        private static StandardBoard _PerformMove(IBoard board,
+                                                  Move move)
         {
             // Get a new board.
-            var nextBoard = board.ShallowCopy();
-            var piece = (Piece)nextBoard[move.StartCell];
+            var nextBoard = board.Copy();
+            var piece = (Piece)nextBoard.GetPiece(move.StartCell);
 
             // Perform move.
-            nextBoard[move.EndCell] = piece;
-            nextBoard[move.StartCell] = null;
+            nextBoard.SetPiece(move.EndCell, piece);
+            nextBoard.RemovePiece(move.StartCell);
 
             return nextBoard;
         }
@@ -195,12 +196,12 @@ namespace GameLogic
         // Returns
         // -------
         // A list of possible castles after the move is performed.
-        private static List<Castle> GetCastlesAfterMove(StandardBoard board,
-                                                        Move move,
-                                                        List<Castle> castles)
+        private static List<Castle> _GetCastlesAfterMove(IBoard board,
+                                                         Move move,
+                                                         IEnumerable<Castle> castles)
         {
             var nextCastles = new List<Castle>(castles);
-            var piece = (Piece)board[move.StartCell];
+            var piece = (Piece)board.GetPiece(move.StartCell);
             // Castles.
             var kingCastle = new Castle(piece.Color, CastleType.King);
             var queenCastle = new Castle(piece.Color, CastleType.Queen);
@@ -254,14 +255,14 @@ namespace GameLogic
         // Returns
         // -------
         // The en passant cell after the move is performed.
-        private static Cell? GetEnPassantCellAfterMove(StandardBoard board,
-                                                       Move move)
+        private static Cell? _GetEnPassantCellAfterMove(IBoard board,
+                                                        Move move)
         {
-            var piece = (Piece)board[move.StartCell];
+            var piece = board.GetPiece(move.StartCell);
             var deltaY = move.EndCell.Y - move.StartCell.Y;
 
             // Return en passant cell if the pawn moves forward on two cells.
-            if (piece.Type == PieceType.Pawn &&
+            if (piece?.Type == PieceType.Pawn &&
                 Math.Abs(deltaY) == 2)
             {
                 var enPassantY = (move.StartCell.Y + move.EndCell.Y) / 2;

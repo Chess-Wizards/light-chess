@@ -1,5 +1,7 @@
 using Bot;
-using GameLogic;
+using GameLogic.Entities;
+using GameLogic.Entities.States;
+using GameLogic.Engine;
 
 namespace Communication.Protocols.UCI
 {
@@ -148,7 +150,7 @@ namespace Communication.Protocols.UCI
             // Perform moves
             foreach (var move in moves)
             {
-                GameState = new StandardGame().MakeMove(GameState, move);
+                GameState = (StandardGameState)new StandardGame().MakeMove(GameState, move);
             }
 
             yield break;

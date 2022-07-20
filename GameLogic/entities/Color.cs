@@ -1,4 +1,4 @@
-namespace GameLogic
+namespace GameLogic.Entities
 {
     // Player colors.
     public enum Color

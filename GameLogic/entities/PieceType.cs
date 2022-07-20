@@ -1,8 +1,6 @@
-using System;
-
-namespace GameLogic
+namespace GameLogic.Entities
 {
-    // The enumeration contains possible piece types.
+    // Piece types.
     public enum PieceType
     {
         Pawn,

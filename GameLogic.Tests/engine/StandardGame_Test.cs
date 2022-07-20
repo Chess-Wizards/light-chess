@@ -1,7 +1,5 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using NUnit.Framework;
+using GameLogic.Engine;
 
 namespace GameLogic.Tests
 {

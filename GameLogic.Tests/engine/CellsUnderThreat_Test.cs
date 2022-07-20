@@ -1,7 +1,6 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using NUnit.Framework;
+using GameLogic.Entities;
+using GameLogic.Engine;
 
 namespace GameLogic.Tests
 {
@@ -72,7 +71,7 @@ namespace GameLogic.Tests
                     // Check if the cell is empty.
                     else
                     {
-                        Assert.Null(board[cell]);
+                        Assert.Null(board.GetPiece(cell));
                     }
                 }
             }

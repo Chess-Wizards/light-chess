@@ -1,8 +1,7 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using GameLogic.Entities;
+using GameLogic.Entities.Boards;
 
-namespace GameLogic
+namespace GameLogic.Engine
 {
     // The static class aims to find a list of cells 'under threat'. 'under threat' means all cells
     // at which the enemy king cannot stand because of the check. In addition, the piece must be able to 
@@ -23,9 +22,9 @@ namespace GameLogic
         // -------
         // A list containing cells under threat produced by piece at cell |cell|.
         public static List<Cell> GetCellsUnderThreat(Cell cell,
-                                                     StandardBoard board)
+                                                     IRectangularBoard board)
         {
-            var piece = board[cell];
+            var piece = board.GetPiece(cell);
 
             // Return empty list if cell is empty.
             if (piece == null)
@@ -54,8 +53,8 @@ namespace GameLogic
             };
 
             return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
-                                            pieceCells,
-                                            enemyPieceCells,
+                                            pieceCells.ToList(),
+                                            enemyPieceCells.ToList(),
                                             board.IsOnBoard,
                                             (Color)piece?.Color);
         }

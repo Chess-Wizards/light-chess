@@ -1,5 +1,6 @@
-using System;
 using NUnit.Framework;
+using GameLogic.Entities;
+using GameLogic.Entities.Boards;
 
 namespace GameLogic.Tests
 {
@@ -12,16 +13,14 @@ namespace GameLogic.Tests
         public void ShallowCopyPieces()
         {
             var board = new StandardBoard();
-            var boardShallowCopyConstructor = new StandardBoard(board.PositionToPiece);
-            var boardShallowCopy = board.ShallowCopy();
+            var boardShallowCopy = board.Copy();
 
             var cell = new Cell(4, 4);
             var piece = new Piece(Color.White, PieceType.Rook);
             // Set |piece| to |cell| for |board|.
-            board[cell] = piece;
+            board.SetPiece(cell, piece);
 
             Assert.False(board.IsEmpty(cell));
-            Assert.True(boardShallowCopyConstructor.IsEmpty(cell));
             Assert.True(boardShallowCopy.IsEmpty(cell));
         }
 
@@ -52,10 +51,10 @@ namespace GameLogic.Tests
             var board = new StandardBoard();
             var cell = new Cell(3, 4);
             var piece = new Piece(Color.White, PieceType.King);
-            board[cell] = piece;
+            board.SetPiece(cell, piece);
 
             Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
-            Assert.That(cell, Is.EqualTo(board.GetCellsWithPieces()[0]));
+            Assert.That(cell, Is.EqualTo(board.GetCellsWithPieces().ToList()[0]));
 
             // Iterate over colors.
             foreach (Color color in Enum.GetValues(typeof(Color)))
@@ -70,7 +69,7 @@ namespace GameLogic.Tests
                         && pieceType == PieceType.King)
                     {
                         Assert.That(cells.Count, Is.EqualTo(1));
-                        Assert.That(cell, Is.EqualTo(cells[0]));
+                        Assert.That(cell, Is.EqualTo(cells.ToList()[0]));
                     }
                     else
                     {
@@ -91,20 +90,20 @@ namespace GameLogic.Tests
             var piece = new Piece(Color.White, PieceType.Rook);
 
             // Set piece.
-            board[cell] = piece;
-            Assert.That(piece, Is.EqualTo(board[cell]));
+            board.SetPiece(cell, piece);
+            Assert.That(piece, Is.EqualTo(board.GetPiece(cell)));
             Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
 
             // Remove piece.
-            board[cell] = null;
-            Assert.Null(board[cell]);
+            board.RemovePiece(cell);
+            Assert.Null(board.GetPiece(cell));
             Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(0));
 
             // Replace piece.
-            board[cell] = piece;
+            board.SetPiece(cell, piece);
             var pieceNext = new Piece(Color.Black, PieceType.Bishop);
-            board[cell] = pieceNext;
-            Assert.That(pieceNext, Is.EqualTo(board[cell]));
+            board.SetPiece(cell, pieceNext);
+            Assert.That(pieceNext, Is.EqualTo(board.GetPiece(cell)));
             Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
         }
     }
