@@ -124,7 +124,7 @@ namespace GameLogic.Tests
 
             // Perform move.
             var move = StandardFENSerializer.NotationToMove(moveNotation);
-            var endGameState = MoveApplier.GetNextGameState(startGameState, move);
+            var endGameState = MoveApplier.ApplyMove(startGameState, move);
 
             // Deserialize.
             var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(endGameState);

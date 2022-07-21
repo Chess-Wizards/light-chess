@@ -7,6 +7,8 @@ namespace GameLogic.Engine
     // This class does not consider checks, en passant moves, and castles.
     static public class PieceMoves
     {
+        private static readonly List<int> _LastPawnRanks = new List<int> {0, 7};
+
         // Finds moves produced by piece at cell |cell|.
         //
         // Parameters
@@ -27,7 +29,6 @@ namespace GameLogic.Engine
                 return new List<Move>() { };
             }
 
-            var lastPawnRanks = new List<int> { 0, 7 };
             var possiblePromotionPieceTypes = new List<PieceType>{PieceType.Knight,
                                                                   PieceType.Bishop,
                                                                   PieceType.Rook,
@@ -58,7 +59,7 @@ namespace GameLogic.Engine
                                             board.IsOnBoard,
                                             (Color)piece?.Color)
                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
-                .SelectMany(nextCell => ((Piece)piece).Type == PieceType.Pawn && lastPawnRanks.Contains(nextCell.Y)
+                .SelectMany(nextCell => ((Piece)piece).Type == PieceType.Pawn && _LastPawnRanks.Contains(nextCell.Y)
                                         ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
                                         : new List<Move>() { new Move(cell, nextCell) });
         }

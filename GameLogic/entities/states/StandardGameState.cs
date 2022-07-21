@@ -20,7 +20,7 @@ namespace GameLogic.Entities.States
             get { return ActiveColor.Change(); }
         }
 
-        public StandardGameState(StandardBoard board, Color color, IEnumerable<Castle> availableCastles,
+        public StandardGameState(IRectangularBoard board, Color color, IEnumerable<Castle> availableCastles,
                                  Cell? enPassantCell, int halfmoveNumber, int fullmoveNumber)
         {
             Board = board;

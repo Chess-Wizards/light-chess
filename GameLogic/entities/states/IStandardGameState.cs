@@ -2,7 +2,7 @@ using GameLogic.Entities.Boards;
 
 namespace GameLogic.Entities.States
 {
-    // Represents state functionality. 
+    // Represents standard state functionality. 
     public interface IStandardGameState : IGameState<IRectangularBoard>
     {
         IEnumerable<Castle> AvailableCastles { get; }
