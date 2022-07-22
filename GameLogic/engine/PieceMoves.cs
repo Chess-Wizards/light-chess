@@ -1,5 +1,6 @@
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
+using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine
 {
@@ -7,7 +8,7 @@ namespace GameLogic.Engine
     // This class does not consider checks, en passant moves, and castles.
     static public class PieceMoves
     {
-        private static readonly List<int> _LastPawnRanks = new List<int> { 0, 7 };
+        private static readonly PieceConstants _PieceConstants = new();
 
         // Finds moves produced by piece at cell |cell|.
         //
@@ -35,8 +36,8 @@ namespace GameLogic.Engine
                                                                   PieceType.Queen};
 
             // Divide pieces into own and enemy.
-            var pieceCells = board.GetCellsWithPieces(filterByColor: (Color)piece?.Color);
-            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
+            var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
+            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: (piece.Value.Color).Change());
 
             var mappingPieceTypeToMethod = new Dictionary<PieceType,
                                                           Func<Cell, IEnumerable<Cell>,
@@ -53,15 +54,19 @@ namespace GameLogic.Engine
                 {PieceType.Pawn, _GetNextCellsPawn}
             };
 
-            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
+            return mappingPieceTypeToMethod[piece.Value.Type](cell,
                                             pieceCells,
                                             enemyPieceCells,
                                             board.IsOnBoard,
-                                            (Color)piece?.Color)
+                                            piece.Value.Color)
                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
-                .SelectMany(nextCell => ((Piece)piece).Type == PieceType.Pawn && _LastPawnRanks.Contains(nextCell.Y)
+                .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn  && _IsPawnPromotionRank(nextCell.Y)
                                         ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
-                                        : new List<Move>() { new Move(cell, nextCell) });
+                                        : new List<Move>() { new Move(cell, nextCell) }));
+        }
+        private static bool _IsPawnPromotionRank(int rank)
+        {
+            return _PieceConstants.BlackPawnPromotionRank == rank|| _PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         // Finds next/move cells produced by pawn at cell |cell|.
@@ -102,8 +107,8 @@ namespace GameLogic.Engine
 
             // Two moves forward.
             var cellTwoMovesForward = cellOneMoveForward + shift;
-            var startRow = activeColor == Color.White ? 1 : 6;
-            var notTouchedPawn = cell.Y == startRow;
+            var initialPawnRank = activeColor == Color.White ? _PieceConstants.WhiteInitialPawnRank : _PieceConstants.BlackInitialPawnRank;
+            var notTouchedPawn = cell.Y == initialPawnRank;
             if (notTouchedPawn
                 && !pieceCells.Contains(cellOneMoveForward)
                 && !enemyPieceCells.Contains(cellTwoMovesForward))

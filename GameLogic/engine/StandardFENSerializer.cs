@@ -2,6 +2,7 @@ using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.States;
 using GameLogic.Entities.Castles;
+using GameLogic.Entities.Pieces;
 
 
 namespace GameLogic.Engine

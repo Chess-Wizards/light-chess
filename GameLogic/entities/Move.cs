@@ -1,3 +1,5 @@
+using GameLogic.Entities.Pieces;
+
 namespace GameLogic.Entities
 {
     // Defines a move. Each move can
@@ -15,6 +17,32 @@ namespace GameLogic.Entities
             StartCell = startCell;
             EndCell = endCell;
             PromotionPieceType = promotionPieceType;
+        }
+
+        public static bool operator ==(Move move1, Move move2)
+        {
+            return move1.Equals(move2);
+        }
+
+        public static bool operator !=(Move move1, Move move2)
+        {
+            return !move1.Equals(move2);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var move = (Move)obj;
+            if (move == null)
+            {
+                return false;
+            }
+
+            return StartCell == move.StartCell && EndCell == move.EndCell && PromotionPieceType == move.PromotionPieceType;
+        }
+
+        public override int GetHashCode()
+        {
+            return StartCell.GetHashCode() ^ EndCell.GetHashCode() ^ (PromotionPieceType == null ? 0 : PromotionPieceType).GetHashCode();
         }
     }
 }

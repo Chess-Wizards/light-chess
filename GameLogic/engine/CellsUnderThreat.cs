@@ -1,6 +1,6 @@
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
-using System.Linq;
+using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine
 {
@@ -33,8 +33,8 @@ namespace GameLogic.Engine
             }
 
             // Divide pieces into own and enemy.
-            var pieceCells = board.GetCellsWithPieces(filterByColor: (Color)piece?.Color);
-            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: ((Color)piece?.Color).Change());
+            var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
+            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color.Change());
 
             var mappingPieceTypeToMethod = new Dictionary<PieceType,
                                                           Func<Cell, IEnumerable<Cell>,

@@ -2,6 +2,7 @@ using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.States;
 using GameLogic.Entities.Castles;
+using GameLogic.Entities.Pieces;
 using GameLogic.Engine.MoveTypes;
 
 namespace GameLogic.Engine
@@ -9,8 +10,15 @@ namespace GameLogic.Engine
     // Applies a move.
     public static class MoveApplier
     {
+        private static readonly PieceConstants _PieceConstants = new();
 
-        private static readonly List<int> _LastPawnRanks = new List<int>() { 0, 7 };
+        private static readonly Dictionary<Castle, ICastleConstant> mappingCastleToConstant = new()
+        {
+            {new Castle(Color.White, CastleType.King), new WhiteKingCastleConstants()},
+            {new Castle(Color.White, CastleType.Queen), new WhiteQueenCastleConstants()},
+            {new Castle(Color.Black, CastleType.King), new BlackKingCastleConstants()},
+            {new Castle(Color.Black, CastleType.Queen), new BlackQueenCastleConstants()}
+        };
 
         // Applies move and returns next game state.
         //
@@ -58,15 +66,15 @@ namespace GameLogic.Engine
             );
         }
 
-        private static bool _IsLastRank(int rank)
+        private static bool _IsPawnPromotionRank(int rank)
         {
-            return _LastPawnRanks.Contains(rank);
+            return _PieceConstants.BlackPawnPromotionRank == rank|| _PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
         {
-            var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
-            if (startCellPiece.Type == PieceType.King && deltaX == 2)
+            if (startCellPiece.Type == PieceType.King 
+                && mappingCastleToConstant.Values.Any(castleConstant => castleConstant.GetCastleMove == move))
             {
                 return new CastleMove();
             }
@@ -77,8 +85,7 @@ namespace GameLogic.Engine
                 return new EnPassantMove();
             }
             // Pawn promotion
-            // else if (startCellPiece.Type == PieceType.Pawn && _IsLastRank(move.EndCell.Y))
-            else if (startCellPiece.Type == PieceType.Pawn && _IsLastRank(move.EndCell.Y))
+            else if (startCellPiece.Type == PieceType.Pawn && _IsPawnPromotionRank(move.EndCell.Y))
             {
                 return new PawnPromotionMove();
             }
@@ -104,47 +111,28 @@ namespace GameLogic.Engine
                                                          Move move,
                                                          IEnumerable<Castle> castles)
         {
-            var nextCastles = new List<Castle>(castles);
+            var nextCastles = castles.ToList();
             var piece = board.GetPiece(move.StartCell).Value;
-            // Castles.
-            var kingCastle = new Castle(piece.Color, CastleType.King);
-            var queenCastle = new Castle(piece.Color, CastleType.Queen);
-            // Enemy castles.
-            var kingEnemyCastle = new Castle(piece.Color.Change(), CastleType.King);
-            var queenEnemyCastle = new Castle(piece.Color.Change(), CastleType.Queen);
-            // Initial rook cells.
-            var y = piece.Color == Color.White ? 0 : 7;
-            var kingRookInitialCell = new Cell(7, y);
-            var queenRookInitialCell = new Cell(0, y);
-            // Initial enemy rook cells.
-            var yEnemy = piece.Color == Color.White ? 7 : 0;
-            var kingEnemyRookInitialCell = new Cell(7, yEnemy);
-            var queenEnemyRookInitialCell = new Cell(0, yEnemy);
 
-            // Update castles by removing castles.
+            // King move.
             if (piece.Type == PieceType.King)
             {
-                nextCastles.Remove(kingCastle);
-                nextCastles.Remove(queenCastle);
-            }
-            else if (move.StartCell == kingRookInitialCell)
-            {
-                nextCastles.Remove(kingCastle);
-            }
-            else if (move.StartCell == queenRookInitialCell)
-            {
-                nextCastles.Remove(queenCastle);
+                mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+                                       .ToList()
+                                       .ForEach(pair => nextCastles.Remove(pair.Key));
             }
 
-            // Update castles by removing enemy castles.
-            if (move.EndCell == kingEnemyRookInitialCell)
-            {
-                nextCastles.Remove(kingEnemyCastle);
-            }
-            else if (move.EndCell == queenEnemyRookInitialCell)
-            {
-                nextCastles.Remove(queenEnemyCastle);
-            }
+            // Rook moves.
+            mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color 
+                                          && move.StartCell == pair.Value.InitialRookCell)
+                                   .ToList()
+                                   .ForEach(pair => nextCastles.Remove(pair.Key));
+
+            // Capture of the enemy rook.
+            mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change()
+                                          && move.EndCell == pair.Value.InitialRookCell)
+                                   .ToList()
+                                   .ForEach(pair => nextCastles.Remove(pair.Key));
 
             return nextCastles;
         }

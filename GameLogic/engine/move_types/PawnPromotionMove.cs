@@ -1,5 +1,6 @@
-using GameLogic.Entities.Boards;
 using GameLogic.Entities;
+using GameLogic.Entities.Boards;
+using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine.MoveTypes
 {

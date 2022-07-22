@@ -1,3 +1,5 @@
+using GameLogic.Entities.Pieces;
+
 namespace GameLogic.Entities.Boards
 {
     // Represents board functionality. 

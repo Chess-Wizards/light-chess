@@ -8,7 +8,7 @@ namespace GameLogic.Entities.Castles
         public Cell FinalKingCell { get; } = new Cell(2, 7);
         public Cell FinalRookCell { get; } = new Cell(3, 7);
         public IList<Cell> RequiredEmptyCells { get; } = new List<Cell>() {
-                                                            new Cell(7, 1), new Cell(2, 7), new Cell(3, 7)
+                                                            new Cell(1, 7), new Cell(2, 7), new Cell(3, 7)
                                                          };
     }
 }

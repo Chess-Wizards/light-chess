@@ -1,4 +1,4 @@
-namespace GameLogic.Entities
+namespace GameLogic.Entities.Pieces
 {
     // Piece types.
     public enum PieceType

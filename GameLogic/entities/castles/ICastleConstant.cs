@@ -7,6 +7,7 @@ namespace GameLogic.Entities.Castles
         Cell FinalKingCell { get; }
         Cell FinalRookCell { get; }
         IList<Cell> RequiredEmptyCells { get; }
+        Move GetCastleMove {get {return new Move(InitialKingCell, FinalKingCell);} } 
 
     }
 }

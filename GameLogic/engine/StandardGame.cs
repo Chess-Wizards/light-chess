@@ -1,6 +1,7 @@
 using GameLogic.Entities;
 using GameLogic.Entities.States;
 using GameLogic.Entities.Castles;
+using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine
 {
@@ -9,6 +10,16 @@ namespace GameLogic.Engine
     // Game state must be valid!!!
     public class StandardGame : IGameLogic<IStandardGameState>
     {
+        private static readonly PieceConstants _PieceConstants = new();
+
+        private static readonly Dictionary<Castle, ICastleConstant> mappingCastleToConstant = new()
+        {
+            {new Castle(Color.White, CastleType.King), new WhiteKingCastleConstants()},
+            {new Castle(Color.White, CastleType.Queen), new WhiteQueenCastleConstants()},
+            {new Castle(Color.Black, CastleType.King), new BlackKingCastleConstants()},
+            {new Castle(Color.Black, CastleType.Queen), new BlackQueenCastleConstants()}
+        };
+
         // Checks if the mate occurs at the current game state.
         // Enemy color mates/wins the active color.
         //
@@ -89,9 +100,8 @@ namespace GameLogic.Engine
             var checkToEnemyKing = FindAllCellsUnderThreat(gameState, filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
 
             // Pawns cannot be located on first and last ranks.
-            var invalidPawnRanks = new List<int> { 0, 7 };
             var pawnsOnInvalidRanks = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
-                                                     .Any(cell => invalidPawnRanks.Contains(cell.Y));
+                                                     .Any(cell => _PieceConstants.InvalidPawnRanks.Contains(cell.Y));
 
             return onlyOneEnemyKing
                    && onlyOneKing
@@ -165,25 +175,10 @@ namespace GameLogic.Engine
         // A IEnumerable collection containing castle moves.
         private IEnumerable<Move> GetCastleMoves(IStandardGameState gameState)
         {
-            var mappingCatleToMoveNotation = new Dictionary<Castle, string>
-            {
-                {new Castle(Color.White, CastleType.King), "e1g1"},
-                {new Castle(Color.White, CastleType.Queen), "e1c1"},
-                {new Castle(Color.Black, CastleType.King), "e8g8"},
-                {new Castle(Color.Black, CastleType.Queen), "e8c8"}
-            };
-            var emptyCellNotations = new Dictionary<Castle, IEnumerable<string>>
-            {
-                {new Castle(Color.White, CastleType.King), new List<string>(){"f1", "g1"}},
-                {new Castle(Color.White, CastleType.Queen), new List<string>(){"b1", "c1", "d1"}},
-                {new Castle(Color.Black, CastleType.King), new List<string>(){"f8", "g8"}},
-                {new Castle(Color.Black, CastleType.Queen), new List<string>(){"b8", "c8", "d8"}}
-            };
-
             return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor
-                                             && emptyCellNotations[castle].All(notation => gameState.Board.IsEmpty((Cell)StandardFENSerializer.NotationToCell(notation))))
-                            .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]));
+                                             && mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
+                            .Select(castle => mappingCastleToConstant[castle].GetCastleMove);
         }
 
         // Find all valid moves.

@@ -1,4 +1,4 @@
-namespace GameLogic.Entities
+namespace GameLogic.Entities.Pieces
 {
     // Possible pieces. Each piece can
     // be uniquely identified by pair of color and piece type.
