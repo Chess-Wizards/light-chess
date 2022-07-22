@@ -7,7 +7,7 @@ namespace GameLogic.Engine
     // This class does not consider checks, en passant moves, and castles.
     static public class PieceMoves
     {
-        private static readonly List<int> _LastPawnRanks = new List<int> {0, 7};
+        private static readonly List<int> _LastPawnRanks = new List<int> { 0, 7 };
 
         // Finds moves produced by piece at cell |cell|.
         //

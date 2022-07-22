@@ -1,133 +1,15 @@
+using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.States;
+using GameLogic.Engine.MoveTypes;
 
-namespace GameLogic.Entities
+namespace GameLogic.Engine
 {
     // Applies a move.
     public static class MoveApplier
     {
-        private interface IMoveType {
-            IRectangularBoard Apply(IRectangularBoard board, Move move);
-        }
 
-        // Perform castle. The castle must be possible/valid.
-        //
-        // Parameters
-        // ----------
-        // board: The start/initial board.
-        // move: The move to perform.
-        // 
-        // Returns
-        // -------
-        // The next board with performed move.
-        private class CastleMove : IMoveType {
-            public IRectangularBoard Apply(IRectangularBoard board, Move move) {
-            // Get a new board.
-                var nextBoard = board.Copy();
-
-                var deltaX = move.EndCell.X - move.StartCell.X;
-                var y = board.GetPiece(move.StartCell)?.Color == Color.White ? 0 : 7;
-                int nextXKing;
-                int nextXRook;
-                int xRook;
-
-                // Short/king castle.
-                if (deltaX > 0)
-                {
-                    nextXKing = 6;
-                    nextXRook = 5;
-                    xRook = 7;
-                }
-                // Long/queen castle.
-                else
-                {
-                    nextXKing = 2;
-                    nextXRook = 3;
-                    xRook = 0;
-                }
-
-                var nextKingCell = new Cell(nextXKing, y);
-                var nextRookCell = new Cell(nextXRook,
-                                            y);
-                var rookCell = new Cell(xRook, y);
-                // Perform castle.
-                var kingPiece = (Piece)nextBoard.GetPiece(move.StartCell);
-                var rookPiece = (Piece)nextBoard.GetPiece(rookCell);
-                nextBoard.RemovePiece(move.StartCell);
-                nextBoard.RemovePiece(rookCell);
-                nextBoard.SetPiece(nextKingCell, kingPiece);
-                nextBoard.SetPiece(nextRookCell, rookPiece);
-
-                return nextBoard;
-            }
-        }
-
-        // Perform en passant move. The en passant move must be possible/valid.
-        //
-        // Parameters
-        // ----------
-        // board: The start/initial board.
-        // move: The move to perform.
-        //
-        // Returns
-        // -------
-        // The next board with performed move.
-        private class EnPassantMove : IMoveType {
-            public IRectangularBoard Apply(IRectangularBoard board, Move move) {
-                // Get a new board.
-                var nextBoard = board.Copy();
-                var piece = (Piece)board.GetPiece(move.StartCell);
-
-                // Move own pawn.
-                nextBoard.SetPiece(move.EndCell, piece);
-                nextBoard.RemovePiece(move.StartCell);
-
-                // Capture enemy pawn.
-                var enemyCellWithPawn = new Cell(move.EndCell.X, move.StartCell.Y);
-                nextBoard.RemovePiece(enemyCellWithPawn);
-
-                return nextBoard;
-            }
-        }
-
-        private class PawnPromotionMove : IMoveType {
-            public IRectangularBoard Apply(IRectangularBoard board, Move move) {
-                var color = board.GetPiece(move.StartCell).Value.Color;
-                var nextBoard = new OrdinaryMove().Apply(board, move);
-
-                // Replace pawn with piece after promotion
-                var pieceAfterPromotion = new Piece(color, move.PromotionPieceType.Value);
-                nextBoard.SetPiece(move.EndCell, pieceAfterPromotion);
-
-                return nextBoard;
-            }
-        }
-
-        // Perform the simple move. The move must be possible/valid.
-        //
-        // Parameters
-        // ----------
-        // board: The start/initial board.
-        // move: The move to perform.
-        //
-        // Returns
-        // -------
-        // The next board with performed move.
-        private class OrdinaryMove : IMoveType {
-            public IRectangularBoard Apply(IRectangularBoard board, Move move) {
-                // Get a new board.
-                var nextBoard = board.Copy();
-                var piece = (Piece)nextBoard.GetPiece(move.StartCell);
-
-                // Perform move.
-                nextBoard.SetPiece(move.EndCell, piece);
-                nextBoard.RemovePiece(move.StartCell);
-
-                return nextBoard;
-            }
-        }
-
-        private static readonly List<int> _LastPawnRanks = new List<int>() {0, 7};
+        private static readonly List<int> _LastPawnRanks = new List<int>() { 0, 7 };
 
         // Applies move and returns next game state.
         //
@@ -148,8 +30,8 @@ namespace GameLogic.Entities
             }
 
             var piece = optionalPiece.Value;
-            IMoveType moveType = _SelectMoveType(gameState, piece, move);
-            IRectangularBoard nextBoard = moveType.Apply(gameState.Board, move);
+            var moveType = _SelectMoveType(gameState, piece, move);
+            var nextBoard = moveType.Apply(gameState.Board, move);
             // Next castles.
             var nextAvailableCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
 
@@ -175,11 +57,13 @@ namespace GameLogic.Entities
             );
         }
 
-        private static bool _IsLastRank(int rank) {
+        private static bool _IsLastRank(int rank)
+        {
             return _LastPawnRanks.Contains(rank);
         }
 
-        private static IMoveType _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move) {
+        private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
+        {
             var deltaX = Math.Abs(move.EndCell.X - move.StartCell.X);
             if (startCellPiece.Type == PieceType.King && deltaX == 2)
             {
