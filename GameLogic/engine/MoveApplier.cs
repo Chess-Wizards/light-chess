@@ -1,6 +1,7 @@
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.States;
+using GameLogic.Entities.Castles;
 using GameLogic.Engine.MoveTypes;
 
 namespace GameLogic.Engine

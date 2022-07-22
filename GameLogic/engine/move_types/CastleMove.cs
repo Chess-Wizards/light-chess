@@ -1,49 +1,53 @@
-using GameLogic.Entities.Boards;
 using GameLogic.Entities;
+using GameLogic.Entities.Boards;
+using GameLogic.Entities.Castles;
 
 namespace GameLogic.Engine.MoveTypes
 {
     public class CastleMove : IMoveType<IRectangularBoard>
     {
+        private static readonly StandardBoardConstants _StandardBoardConstants = new();
         public IRectangularBoard Apply(IRectangularBoard board, Move move)
         {
+
             // Get a new board.
             var nextBoard = board.Copy();
 
-            var deltaX = move.EndCell.X - move.StartCell.X;
-            var y = board.GetPiece(move.StartCell)?.Color == Color.White ? 0 : 7;
-            int nextXKing;
-            int nextXRook;
-            int xRook;
+            var activeColor = board.GetPiece(move.StartCell).Value.Color;
+            var castleConstants = _SelectCastleConstants(activeColor, move);
 
-            // Short/king castle.
-            if (deltaX > 0)
-            {
-                nextXKing = 6;
-                nextXRook = 5;
-                xRook = 7;
-            }
-            // Long/queen castle.
-            else
-            {
-                nextXKing = 2;
-                nextXRook = 3;
-                xRook = 0;
-            }
-
-            var nextKingCell = new Cell(nextXKing, y);
-            var nextRookCell = new Cell(nextXRook,
-                                        y);
-            var rookCell = new Cell(xRook, y);
             // Perform castle.
-            var kingPiece = (Piece)nextBoard.GetPiece(move.StartCell);
-            var rookPiece = (Piece)nextBoard.GetPiece(rookCell);
-            nextBoard.RemovePiece(move.StartCell);
-            nextBoard.RemovePiece(rookCell);
-            nextBoard.SetPiece(nextKingCell, kingPiece);
-            nextBoard.SetPiece(nextRookCell, rookPiece);
+            var kingPiece = nextBoard.GetPiece(castleConstants.InitialKingCell).Value;
+            var rookPiece = nextBoard.GetPiece(castleConstants.InitialRookCell).Value;
+            nextBoard.RemovePiece(castleConstants.InitialKingCell);
+            nextBoard.RemovePiece(castleConstants.InitialRookCell);
+            nextBoard.SetPiece(castleConstants.FinalKingCell, kingPiece);
+            nextBoard.SetPiece(castleConstants.FinalRookCell, rookPiece);
 
             return nextBoard;
+        }
+
+        private ICastleConstant _SelectCastleConstants(Color color, Move move)
+        {
+            var deltaX = move.EndCell.X - move.StartCell.X;
+            if (color == Color.White && deltaX > 0)
+            {
+                return new WhiteKingCastleConstants();
+            }
+            else if (color == Color.White && deltaX < 0)
+            {
+                return new WhiteQueenCastleConstants();
+            }
+            else if (color == Color.Black && deltaX > 0)
+            {
+                return new BlackKingCastleConstants();
+            }
+            else if (color == Color.Black && deltaX < 0)
+            {
+                return new BlackQueenCastleConstants();
+            }
+
+            throw new ArgumentException($"Invalid argument combination {color} and {deltaX}");
         }
     }
 }

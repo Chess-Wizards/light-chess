@@ -1,4 +1,4 @@
-namespace GameLogic.Entities
+namespace GameLogic.Entities.Castles
 {
     // Castle types.
     public enum CastleType

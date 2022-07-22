@@ -1,4 +1,4 @@
-namespace GameLogic.Entities
+namespace GameLogic.Entities.Castles
 {
     // Describes a castle.
     //

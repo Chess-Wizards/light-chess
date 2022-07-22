@@ -1,5 +1,6 @@
 using GameLogic.Entities;
 using GameLogic.Entities.States;
+using GameLogic.Entities.Castles;
 
 namespace GameLogic.Engine
 {

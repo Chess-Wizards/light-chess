@@ -1,4 +1,5 @@
 using GameLogic.Entities.Boards;
+using GameLogic.Entities.Castles;
 
 namespace GameLogic.Entities.States
 {
