@@ -60,13 +60,13 @@ namespace GameLogic.Engine
                                             board.IsOnBoard,
                                             piece.Value.Color)
                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
-                .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn  && _IsPawnPromotionRank(nextCell.Y)
+                .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
                                         ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
                                         : new List<Move>() { new Move(cell, nextCell) }));
         }
         private static bool _IsPawnPromotionRank(int rank)
         {
-            return _PieceConstants.BlackPawnPromotionRank == rank|| _PieceConstants.WhitePawnPromotionRank == rank;
+            return _PieceConstants.BlackPawnPromotionRank == rank || _PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         // Finds next/move cells produced by pawn at cell |cell|.

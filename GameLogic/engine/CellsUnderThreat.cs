@@ -4,7 +4,7 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine
 {
-    // Finds a INumerable of cells 'under threat'. 'under threat' means all cells
+    // Finds a INumerable collection of cells 'under threat'. 'under threat' means all cells
     // at which the enemy king cannot stand because of the check. In addition, the piece must be able to 
     // make a move at this cell. For example, a pawn can capture iff the enemy piece stands at a diagonal.
     //
@@ -51,11 +51,11 @@ namespace GameLogic.Engine
                 {PieceType.Pawn, GetCellsUnderThreatPawn}
             };
 
-            return mappingPieceTypeToMethod[(PieceType)piece?.Type](cell,
+            return mappingPieceTypeToMethod[piece.Value.Type](cell,
                                             pieceCells,
                                             enemyPieceCells,
                                             board.IsOnBoard,
-                                            (Color)piece?.Color);
+                                            piece.Value.Color);
         }
 
         // Finds cells under threat produced by piece at cell |cell|. 
@@ -123,26 +123,14 @@ namespace GameLogic.Engine
                                                                 Func<Cell, bool> IsOnBoard,
                                                                 Color activeColor)
         {
-            // up and down over y-axis or files
-            // right and left - x-axis or ranks
-            var upShift = new Cell(0, 1);
-            var rightShift = new Cell(1, 0);
-            var downShift = new Cell(0, -1);
-            var leftShift = new Cell(-1, 0);
+            var rookConstant = new RookShiftConstants();
 
-            var shifts = new List<Cell>()
-            {
-                upShift,
-                rightShift,
-                downShift,
-                leftShift
-            };
             return FindCells(cell,
-                             shifts,
+                             rookConstant.Shifts,
                              pieceCells,
                              enemyPieceCells,
                              IsOnBoard,
-                             oneShift: false);
+                             oneShift: rookConstant.IsOneShift);
         }
 
         // Finds cells under threat produced by knight at cell |cell|.
@@ -164,21 +152,14 @@ namespace GameLogic.Engine
                                                                   Func<Cell, bool> IsOnBoard,
                                                                   Color activeColor)
         {
-            var xs = new[] { -2, -1, 1, 2 };
-            var ys = new[] { -2, -1, 1, 2 };
-            var shifts =
-                (from x in xs
-                 from y in ys
-                 select new { x, y }) // Get all combinations.
-                .Where((tuple) => Math.Abs(tuple.x) != Math.Abs(tuple.y))
-                .Select((tuple) => new Cell(tuple.x, tuple.y));
+            var knightConstant = new KnightShiftConstants();
 
             return FindCells(cell,
-                             shifts,
+                             knightConstant.Shifts,
                              pieceCells,
                              enemyPieceCells,
                              IsOnBoard,
-                             oneShift: true);
+                             oneShift: knightConstant.IsOneShift);
 
         }
 
@@ -202,27 +183,14 @@ namespace GameLogic.Engine
                                                                   Color activeColor)
 
         {
-            // up and down over cells in file.
-            // right and left over cells in rank.
-            var upRightShift = new Cell(1, 1);
-            var downRightShift = new Cell(1, -1);
-            var downLeftShift = new Cell(-1, -1);
-            var upLeftShift = new Cell(-1, 1);
-
-            var shifts = new List<Cell>()
-            {
-                upRightShift,
-                downRightShift,
-                downLeftShift,
-                upLeftShift
-            };
+            var bishopConstant = new BishopShiftConstants();
 
             return FindCells(cell,
-                             shifts,
+                             bishopConstant.Shifts,
                              pieceCells,
                              enemyPieceCells,
                              IsOnBoard,
-                             oneShift: false);
+                             oneShift: bishopConstant.IsOneShift);
         }
 
         // Finds cells under threat produced by queen at cell |cell|.
@@ -279,21 +247,14 @@ namespace GameLogic.Engine
                                                                 Func<Cell, bool> IsOnBoard,
                                                                 Color activeColor)
         {
-            var xs = new[] { -1, 0, 1 };
-            var ys = new[] { -1, 0, 1 };
-            var shifts =
-                (from x in xs
-                 from y in ys
-                 select new { x, y }) // Get all combinations.
-                .Where((tuple) => !(tuple.x == 0 && tuple.y == 0)) // Exclude tuple corresponding to |cell|.
-                .Select((tuple) => new Cell(tuple.x, tuple.y));
+            var kingConstant = new KingShiftConstants();
 
             return FindCells(cell,
-                             shifts,
+                             kingConstant.Shifts,
                              pieceCells,
                              enemyPieceCells,
                              IsOnBoard,
-                             oneShift: true);
+                             oneShift: kingConstant.IsOneShift);
         }
 
         // Finds cells under threat produced by pawn at cell |cell|.
@@ -315,6 +276,7 @@ namespace GameLogic.Engine
                                                                 Func<Cell, bool> IsOnBoard,
                                                                 Color activeColor)
         {
+            // TODO: Must be refactored
             var leftShift = activeColor == Color.White ? new Cell(-1, 1) : new Cell(-1, -1);
             var rightShift = activeColor == Color.White ? new Cell(1, 1) : new Cell(1, -1);
 

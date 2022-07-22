@@ -1,7 +1,7 @@
 
 namespace GameLogic.Entities.Castles
 {
-    class BlackQueenCastleConstants : ICastleConstant
+    class BlackQueenCastleConstants : ICastleTypeConstants
     {
         public Cell InitialKingCell { get; } = new Cell(4, 7);
         public Cell InitialRookCell { get; } = new Cell(0, 7);

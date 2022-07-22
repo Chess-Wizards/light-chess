@@ -7,6 +7,8 @@ namespace GameLogic.Engine.MoveTypes
     public class CastleMove : IMoveType<IRectangularBoard>
     {
         private static readonly StandardBoardConstants _StandardBoardConstants = new();
+        private static readonly CastleConstants _CastleConstants = new();
+
         public IRectangularBoard Apply(IRectangularBoard board, Move move)
         {
 
@@ -14,7 +16,7 @@ namespace GameLogic.Engine.MoveTypes
             var nextBoard = board.Copy();
 
             var activeColor = board.GetPiece(move.StartCell).Value.Color;
-            var castleConstants = _SelectCastleConstants(activeColor, move);
+            var castleConstants = _SelectCastleConstants(move);
 
             // Perform castle.
             var kingPiece = nextBoard.GetPiece(castleConstants.InitialKingCell).Value;
@@ -27,27 +29,12 @@ namespace GameLogic.Engine.MoveTypes
             return nextBoard;
         }
 
-        private ICastleConstant _SelectCastleConstants(Color color, Move move)
+        private ICastleTypeConstants _SelectCastleConstants(Move move)
         {
-            var deltaX = move.EndCell.X - move.StartCell.X;
-            if (color == Color.White && deltaX > 0)
-            {
-                return new WhiteKingCastleConstants();
-            }
-            else if (color == Color.White && deltaX < 0)
-            {
-                return new WhiteQueenCastleConstants();
-            }
-            else if (color == Color.Black && deltaX > 0)
-            {
-                return new BlackKingCastleConstants();
-            }
-            else if (color == Color.Black && deltaX < 0)
-            {
-                return new BlackQueenCastleConstants();
-            }
+            return _CastleConstants.mappingCastleToConstant.Where(pair => pair.Value.GetCastleMove == move)
+                                                           .Select(pair => pair.Value)
+                                                           .First();
 
-            throw new ArgumentException($"Invalid argument combination {color} and {deltaX}");
         }
     }
 }

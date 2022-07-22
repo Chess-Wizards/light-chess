@@ -12,13 +12,7 @@ namespace GameLogic.Engine
     {
         private static readonly PieceConstants _PieceConstants = new();
 
-        private static readonly Dictionary<Castle, ICastleConstant> mappingCastleToConstant = new()
-        {
-            {new Castle(Color.White, CastleType.King), new WhiteKingCastleConstants()},
-            {new Castle(Color.White, CastleType.Queen), new WhiteQueenCastleConstants()},
-            {new Castle(Color.Black, CastleType.King), new BlackKingCastleConstants()},
-            {new Castle(Color.Black, CastleType.Queen), new BlackQueenCastleConstants()}
-        };
+        private static readonly CastleConstants _CastleConstants = new();
 
         // Checks if the mate occurs at the current game state.
         // Enemy color mates/wins the active color.
@@ -177,8 +171,8 @@ namespace GameLogic.Engine
         {
             return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor
-                                             && mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
-                            .Select(castle => mappingCastleToConstant[castle].GetCastleMove);
+                                             && _CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
+                            .Select(castle => _CastleConstants.mappingCastleToConstant[castle].GetCastleMove);
         }
 
         // Find all valid moves.
