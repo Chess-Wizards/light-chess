@@ -18,6 +18,11 @@ namespace GameLogic.Entities
             return new Cell(cell1.X + cell2.X, cell1.Y + cell2.Y);
         }
 
+        public static Cell operator -(Cell cell1, Cell cell2)
+        {
+            return new Cell(cell1.X - cell2.X, cell1.Y - cell2.Y);
+        }
+
         public static bool operator ==(Cell cell1, Cell cell2)
         {
             return cell1.Equals(cell2);

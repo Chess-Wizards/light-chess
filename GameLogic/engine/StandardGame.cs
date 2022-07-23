@@ -93,7 +93,7 @@ namespace GameLogic.Engine
             {
                 // Check possible pawns which can perform an en passant move.
                 enPassantMoves = _PieceConstants.ShiftsForEnPassantMove[gameState.ActiveColor]
-                                                .Select(shift => gameState.EnPassantCell.Value + shift)
+                                                .Select(shift => gameState.EnPassantCell.Value - shift)
                                                 .Where(cell => gameState.Board.IsOnBoard(cell)
                                                        && !gameState.Board.IsEmpty(cell)
                                                        && gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn
