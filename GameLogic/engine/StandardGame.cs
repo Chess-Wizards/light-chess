@@ -17,14 +17,6 @@ namespace GameLogic.Engine
 
         // Checks if the mate occurs at the current game state.
         // Enemy color mates/wins the active color.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the mate occurs. Otherwise, false.
         public bool IsMate(IStandardGameState gameState)
         {
             return IsCheck(gameState)
@@ -33,14 +25,6 @@ namespace GameLogic.Engine
 
         // Checks if the check occurs at the current game state.
         // Enemy color checks the active color.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the check occurs. Otherwise, false.
         public bool IsCheck(IStandardGameState gameState)
         {
             // Extract king location.
@@ -52,15 +36,6 @@ namespace GameLogic.Engine
         }
 
         // Applies the move.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        // move: The move to apply.
-        // 
-        // Returns
-        // -------
-        // A new instance of StandardGame, if the move is valid. Otherwise, returns null.
         public IStandardGameState? MakeMove(IStandardGameState gameState, Move move)
         {
             if (!IsValid(gameState))
@@ -73,14 +48,6 @@ namespace GameLogic.Engine
         }
 
         // Check if the current game state is valid.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the current game state is valid. Otherwise, returns false.
         private bool IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
@@ -105,14 +72,6 @@ namespace GameLogic.Engine
         }
 
         // Find all moves. Moves might be not valid.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing all moves.
         private IEnumerable<Move> FindAllMoves(IStandardGameState gameState)
         {
             var enPassantMoves = GetEnPassantMoves(gameState).ToList(); ;
@@ -126,14 +85,6 @@ namespace GameLogic.Engine
         }
 
         // Find all en passant moves.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing en passant moves.
         private IEnumerable<Move> GetEnPassantMoves(IStandardGameState gameState)
         {
             var enPassantMoves = new List<Move>() { };
@@ -160,14 +111,6 @@ namespace GameLogic.Engine
         //
         // This function should not check the location of the rook and king.
         // gameState contains this information implicitly in |AvailableCastles| field.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing castle moves.
         private IEnumerable<Move> GetCastleMoves(IStandardGameState gameState)
         {
             return gameState.AvailableCastles
@@ -177,14 +120,6 @@ namespace GameLogic.Engine
         }
 
         // Find all valid moves.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing valid moves.
         public IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState)
         {
             if (!IsValid(gameState))
@@ -197,14 +132,6 @@ namespace GameLogic.Engine
 
         // Find all cells 'under threat' produced by |filterByColor| color.
         // 'under threat' means all cells at which the enemy king cannot stand because of the check.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing all cells.
         private IEnumerable<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
         {
             return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
