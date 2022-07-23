@@ -38,17 +38,17 @@ namespace GameLogic.Engine
         // Applies the move.
         public IStandardGameState? MakeMove(IStandardGameState gameState, Move move)
         {
-            if (!IsValid(gameState))
+            if (!_IsValid(gameState))
             {
                 throw new ArgumentException("Invalid FEN notation.");
             }
 
             var nextGameState = gameState.ApplyMove(move);
-            return IsValid(nextGameState) ? nextGameState : null;
+            return _IsValid(nextGameState) ? nextGameState : null;
         }
 
         // Check if the current game state is valid.
-        private bool IsValid(IStandardGameState gameState)
+        private bool _IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                       filterByPieceType: PieceType.King).ToList().Count == 1;
@@ -72,10 +72,10 @@ namespace GameLogic.Engine
         }
 
         // Find all moves. Moves might be not valid.
-        private IEnumerable<Move> FindAllMoves(IStandardGameState gameState)
+        private IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = GetEnPassantMoves(gameState).ToList(); ;
-            var castleMoves = GetCastleMoves(gameState).ToList(); ;
+            var enPassantMoves = _GetEnPassantMoves(gameState).ToList(); ;
+            var castleMoves = _GetCastleMoves(gameState).ToList(); ;
             var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
                                            .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
                                            .ToList();
@@ -85,23 +85,21 @@ namespace GameLogic.Engine
         }
 
         // Find all en passant moves.
-        private IEnumerable<Move> GetEnPassantMoves(IStandardGameState gameState)
+        private IEnumerable<Move> _GetEnPassantMoves(IStandardGameState gameState)
         {
             var enPassantMoves = new List<Move>() { };
 
             if (gameState.EnPassantCell != null)
             {
-                var yShift = gameState.ActiveColor == Color.White ? -1 : 1;
-                var xShifts = new List<int>() { -1, 1 };
-
                 // Check possible pawns which can perform an en passant move.
-                enPassantMoves = xShifts.Select(xShift => (Cell)gameState.EnPassantCell + new Cell(xShift, yShift))
-                                        .Where(cell => gameState.Board.IsOnBoard(cell)
+                enPassantMoves = _PieceConstants.ShiftsForEnPassantMove[gameState.ActiveColor]
+                                                .Select(shift => gameState.EnPassantCell.Value + shift)
+                                                .Where(cell => gameState.Board.IsOnBoard(cell)
                                                        && !gameState.Board.IsEmpty(cell)
                                                        && gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn
                                                        && gameState.Board.GetPiece(cell)?.Color == gameState.ActiveColor)
-                                        .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
-                                        .ToList();
+                                                .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
+                                                .ToList();
             }
 
             return enPassantMoves;
@@ -111,7 +109,7 @@ namespace GameLogic.Engine
         //
         // This function should not check the location of the rook and king.
         // gameState contains this information implicitly in |AvailableCastles| field.
-        private IEnumerable<Move> GetCastleMoves(IStandardGameState gameState)
+        private IEnumerable<Move> _GetCastleMoves(IStandardGameState gameState)
         {
             return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor
@@ -122,12 +120,12 @@ namespace GameLogic.Engine
         // Find all valid moves.
         public IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState)
         {
-            if (!IsValid(gameState))
+            if (!_IsValid(gameState))
             {
-                throw new ArgumentException("Invalid FEN notation.");
+                throw new ArgumentException("Invalid game state.");
             }
 
-            return FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null);
+            return _FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null);
         }
 
         // Find all cells 'under threat' produced by |filterByColor| color.
