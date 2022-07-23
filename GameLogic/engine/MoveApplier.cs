@@ -15,15 +15,6 @@ namespace GameLogic.Engine
         private static readonly CastleConstants _CastleConstants = new();
 
         // Applies move and returns next game state.
-        //
-        // Parameters
-        // ----------
-        // gameState: The start/initial game state.
-        // move: The move to perform. The move must be valid/possible.
-        //
-        // Returns
-        // -------
-        // The next game state.
         public static IStandardGameState ApplyMove(this IStandardGameState gameState, Move move)
         {
             var optionalPiece = gameState.Board.GetPiece(move.StartCell);
@@ -91,16 +82,6 @@ namespace GameLogic.Engine
         }
 
         // Get a list of possible castles after the move is performed.
-        //
-        // Parameters
-        // ----------
-        // board: The start/initial board.
-        // move: The move to perform.
-        // castles: A list of possible castles at start/initial board.
-        //
-        // Returns
-        // -------
-        // A list of possible castles after the move is performed.
         private static List<Castle> _GetCastlesAfterMove(IBoard board,
                                                          Move move,
                                                          IEnumerable<Castle> castles)
@@ -132,15 +113,6 @@ namespace GameLogic.Engine
         }
 
         // Get en passant cell after the move is performed.
-        // 
-        // Parameters
-        // ----------
-        // board: The start/initial board.
-        // move: The move to perform.
-        //
-        // Returns
-        // -------
-        // The en passant cell after the move is performed.
         private static Cell? _GetEnPassantCellAfterMove(IBoard board,
                                                         Move move)
         {

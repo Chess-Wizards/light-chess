@@ -15,7 +15,7 @@ namespace GameLogic.Entities.Pieces
                                                                                            PieceType.Queen};
         public IDictionary<Color, IList<Cell>> ShiftsForEnPassantMove = new Dictionary<Color, IList<Cell>>(){
             {Color.White, new List<Cell>(){new Cell(1, 1), new Cell(-1, 1)}},
-            {Color.Black, new List<Cell>(){new Cell(1, -1), new Cell(-1, -1)}} 
-        };                                                                                      
+            {Color.Black, new List<Cell>(){new Cell(1, -1), new Cell(-1, -1)}}
+        };
     }
 }
