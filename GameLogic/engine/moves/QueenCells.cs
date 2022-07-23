@@ -1,15 +1,15 @@
 using GameLogic.Entities;
 
-namespace GameLogic.Engine.UnderThreats
+namespace GameLogic.Engine.Moves
 {
-    public class QueenUnderThreatCells : IPieceUnderThreatCells
+    public class QueenCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
             get
             {
-                var bishopShifts = new BishopUnderThreatCells().Shifts[Color.White].ToList();
-                var rookShifts = new RookUnderThreatCells().Shifts[Color.White].ToList();
+                var bishopShifts = new BishopCells().Shifts[Color.White].ToList();
+                var rookShifts = new RookCells().Shifts[Color.White].ToList();
                 var shifts = bishopShifts.Concat(rookShifts).ToList();
                 
                 return new Dictionary<Color, IEnumerable<Cell>>()
@@ -19,6 +19,8 @@ namespace GameLogic.Engine.UnderThreats
                 };
             }
         }
-        public bool IsOneShift { get; } = false;
+        public int NumberShifts { get; } = Int32.MaxValue;
+
+        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }
 }

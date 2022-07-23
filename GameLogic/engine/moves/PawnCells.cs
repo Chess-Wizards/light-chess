@@ -1,29 +1,25 @@
 using GameLogic.Entities;
 
-namespace GameLogic.Engine.UnderThreats
+namespace GameLogic.Engine.Moves
 {
-    public class PawnUnderThreatCells : IPieceUnderThreatCells
+    public class PawnCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
             get
             {
 
-                var leftShiftWhite = new Cell(-1, 1);
-                var rightShiftWhite = new Cell(1, 1);
-                var leftShiftBlack = new Cell(-1, -1);
-                var rightShiftBlack = new Cell(1, -1);                
+                var shiftWhite = new Cell(0, 1);
+                var shiftBlack = new Cell(0, -1);                
 
                 var shiftsWhite = new List<Cell>()
                     {
-                        leftShiftWhite,
-                        rightShiftWhite
+                        shiftWhite
                     };
 
                 var shiftsBlack = new List<Cell>()
                     {
-                        leftShiftBlack,
-                        rightShiftBlack
+                        shiftBlack
                     };
                 
                 return new Dictionary<Color, IEnumerable<Cell>>()
@@ -33,6 +29,8 @@ namespace GameLogic.Engine.UnderThreats
                 };
             }
         }
-        public bool IsOneShift { get; } = true;
+        public int NumberShifts { get; } = 2;
+
+        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MustNotContain;
     }
 }

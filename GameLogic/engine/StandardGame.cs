@@ -1,4 +1,4 @@
-using GameLogic.Engine.UnderThreats;
+using GameLogic.Engine.Moves;
 using GameLogic.Entities;
 using GameLogic.Entities.States;
 using GameLogic.Entities.Castles;

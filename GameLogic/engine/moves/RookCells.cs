@@ -1,8 +1,8 @@
 using GameLogic.Entities;
 
-namespace GameLogic.Engine.UnderThreats
+namespace GameLogic.Engine.Moves
 {
-    public class RookUnderThreatCells : IPieceUnderThreatCells
+    public class RookCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
@@ -30,6 +30,8 @@ namespace GameLogic.Engine.UnderThreats
                 };
             }
         }
-        public bool IsOneShift { get; } = false;
+        public int NumberShifts { get; } = Int32.MaxValue;
+
+        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }
 }

@@ -1,9 +1,8 @@
-using GameLogic.Engine.UnderThreats;
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.Pieces;
 
-namespace GameLogic.Engine
+namespace GameLogic.Engine.Moves
 {
     // The class aims to find the array of all moves. Moves cannot be valid.
     // This class does not consider checks, en passant moves, and castles.

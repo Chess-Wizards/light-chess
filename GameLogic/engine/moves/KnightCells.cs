@@ -1,8 +1,8 @@
 using GameLogic.Entities;
 
-namespace GameLogic.Engine.UnderThreats
+namespace GameLogic.Engine.Moves
 {
-    public class KnightUnderThreatCells : IPieceUnderThreatCells
+    public class KnightCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
@@ -24,6 +24,8 @@ namespace GameLogic.Engine.UnderThreats
                 };
             }
         }
-        public bool IsOneShift { get; } = true;
+        public int NumberShifts { get; } = 1;
+
+        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }
 }
