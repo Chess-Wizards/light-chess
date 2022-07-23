@@ -6,6 +6,7 @@ namespace GameLogic.Entities.Castles
     public struct Castle
     {
         public Color Color { get; }
+
         public CastleType Type { get; }
 
         public Castle(Color color, CastleType type)

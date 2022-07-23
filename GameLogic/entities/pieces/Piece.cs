@@ -5,6 +5,7 @@ namespace GameLogic.Entities.Pieces
     public struct Piece
     {
         public Color Color { get; }
+
         public PieceType Type { get; }
 
         public Piece(Color color, PieceType type)

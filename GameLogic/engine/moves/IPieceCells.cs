@@ -5,7 +5,9 @@ namespace GameLogic.Engine.Moves
     public interface IPieceCells
     {
         IDictionary<Color, IEnumerable<Cell>> Shifts { get; }
+
         int NumberShifts { get; }
+
         EnemyPieceTolerance EnemyPieceTolerance { get; }
 
         IEnumerable<Cell> GetCells(Cell cell,
@@ -14,11 +16,11 @@ namespace GameLogic.Engine.Moves
                                    IEnumerable<Cell> enemyPieceCells,
                                    Func<Cell, bool> IsOnBoard)
         {
-            // List to save cells 'under threat'
+            // List to save cells 'under threat'.
             var cells = new List<Cell>();
 
             int currentNumberShifts = 1;
-            // Iterate over shifts
+            // Iterate over shifts.
             foreach (var shift in Shifts[activeColor])
             {
                 var currentCell = cell;

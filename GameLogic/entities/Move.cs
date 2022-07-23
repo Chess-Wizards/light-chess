@@ -8,9 +8,10 @@ namespace GameLogic.Entities
     public struct Move
     {
         public Cell StartCell { get; }
-        public Cell EndCell { get; }
-        public PieceType? PromotionPieceType { get; }
 
+        public Cell EndCell { get; }
+
+        public PieceType? PromotionPieceType { get; }
 
         public Move(Cell startCell, Cell endCell, PieceType? promotionPieceType = null)
         {

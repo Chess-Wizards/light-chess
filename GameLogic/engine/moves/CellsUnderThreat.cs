@@ -13,15 +13,6 @@ namespace GameLogic.Engine.Moves
     {
 
         // Finds cells under threat produced by piece at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // board: The board represents the current arrangement of all pieces.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing cells under threat produced by piece at cell |cell|.
         public static IEnumerable<Cell> GetCellsUnderThreat(Cell cell, IRectangularBoard board)
         {
             var piece = board.GetPiece(cell);

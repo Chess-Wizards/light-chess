@@ -69,7 +69,7 @@ namespace GameLogic.Engine
             {
                 return new EnPassantMove();
             }
-            // Pawn promotion
+            // Pawn promotion.
             else if (startCellPiece.Type == PieceType.Pawn && _IsPawnPromotionRank(move.EndCell.Y))
             {
                 return new PawnPromotionMove();
@@ -116,15 +116,14 @@ namespace GameLogic.Engine
         private static Cell? _GetEnPassantCellAfterMove(IBoard board,
                                                         Move move)
         {
-            var piece = board.GetPiece(move.StartCell);
+            var piece = board.GetPiece(move.StartCell).Value;
             var deltaY = move.EndCell.Y - move.StartCell.Y;
 
             // Return en passant cell if the pawn moves forward on two cells.
-            if (piece?.Type == PieceType.Pawn &&
-                Math.Abs(deltaY) == 2)
+            if (piece.Type == PieceType.Pawn &&
+                Math.Abs(deltaY) == _PieceConstants.ForwardPawnMovesNotTouched)
             {
-                var enPassantY = (move.StartCell.Y + move.EndCell.Y) / 2;
-                return new Cell(move.StartCell.X, enPassantY);
+                return move.EndCell + _PieceConstants.NewEnPassantCellAfterMove[piece.Color];
             }
 
             return null;
