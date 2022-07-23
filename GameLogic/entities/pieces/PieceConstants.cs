@@ -7,10 +7,11 @@ namespace GameLogic.Entities.Pieces
         public int BlackInitialPawnRank { get; } = 6;
         public int BlackPawnPromotionRank { get; } = 0;
         public IList<int> InvalidPawnRanks { get; } = new List<int> { 0, 7 };
-
+        public int ForwardPawnMovesNotTouched { get; } = 2;
+        public int ForwardPawnMovesTouched { get; } = 1;
         public IList<PieceType> possiblePromotionPieceTypes { get; } = new List<PieceType>{PieceType.Knight,
                                                                                            PieceType.Bishop,
                                                                                            PieceType.Rook,
-                                                                                           PieceType.Queen};        
+                                                                                           PieceType.Queen};
     }
 }

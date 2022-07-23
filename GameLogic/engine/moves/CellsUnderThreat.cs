@@ -47,32 +47,32 @@ namespace GameLogic.Engine.Moves
 
         private static IPieceCells _PieceUnderThreatCells(PieceType pieceType)
         {
-                if (pieceType == PieceType.Rook)
-                { 
-                    return new RookCells();
-                }
-                else if (pieceType == PieceType.Knight)
-                {
-                    return new KnightCells();
-                }
-                else if (pieceType == PieceType.Bishop)
-                {
-                    return new BishopCells();
-                }
-                else if (pieceType == PieceType.Queen)
-                {
-                    return new QueenCells();
-                }
-                else if (pieceType == PieceType.King)
-                {
-                    return new KingCells();
-                }
-                else if(pieceType == PieceType.Pawn)
-                {
-                    return new PawnCellsUnderThreat();
-                }
+            if (pieceType == PieceType.Rook)
+            {
+                return new RookCells();
+            }
+            else if (pieceType == PieceType.Knight)
+            {
+                return new KnightCells();
+            }
+            else if (pieceType == PieceType.Bishop)
+            {
+                return new BishopCells();
+            }
+            else if (pieceType == PieceType.Queen)
+            {
+                return new QueenCells();
+            }
+            else if (pieceType == PieceType.King)
+            {
+                return new KingCells();
+            }
+            else if (pieceType == PieceType.Pawn)
+            {
+                return new PawnCellsUnderThreat();
+            }
 
-                throw new ArgumentException("Invalid argument");
+            throw new ArgumentException("Invalid argument");
         }
     }
 }

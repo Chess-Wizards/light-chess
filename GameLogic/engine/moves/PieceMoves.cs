@@ -34,76 +34,58 @@ namespace GameLogic.Engine.Moves
             var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: (piece.Value.Color).Change());
 
-            var cellsUnderThreat = CellsUnderThreat.GetCellsUnderThreat(cell, board);
 
-            if (piece.Value.Type == PieceType.Pawn)
-            {
-                cellsUnderThreat = _GetNextCellsPawn(
-                                                    cell,
-                                                    cellsUnderThreat,
-                                                    pieceCells,
-                                                    enemyPieceCells.ToList(),
-                                                    piece.Value.Color
-                                                    );
-            }
-
-            return cellsUnderThreat
-                // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.
-                .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
-                                        ? _PieceConstants.possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
-                                        : new List<Move>() { new Move(cell, nextCell) }));
+            return _PieceCells(cell, piece.Value).SelectMany(option => option.GetCells(cell,
+                                                                                       piece.Value.Color,
+                                                                                       pieceCells,
+                                                                                       enemyPieceCells.ToList(),
+                                                                                       board.IsOnBoard)
+                                                           )
+                                                 // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.
+                                                 .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
+                                                                        ? _PieceConstants.possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
+                                                                        : new List<Move>() { new Move(cell, nextCell) }));
         }
-        
+
         private static bool _IsPawnPromotionRank(int rank)
         {
             return _PieceConstants.BlackPawnPromotionRank == rank || _PieceConstants.WhitePawnPromotionRank == rank;
         }
 
-        // Finds next/move cells produced by pawn at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // pieceCells: A IEnumerable collection containing pieces that belong to the same color as the piece at cell |cell|.
-        // enemyPieceCells: A IEnumerable collection containing pieces that belong to the enemy color.
-        // IsOnBoard: A function to decide on where the cell is on board.
-        // activeColor: The pawn color.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing next/move cells produced by pawn at cell |cell|.
-        private static IEnumerable<Cell> _GetNextCellsPawn(Cell cell,
-                                                           IEnumerable<Cell> cellsUnderThreat,
-                                                           IEnumerable<Cell> pieceCells,                                                           
-                                                           IList<Cell> enemyPieceCells,
-                                                           Color activeColor)
+        private static IEnumerable<IPieceCells> _PieceCells(Cell cell, Piece piece)
         {
-            var nextCells = cellsUnderThreat.Where(cell => enemyPieceCells.Contains(cell))
-                                            .ToList();
-                                                         
-            // Shift depends on color.            
-            var shift = activeColor == Color.White ? new Cell(0, 1) : new Cell(0, -1);
-
-            var cellOneMoveForward = cell + shift;
-            // One move forward.
-            if (!pieceCells.Contains(cellOneMoveForward)
-                && !enemyPieceCells.Contains(cellOneMoveForward))
+            if (piece.Type == PieceType.Rook)
             {
-                nextCells.Add(cellOneMoveForward);
+                return new List<IPieceCells>() { new RookCells() };
+            }
+            else if (piece.Type == PieceType.Knight)
+            {
+                return new List<IPieceCells>() { new KnightCells() };
+            }
+            else if (piece.Type == PieceType.Bishop)
+            {
+                return new List<IPieceCells>() { new BishopCells() };
+            }
+            else if (piece.Type == PieceType.Queen)
+            {
+                return new List<IPieceCells>() { new QueenCells() };
+            }
+            else if (piece.Type == PieceType.King)
+            {
+                return new List<IPieceCells>() { new KingCells() };
+            }
+            else if (piece.Type == PieceType.Pawn)
+            {
+                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? _PieceConstants.ForwardPawnMovesNotTouched : _PieceConstants.ForwardPawnMovesTouched;
+                return new List<IPieceCells>() { new PawnCells(numberShifts), new PawnCellsCapture() };
             }
 
-            // Two moves forward.
-            var cellTwoMovesForward = cellOneMoveForward + shift;
-            var initialPawnRank = activeColor == Color.White ? _PieceConstants.WhiteInitialPawnRank : _PieceConstants.BlackInitialPawnRank;
-            var notTouchedPawn = cell.Y == initialPawnRank;
-            if (notTouchedPawn
-                && !pieceCells.Contains(cellOneMoveForward)
-                && !enemyPieceCells.Contains(cellTwoMovesForward))
-            {
-                nextCells.Add(cellTwoMovesForward);
-            }
+            throw new ArgumentException("Invalid argument");
+        }
 
-            return nextCells;
+        private static bool _PawnIsNotTouched(int rank, Color color)
+        {
+            return (color == Color.White ? _PieceConstants.WhiteInitialPawnRank : _PieceConstants.BlackInitialPawnRank) == rank;
         }
     }
 }

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using GameLogic.Entities;
 using GameLogic.Engine;
+using GameLogic.Engine.Moves;
 
 namespace GameLogic.Tests
 {

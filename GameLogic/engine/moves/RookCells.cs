@@ -22,11 +22,11 @@ namespace GameLogic.Engine.Moves
                         downShift,
                         leftShift
                     };
-                
+
                 return new Dictionary<Color, IEnumerable<Cell>>()
                 {
                     {Color.White, shifts},
-                    {Color.Black, shifts}                    
+                    {Color.Black, shifts}
                 };
             }
         }

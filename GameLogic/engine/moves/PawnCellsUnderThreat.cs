@@ -12,7 +12,7 @@ namespace GameLogic.Engine.Moves
                 var leftShiftWhite = new Cell(-1, 1);
                 var rightShiftWhite = new Cell(1, 1);
                 var leftShiftBlack = new Cell(-1, -1);
-                var rightShiftBlack = new Cell(1, -1);                
+                var rightShiftBlack = new Cell(1, -1);
 
                 var shiftsWhite = new List<Cell>()
                     {
@@ -25,11 +25,11 @@ namespace GameLogic.Engine.Moves
                         leftShiftBlack,
                         rightShiftBlack
                     };
-                
+
                 return new Dictionary<Color, IEnumerable<Cell>>()
                 {
                     {Color.White, shiftsWhite},
-                    {Color.Black, shiftsBlack}                    
+                    {Color.Black, shiftsBlack}
                 };
             }
         }

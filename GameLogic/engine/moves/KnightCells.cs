@@ -10,17 +10,17 @@ namespace GameLogic.Engine.Moves
             {
                 var xs = new[] { -2, -1, 1, 2 };
                 var ys = new[] { -2, -1, 1, 2 };
-                var shifts = 
+                var shifts =
                     (from x in xs
                      from y in ys
                      select new { x, y }) // Get all combinations.
                     .Where((tuple) => Math.Abs(tuple.x) != Math.Abs(tuple.y))
                     .Select((tuple) => new Cell(tuple.x, tuple.y));
-                
+
                 return new Dictionary<Color, IEnumerable<Cell>>()
                 {
                     {Color.White, shifts},
-                    {Color.Black, shifts}                    
+                    {Color.Black, shifts}
                 };
             }
         }

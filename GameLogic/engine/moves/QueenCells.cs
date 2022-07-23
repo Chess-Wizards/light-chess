@@ -11,11 +11,11 @@ namespace GameLogic.Engine.Moves
                 var bishopShifts = new BishopCells().Shifts[Color.White].ToList();
                 var rookShifts = new RookCells().Shifts[Color.White].ToList();
                 var shifts = bishopShifts.Concat(rookShifts).ToList();
-                
+
                 return new Dictionary<Color, IEnumerable<Cell>>()
                 {
                     {Color.White, shifts},
-                    {Color.Black, shifts}                    
+                    {Color.Black, shifts}
                 };
             }
         }
