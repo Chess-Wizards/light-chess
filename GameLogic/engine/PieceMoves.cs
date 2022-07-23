@@ -1,3 +1,4 @@
+using GameLogic.Engine.UnderThreats;
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.Pieces;
@@ -30,40 +31,30 @@ namespace GameLogic.Engine
                 return new List<Move>() { };
             }
 
-            var possiblePromotionPieceTypes = new List<PieceType>{PieceType.Knight,
-                                                                  PieceType.Bishop,
-                                                                  PieceType.Rook,
-                                                                  PieceType.Queen};
-
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
             var enemyPieceCells = board.GetCellsWithPieces(filterByColor: (piece.Value.Color).Change());
 
-            var mappingPieceTypeToMethod = new Dictionary<PieceType,
-                                                          Func<Cell, IEnumerable<Cell>,
-                                                          IEnumerable<Cell>,
-                                                          Func<Cell, bool>,
-                                                          Color,
-                                                          IEnumerable<Cell>>>()
-            {
-                {PieceType.Rook, CellsUnderThreat.GetCellsUnderThreatRook},
-                {PieceType.Knight, CellsUnderThreat.GetCellsUnderThreatKnight},
-                {PieceType.Bishop, CellsUnderThreat.GetCellsUnderThreatBishop},
-                {PieceType.Queen, CellsUnderThreat.GetCellsUnderThreatQueen},
-                {PieceType.King, CellsUnderThreat.GetCellsUnderThreatKing},
-                {PieceType.Pawn, _GetNextCellsPawn}
-            };
+            var cellsUnderThreat = CellsUnderThreat.GetCellsUnderThreat(cell, board);
 
-            return mappingPieceTypeToMethod[piece.Value.Type](cell,
-                                            pieceCells,
-                                            enemyPieceCells,
-                                            board.IsOnBoard,
-                                            piece.Value.Color)
-                // Suggest four moves, if the pawn promotion is applied. Otherwise, only move os suggested.
+            if (piece.Value.Type == PieceType.Pawn)
+            {
+                cellsUnderThreat = _GetNextCellsPawn(
+                                                    cell,
+                                                    cellsUnderThreat,
+                                                    pieceCells,
+                                                    enemyPieceCells.ToList(),
+                                                    piece.Value.Color
+                                                    );
+            }
+
+            return cellsUnderThreat
+                // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.
                 .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
-                                        ? possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
+                                        ? _PieceConstants.possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
                                         : new List<Move>() { new Move(cell, nextCell) }));
         }
+        
         private static bool _IsPawnPromotionRank(int rank)
         {
             return _PieceConstants.BlackPawnPromotionRank == rank || _PieceConstants.WhitePawnPromotionRank == rank;
@@ -83,17 +74,14 @@ namespace GameLogic.Engine
         // -------
         // A IEnumerable collection containing next/move cells produced by pawn at cell |cell|.
         private static IEnumerable<Cell> _GetNextCellsPawn(Cell cell,
-                                                           IEnumerable<Cell> pieceCells,
-                                                           IEnumerable<Cell> enemyPieceCells,
-                                                           Func<Cell, bool> IsOnBoard,
+                                                           IEnumerable<Cell> cellsUnderThreat,
+                                                           IEnumerable<Cell> pieceCells,                                                           
+                                                           IList<Cell> enemyPieceCells,
                                                            Color activeColor)
         {
-            var cellsNext = CellsUnderThreat.GetCellsUnderThreatPawn(cell,
-                                                                     pieceCells,
-                                                                     enemyPieceCells,
-                                                                     IsOnBoard,
-                                                                     activeColor).ToList();
-
+            var nextCells = cellsUnderThreat.Where(cell => enemyPieceCells.Contains(cell))
+                                            .ToList();
+                                                         
             // Shift depends on color.            
             var shift = activeColor == Color.White ? new Cell(0, 1) : new Cell(0, -1);
 
@@ -102,7 +90,7 @@ namespace GameLogic.Engine
             if (!pieceCells.Contains(cellOneMoveForward)
                 && !enemyPieceCells.Contains(cellOneMoveForward))
             {
-                cellsNext.Add(cellOneMoveForward);
+                nextCells.Add(cellOneMoveForward);
             }
 
             // Two moves forward.
@@ -113,10 +101,10 @@ namespace GameLogic.Engine
                 && !pieceCells.Contains(cellOneMoveForward)
                 && !enemyPieceCells.Contains(cellTwoMovesForward))
             {
-                cellsNext.Add(cellTwoMovesForward);
+                nextCells.Add(cellTwoMovesForward);
             }
 
-            return cellsNext;
+            return nextCells;
         }
     }
 }

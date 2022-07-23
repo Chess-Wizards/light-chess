@@ -1,8 +1,10 @@
-namespace GameLogic.Entities.Pieces
+using GameLogic.Entities;
+
+namespace GameLogic.Engine.UnderThreats
 {
-    public class BishopShiftConstants : IPieceShiftConstants
+    public class BishopUnderThreatCells : IPieceUnderThreatCells
     {
-        public IEnumerable<Cell> Shifts
+        public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
             get
             {
@@ -13,13 +15,19 @@ namespace GameLogic.Entities.Pieces
                 var downLeftShift = new Cell(-1, -1);
                 var upLeftShift = new Cell(-1, 1);
 
-                return new List<Cell>()
+                var shifts = new List<Cell>()
                     {
                         upRightShift,
                         downRightShift,
                         downLeftShift,
                         upLeftShift
                     };
+                
+                return new Dictionary<Color, IEnumerable<Cell>>()
+                {
+                    {Color.White, shifts},
+                    {Color.Black, shifts}                    
+                };
             }
         }
         public bool IsOneShift { get; } = false;

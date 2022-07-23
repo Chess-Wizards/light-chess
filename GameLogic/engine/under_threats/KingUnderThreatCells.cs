@@ -1,19 +1,27 @@
-namespace GameLogic.Entities.Pieces
+using GameLogic.Entities;
+
+namespace GameLogic.Engine.UnderThreats
 {
-    public class KingShiftConstants : IPieceShiftConstants
+    public class KingUnderThreatCells : IPieceUnderThreatCells
     {
-        public IEnumerable<Cell> Shifts
+        public IDictionary<Color, IEnumerable<Cell>> Shifts
         {
             get
             {
                 var xs = new[] { -1, 0, 1 };
                 var ys = new[] { -1, 0, 1 };
-                return
+                var shifts = 
                     (from x in xs
                      from y in ys
                      select new { x, y })
                     .Where((tuple) => !(tuple.x == 0 && tuple.y == 0)) // Exclude tuple corresponding to |cell|.
                     .Select((tuple) => new Cell(tuple.x, tuple.y));
+                
+                return new Dictionary<Color, IEnumerable<Cell>>()
+                {
+                    {Color.White, shifts},
+                    {Color.Black, shifts}                    
+                };
             }
         }
         public bool IsOneShift { get; } = true;
