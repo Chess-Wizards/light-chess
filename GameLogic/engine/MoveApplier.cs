@@ -59,7 +59,7 @@ namespace GameLogic.Engine
         private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
         {
             if (startCellPiece.Type == PieceType.King
-                && _CastleConstants.mappingCastleToConstant.Values.Any(castleConstant => castleConstant.GetCastleMove == move))
+                && _CastleConstants.mappingCastleToConstant.Values.Any(castleConstant => castleConstant.CastleMove == move))
             {
                 return new CastleMove();
             }

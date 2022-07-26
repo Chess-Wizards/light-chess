@@ -31,7 +31,7 @@ namespace GameLogic.Engine.MoveTypes
 
         private ICastleTypeConstants _SelectCastleConstants(Move move)
         {
-            return _CastleConstants.mappingCastleToConstant.Where(pair => pair.Value.GetCastleMove == move)
+            return _CastleConstants.mappingCastleToConstant.Where(pair => pair.Value.CastleMove == move)
                                                            .Select(pair => pair.Value)
                                                            .First();
 

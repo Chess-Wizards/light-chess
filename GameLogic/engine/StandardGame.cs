@@ -113,7 +113,7 @@ namespace GameLogic.Engine
             return gameState.AvailableCastles
                             .Where(castle => castle.Color == gameState.ActiveColor)
                             .Where(castle => _CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
-                            .Select(castle => _CastleConstants.mappingCastleToConstant[castle].GetCastleMove);
+                            .Select(castle => _CastleConstants.mappingCastleToConstant[castle].CastleMove);
         }
 
         // Find all valid moves.
