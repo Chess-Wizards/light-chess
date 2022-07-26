@@ -9,8 +9,8 @@ namespace GameLogic.Engine.Moves
             get
             {
 
-                var shiftWhite = new Cell(0, 1);
-                var shiftBlack = new Cell(0, -1);
+                var shiftWhite = new Cell(X.Zero, Y.Unit);
+                var shiftBlack = new Cell(X.Zero, -Y.Unit);
 
                 var shiftsWhite = new List<Cell>()
                     {

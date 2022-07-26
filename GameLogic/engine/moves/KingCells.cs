@@ -8,13 +8,13 @@ namespace GameLogic.Engine.Moves
         {
             get
             {
-                var xs = new[] { -1, 0, 1 };
-                var ys = new[] { -1, 0, 1 };
+                var xs = new[] { -X.Unit, X.Zero, X.Unit };
+                var ys = new[] { -Y.Unit, Y.Zero, Y.Unit };
                 var shifts =
                     (from x in xs
                      from y in ys
                      select new { x, y })
-                    .Where((tuple) => !(tuple.x == 0 && tuple.y == 0)) // Exclude tuple corresponding to |cell|.
+                    .Where((tuple) => !(tuple.x == X.Zero && tuple.y == Y.Zero)) // Exclude tuple corresponding to |cell|.
                     .Select((tuple) => new Cell(tuple.x, tuple.y));
 
                 return new Dictionary<Color, IEnumerable<Cell>>()

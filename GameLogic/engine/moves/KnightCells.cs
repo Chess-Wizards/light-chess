@@ -8,8 +8,8 @@ namespace GameLogic.Engine.Moves
         {
             get
             {
-                var xs = new[] { -2, -1, 1, 2 };
-                var ys = new[] { -2, -1, 1, 2 };
+                var xs = new[] { -2 * X.Unit, -X.Unit, X.Unit, 2 * X.Unit };
+                var ys = new[] { -2 * Y.Unit, -Y.Unit, Y.Unit, 2 * Y.Unit };
                 var shifts =
                     (from x in xs
                      from y in ys

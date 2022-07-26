@@ -121,7 +121,7 @@ namespace GameLogic.Engine
 
             // Return en passant cell if the pawn moves forward on two cells.
             if (piece.Type == PieceType.Pawn &&
-                Math.Abs(deltaY) == _PieceConstants.ForwardPawnMovesNotTouched)
+                Math.Abs(deltaY) == _PieceConstants.MaxForwardPawnMovesNotTouched)
             {
                 return move.EndCell + _PieceConstants.NewEnPassantCellAfterMove[piece.Color];
             }

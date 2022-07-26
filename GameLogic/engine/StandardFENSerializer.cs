@@ -223,7 +223,7 @@ namespace GameLogic.Engine
                 // Integer to letter char. Example: 0 -> 'a'.
                 var x = (char)(((Cell)cell).X + 97);
                 // Integer to digit char. Example: 8 -> '7'.
-                var y = ((Cell)cell).Y + 1;
+                var y = cell.Value.Y + 1;
                 return $"{x}{y}";
             }
             return "-";

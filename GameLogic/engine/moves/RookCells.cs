@@ -10,10 +10,10 @@ namespace GameLogic.Engine.Moves
             {
                 // up and down over y-axis or files
                 // right and left - x-axis or ranks
-                var upShift = new Cell(0, 1);
-                var rightShift = new Cell(1, 0);
-                var downShift = new Cell(0, -1);
-                var leftShift = new Cell(-1, 0);
+                var upShift = new Cell(X.Zero, Y.Unit);
+                var rightShift = new Cell(X.Unit, Y.Zero);
+                var downShift = new Cell(X.Zero, -Y.Unit);
+                var leftShift = new Cell(-X.Unit, Y.Zero);
 
                 var shifts = new List<Cell>()
                     {

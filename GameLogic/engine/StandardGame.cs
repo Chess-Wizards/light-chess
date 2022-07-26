@@ -20,7 +20,7 @@ namespace GameLogic.Engine
         public bool IsMate(IStandardGameState gameState)
         {
             return IsCheck(gameState)
-                   && FindAllValidMoves(gameState).ToList().Count == 0;
+                   && FindAllValidMoves(gameState).Count() == 0;
         }
 
         // Checks if the check occurs at the current game state.

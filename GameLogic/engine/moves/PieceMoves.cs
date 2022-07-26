@@ -34,7 +34,7 @@ namespace GameLogic.Engine.Moves
                                                            )
                                                  // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.
                                                  .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
-                                                                        ? _PieceConstants.possiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
+                                                                        ? _PieceConstants.PossiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
                                                                         : new List<Move>() { new Move(cell, nextCell) }));
         }
 
@@ -67,7 +67,7 @@ namespace GameLogic.Engine.Moves
             }
             else if (piece.Type == PieceType.Pawn)
             {
-                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? _PieceConstants.ForwardPawnMovesNotTouched : _PieceConstants.ForwardPawnMovesTouched;
+                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? _PieceConstants.MaxForwardPawnMovesNotTouched : _PieceConstants.MaxForwardPawnMovesTouched;
                 return new List<IPieceCells>() { new PawnCells(numberShifts), new PawnCellsCapture() };
             }
 

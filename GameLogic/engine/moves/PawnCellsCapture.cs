@@ -9,10 +9,10 @@ namespace GameLogic.Engine.Moves
             get
             {
 
-                var leftShiftWhite = new Cell(-1, 1);
-                var rightShiftWhite = new Cell(1, 1);
-                var leftShiftBlack = new Cell(-1, -1);
-                var rightShiftBlack = new Cell(1, -1);
+                var leftShiftWhite = new Cell(-X.Unit, Y.Unit);
+                var rightShiftWhite = new Cell(X.Unit, Y.Unit);
+                var leftShiftBlack = new Cell(-X.Unit, -Y.Unit);
+                var rightShiftBlack = new Cell(X.Unit, -Y.Unit);
 
                 var shiftsWhite = new List<Cell>()
                     {

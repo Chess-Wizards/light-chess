@@ -1,10 +1,12 @@
+using GameLogic.Entities;
+
 namespace GameLogic.Entities.Castles
 {
     public interface ICastleTypeConstants
     {
-        const int WhiteCastleRank = 0;
+        static int WhiteCastleRank { get { return Y._0; } }
 
-        const int BlackCastleRank = 7;
+        static int BlackCastleRank { get { return Y._7; } }
 
         Cell InitialKingCell { get; }
 
