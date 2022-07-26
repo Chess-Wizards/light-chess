@@ -29,7 +29,7 @@ namespace GameLogic.Engine.Moves
             return _PieceCells(cell, piece.Value).SelectMany(option => option.GetCells(cell,
                                                                                        piece.Value.Color,
                                                                                        pieceCells,
-                                                                                       enemyPieceCells.ToList(),
+                                                                                       enemyPieceCells,
                                                                                        board.IsOnBoard)
                                                            )
                                                  // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.

@@ -8,6 +8,7 @@ namespace GameLogic.Engine.Moves
 
         int NumberShifts { get; }
 
+        // Defines if we may/must/must not capture enemy pieces.
         EnemyPieceTolerance EnemyPieceTolerance { get; }
 
         IEnumerable<Cell> GetCells(Cell cell,

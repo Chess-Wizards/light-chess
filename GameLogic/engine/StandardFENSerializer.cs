@@ -181,11 +181,10 @@ namespace GameLogic.Engine
         }
 
         // Deserialize castle FEN notation.
-        public static List<Castle> NotationToCastle(string notation)
+        public static IEnumerable<Castle> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
-                           .Select((castle) => (_mappingNotationToCastle[castle]))
-                           .ToList();
+                           .Select((castle) => (_mappingNotationToCastle[castle]));
 
         }
 
@@ -194,8 +193,7 @@ namespace GameLogic.Engine
         {
             var notation = String.Join("",
                         castles.Select((castle) => _mappingCastleToNotation[castle])
-                               .ToList()
-                       );
+            );
             return notation.Length == 0 ? "-" : notation;
         }
 

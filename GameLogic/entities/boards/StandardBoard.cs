@@ -74,7 +74,7 @@ namespace GameLogic.Entities.Boards
         {
             EnsureCellIsOnBoard(cell);
             RemovePiece(cell);
-            _positionToPiece[cell] = (Piece)piece; ;
+            _positionToPiece[cell] = piece;
         }
 
         // Remove the piece from the cell.
@@ -90,8 +90,7 @@ namespace GameLogic.Entities.Boards
         {
             var cells = _positionToPiece.Keys
                         .Where((cell) => filterByColor == null || _positionToPiece[cell].Color == filterByColor)
-                        .Where((cell) => filterByPieceType == null || _positionToPiece[cell].Type == filterByPieceType)
-                        .ToList();
+                        .Where((cell) => filterByPieceType == null || _positionToPiece[cell].Type == filterByPieceType);
 
             return cells;
         }

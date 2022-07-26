@@ -1,5 +1,3 @@
-using GameLogic.Entities.Pieces;
-
 namespace GameLogic.Entities.Castles
 {
     class KingCastleConstants : ICastleTypeConstants

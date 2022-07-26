@@ -1,4 +1,3 @@
-
 namespace GameLogic.Entities.Castles
 {
     class QueenCastleConstants : ICastleTypeConstants
