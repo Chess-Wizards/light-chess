@@ -51,10 +51,10 @@ namespace GameLogic.Engine
         private bool _IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
-                                                                      filterByPieceType: PieceType.King).ToList().Count == 1;
+                                                                      filterByPieceType: PieceType.King).Count() == 1;
 
             var onlyOneKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                                 filterByPieceType: PieceType.King).ToList().Count == 1;
+                                                                 filterByPieceType: PieceType.King).Count() == 1;
 
             var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                    filterByPieceType: PieceType.King) // Extract king location.
