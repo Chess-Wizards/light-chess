@@ -11,15 +11,6 @@ namespace GameLogic.Engine.Moves
         private static readonly PieceConstants _PieceConstants = new();
 
         // Finds moves produced by piece at cell |cell|.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell.
-        // board: The board represents the current arrangement of all pieces.
-        //
-        // Returns
-        // -------
-        // A IEnumerable collection containing moves produced by piece at cell |cell|.   
         public static IEnumerable<Move> GetMoves(Cell cell, IRectangularBoard board)
         {
             var piece = board.GetPiece(cell);
@@ -27,7 +18,7 @@ namespace GameLogic.Engine.Moves
             // Return an empty IEnumerable collection if the cell is empty.
             if (piece == null)
             {
-                return new List<Move>() { };
+                return Enumerable.Empty<Move>();
             }
 
             // Divide pieces into own and enemy.

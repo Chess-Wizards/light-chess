@@ -21,6 +21,7 @@ namespace GameLogic.Engine.Moves
 
             int currentNumberShifts = 1;
             // Iterate over shifts.
+
             foreach (var shift in Shifts[activeColor])
             {
                 var currentCell = cell;
@@ -28,25 +29,27 @@ namespace GameLogic.Engine.Moves
                 while (true)
                 {
                     currentCell = currentCell + shift;
-                    if (!IsOnBoard(currentCell)
-                        || pieceCells.Contains(currentCell)) break;
+                    if (!IsOnBoard(currentCell) || pieceCells.Contains(currentCell))
+                    {
+                        break;
+                    }
 
                     cells.Add(currentCell);
                     currentNumberShifts += 1;
-                    if (currentNumberShifts > NumberShifts
-                        || enemyPieceCells.Contains(currentCell)) break;
+                    if (currentNumberShifts > NumberShifts || enemyPieceCells.Contains(currentCell))
+                    {
+                        break;
+                    }
                 }
             }
 
             if (EnemyPieceTolerance == EnemyPieceTolerance.MustContain)
             {
-                cells = cells.Where(cell => enemyPieceCells.Contains(cell))
-                             .ToList();
+                return cells.Where(cell => enemyPieceCells.Contains(cell));
             }
             else if (EnemyPieceTolerance == EnemyPieceTolerance.MustNotContain)
             {
-                cells = cells.Where(cell => !enemyPieceCells.Contains(cell))
-                             .ToList();
+                return cells.Where(cell => !enemyPieceCells.Contains(cell));
             }
 
             return cells;

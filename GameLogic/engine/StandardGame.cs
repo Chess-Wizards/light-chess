@@ -74,11 +74,11 @@ namespace GameLogic.Engine
         // Find all moves. Moves might be not valid.
         private IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = _GetEnPassantMoves(gameState).ToList(); ;
-            var castleMoves = _GetCastleMoves(gameState).ToList(); ;
+            var enPassantMoves = _GetEnPassantMoves(gameState);
+            var castleMoves = _GetCastleMoves(gameState);
             var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
-                                           .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
-                                           .ToList();
+                                           .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board));
+
             // Combine moves.
             return enPassantMoves.Concat(castleMoves)
                                  .Concat(restMoves);
@@ -87,19 +87,18 @@ namespace GameLogic.Engine
         // Find all en passant moves.
         private IEnumerable<Move> _GetEnPassantMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = new List<Move>() { };
+            var enPassantMoves = Enumerable.Empty<Move>();
 
             if (gameState.EnPassantCell != null)
             {
                 // Check possible pawns which can perform an en passant move.
                 enPassantMoves = _PieceConstants.ShiftsForEnPassantMove[gameState.ActiveColor]
                                                 .Select(shift => gameState.EnPassantCell.Value - shift)
-                                                .Where(cell => gameState.Board.IsOnBoard(cell)
-                                                       && !gameState.Board.IsEmpty(cell)
-                                                       && gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn
-                                                       && gameState.Board.GetPiece(cell)?.Color == gameState.ActiveColor)
-                                                .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
-                                                .ToList();
+                                                .Where(cell => gameState.Board.IsOnBoard(cell))
+                                                .Where(cell => !gameState.Board.IsEmpty(cell))
+                                                .Where(cell => gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn)
+                                                .Where(cell => gameState.Board.GetPiece(cell)?.Color == gameState.ActiveColor)
+                                                .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell));
             }
 
             return enPassantMoves;
@@ -112,8 +111,8 @@ namespace GameLogic.Engine
         private IEnumerable<Move> _GetCastleMoves(IStandardGameState gameState)
         {
             return gameState.AvailableCastles
-                            .Where(castle => castle.Color == gameState.ActiveColor
-                                             && _CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
+                            .Where(castle => castle.Color == gameState.ActiveColor)
+                            .Where(castle => _CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
                             .Select(castle => _CastleConstants.mappingCastleToConstant[castle].GetCastleMove);
         }
 

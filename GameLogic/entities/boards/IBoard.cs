@@ -21,8 +21,7 @@ namespace GameLogic.Entities.Boards
         void RemovePiece(Cell cell);
 
         // Returns non-empty cells.
-        IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null,
-                                      PieceType? filterByPieceType = null);
+        IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null, PieceType? filterByPieceType = null);
 
         // Copy the board.
         StandardBoard Copy();

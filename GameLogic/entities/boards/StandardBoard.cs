@@ -86,16 +86,11 @@ namespace GameLogic.Entities.Boards
         }
 
         // Finds all piece's cells/locations by color and piece type.
-        public IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null,
-                                                    PieceType? filterByPieceType = null)
+        public IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null, PieceType? filterByPieceType = null)
         {
             var cells = _positionToPiece.Keys
-                        .Where((cell) => filterByColor == null
-                                          ? true
-                                        : _positionToPiece[cell].Color == filterByColor)
-                        .Where((cell) => filterByPieceType == null
-                                        ? true
-                                        : _positionToPiece[cell].Type == filterByPieceType)
+                        .Where((cell) => filterByColor == null || _positionToPiece[cell].Color == filterByColor)
+                        .Where((cell) => filterByPieceType == null || _positionToPiece[cell].Type == filterByPieceType)
                         .ToList();
 
             return cells;

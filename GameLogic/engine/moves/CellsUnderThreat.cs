@@ -20,7 +20,7 @@ namespace GameLogic.Engine.Moves
             // Return empty IEnumerable collection if cell is empty.
             if (piece == null)
             {
-                return new List<Cell>();
+                return Enumerable.Empty<Cell>();
             }
 
             // Divide pieces into own and enemy.

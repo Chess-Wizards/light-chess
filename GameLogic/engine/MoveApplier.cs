@@ -82,9 +82,9 @@ namespace GameLogic.Engine
         }
 
         // Get a list of possible castles after the move is performed.
-        private static List<Castle> _GetCastlesAfterMove(IBoard board,
-                                                         Move move,
-                                                         IEnumerable<Castle> castles)
+        private static IList<Castle> _GetCastlesAfterMove(IBoard board,
+                                                          Move move,
+                                                          IEnumerable<Castle> castles)
         {
             var nextCastles = castles.ToList();
             var piece = board.GetPiece(move.StartCell).Value;
@@ -98,14 +98,14 @@ namespace GameLogic.Engine
             }
 
             // Rook moves.
-            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color
-                                                           && move.StartCell == pair.Value.InitialRookCell)
+            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+                                                    .Where(pair => move.StartCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));
 
             // Capture of the enemy rook.
-            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change()
-                                                           && move.EndCell == pair.Value.InitialRookCell)
+            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change())
+                                                    .Where(pair => move.EndCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));
 
