@@ -150,7 +150,7 @@ namespace GameLogic.Engine
                     else
                     {
                         if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
-                        row.Add(_mappingPieceToNotation[(Piece)board.GetPiece(cell)]);
+                        row.Add(_mappingPieceToNotation[board.GetPiece(cell).Value]);
                         numberEmptyCells = 0;
                     }
                 }
@@ -221,7 +221,7 @@ namespace GameLogic.Engine
             if (cell != null)
             {
                 // Integer to letter char. Example: 0 -> 'a'.
-                var x = (char)(((Cell)cell).X + 97);
+                var x = (char)(cell.Value.X + 97);
                 // Integer to digit char. Example: 8 -> '7'.
                 var y = cell.Value.Y + 1;
                 return $"{x}{y}";
@@ -234,7 +234,7 @@ namespace GameLogic.Engine
         // The notation follows UCI (Universal Chess Interface {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : _mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
+            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : _mappingPieceTypeToNotation[move.PromotionPieceType.Value].ToString();
             return $"{CellToNotation(move.StartCell)}{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
@@ -252,7 +252,7 @@ namespace GameLogic.Engine
             }
 
             var cells = notation.Chunk(2)
-                                .Select(cellNotation => (Cell)NotationToCell(new string(cellNotation)))
+                                .Select(cellNotation => NotationToCell(new string(cellNotation)).Value)
                                 .ToArray(); ;
             return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }
