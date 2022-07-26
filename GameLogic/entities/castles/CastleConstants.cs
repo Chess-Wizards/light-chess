@@ -4,10 +4,10 @@ namespace GameLogic.Entities.Castles
     {
         public readonly Dictionary<Castle, ICastleTypeConstants> mappingCastleToConstant = new()
         {
-            {new Castle(Color.White, CastleType.King), new WhiteKingCastleConstants()},
-            {new Castle(Color.White, CastleType.Queen), new WhiteQueenCastleConstants()},
-            {new Castle(Color.Black, CastleType.King), new BlackKingCastleConstants()},
-            {new Castle(Color.Black, CastleType.Queen), new BlackQueenCastleConstants()}
+            {new Castle(Color.White, CastleType.King), new KingCastleConstants(Color.White)},
+            {new Castle(Color.White, CastleType.Queen), new QueenCastleConstants(Color.White)},
+            {new Castle(Color.Black, CastleType.King), new KingCastleConstants(Color.Black)},
+            {new Castle(Color.Black, CastleType.Queen), new QueenCastleConstants(Color.Black)}
         };
 
 
