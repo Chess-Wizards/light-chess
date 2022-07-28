@@ -93,7 +93,7 @@ namespace GameLogic.Tests
             // Set piece.
             board.SetPiece(cell, piece);
             Assert.That(piece, Is.EqualTo(board.GetPiece(cell)));
-            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(1));
+            Assert.That(board.GetCellsWithPieces(), Has.Exactly(1).Items);
 
             // Remove piece.
             board.RemovePiece(cell);
