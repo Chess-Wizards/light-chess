@@ -70,7 +70,7 @@ namespace GameLogic.Engine
                 return new EnPassantMove();
             }
             // Pawn promotion.
-            else if (startCellPiece.Type == PieceType.Pawn 
+            else if (startCellPiece.Type == PieceType.Pawn
                     && _IsPawnPromotionRank(move.EndCell.Y))
             {
                 return new PawnPromotionMove();
