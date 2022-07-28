@@ -19,8 +19,7 @@ namespace GameLogic.Engine
         // Enemy color mates/wins the active color.
         public bool IsMate(IStandardGameState gameState)
         {
-            return IsCheck(gameState)
-                   && FindAllValidMoves(gameState).Count() == 0;
+            return IsCheck(gameState) && !FindAllValidMoves(gameState).Any();
         }
 
         // Checks if the check occurs at the current game state.

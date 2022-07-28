@@ -74,7 +74,7 @@ namespace GameLogic.Tests
                     }
                     else
                     {
-                        Assert.That(cells.Count, Is.EqualTo(0));
+                        Assert.IsEmpty(cells);
                     }
                 }
             }
