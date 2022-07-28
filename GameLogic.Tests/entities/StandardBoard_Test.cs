@@ -98,7 +98,7 @@ namespace GameLogic.Tests
             // Remove piece.
             board.RemovePiece(cell);
             Assert.Null(board.GetPiece(cell));
-            Assert.That(board.GetCellsWithPieces().Count, Is.EqualTo(0));
+            Assert.IsEmpty(board.GetCellsWithPieces());
 
             // Replace piece.
             board.SetPiece(cell, piece);
