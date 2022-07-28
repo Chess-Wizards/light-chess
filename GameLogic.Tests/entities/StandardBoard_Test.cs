@@ -65,12 +65,12 @@ namespace GameLogic.Tests
                 {
                     // Get all cells containing piece with |color| color and |pieceType| piece type.
                     var cells = board.GetCellsWithPieces(filterByColor: color,
-                                                         filterByPieceType: pieceType);
+                                                         filterByPieceType: pieceType).ToList();
+
                     if (color == Color.White
                         && pieceType == PieceType.King)
                     {
-                        Assert.That(cells.Count, Is.EqualTo(1));
-                        Assert.That(cell, Is.EqualTo(cells.ToList()[0]));
+                        CollectionAssert.AreEqual(cells, new List<Cell>() { cell });
                     }
                     else
                     {
