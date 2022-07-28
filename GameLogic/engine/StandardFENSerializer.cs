@@ -36,6 +36,7 @@ namespace GameLogic.Engine
                 {'k', new Castle(Color.Black, CastleType.King)},
                 {'q', new Castle(Color.Black, CastleType.Queen)},
             };
+
         private static Dictionary<Castle, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
         private static Dictionary<char, Color> _mappingNotationToColor = new Dictionary<char, Color>()
@@ -43,6 +44,8 @@ namespace GameLogic.Engine
                 {'w', Color.White},
                 {'b', Color.Black}
             };
+
+        public static Dictionary<Color, char> mappingColorToNotation = _mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
         private static Dictionary<char, PieceType> _mappingNotationToPieceType = new Dictionary<char, PieceType>()
             {
@@ -52,7 +55,6 @@ namespace GameLogic.Engine
                 {'q', PieceType.Queen}
             };
         public static Dictionary<PieceType, char> _mappingPieceTypeToNotation = _mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
-
 
         // Serialize object to FEN notation.
         public static string SerializeToFEN(IStandardGameState objectToSerialize)
@@ -72,7 +74,7 @@ namespace GameLogic.Engine
         }
 
         // Deserialize FEN notation to object.
-        public static StandardGameState DeserializeFromFEN(string fenNotation)
+        public static IStandardGameState DeserializeFromFEN(string fenNotation)
         {
             var splitFenNotation = fenNotation.Split(' ');
 
@@ -91,10 +93,8 @@ namespace GameLogic.Engine
             return gameState;
         }
 
-        public static Dictionary<Color, char> mappingColorToNotation = _mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
-
         // Deserializes board FEN notation.
-        public static StandardBoard NotationToBoard(string notation)
+        public static IRectangularBoard NotationToBoard(string notation)
         {
             var board = new StandardBoard();
 

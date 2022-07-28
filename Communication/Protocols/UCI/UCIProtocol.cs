@@ -10,7 +10,7 @@ namespace Communication.Protocols.UCI
         private readonly int Id;
         private string NextMoveNotation { get; set; }
         private IBot Bot { get; set; }
-        private StandardGameState GameState { get; set; }
+        private IStandardGameState GameState { get; set; }
         private const string InitialFENGameState = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         List<IOption> options = new List<IOption>
@@ -29,7 +29,7 @@ namespace Communication.Protocols.UCI
             return Math.Abs(new Random().Next());
         }
 
-        private StandardGameState GetInitialGameState()
+        private IStandardGameState GetInitialGameState()
         {
             return StandardFENSerializer.DeserializeFromFEN(InitialFENGameState);
         }
@@ -111,7 +111,7 @@ namespace Communication.Protocols.UCI
         // http://wbec-ridderkerk.nl/html/UCIProtocol.html
         private IEnumerable<string> HandleGoCommand()
         {
-            var move = (Move)Bot.SuggestMove(GameState);
+            var move = Bot.SuggestMove(GameState).Value;
             NextMoveNotation = StandardFENSerializer.MoveToNotation(move);
             yield return $"bestmove {NextMoveNotation}";
         }
@@ -150,7 +150,7 @@ namespace Communication.Protocols.UCI
             // Perform moves
             foreach (var move in moves)
             {
-                GameState = (StandardGameState)new StandardGame().MakeMove(GameState, move);
+                GameState = new StandardGame().MakeMove(GameState, move);
             }
 
             yield break;
