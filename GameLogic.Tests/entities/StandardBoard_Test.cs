@@ -8,7 +8,7 @@ namespace GameLogic.Tests
     [TestFixture]
     public class StandardBoard_Test
     {
-        // Create a board and then shallow copy using constructor and method. Finally,
+        // Creates a board and then shallow copy using constructor and method. Finally,
         // check if the change in the initial board influences shallow copies.
         [Test]
         [TestCase(3, 4, Color.White, PieceType.King)]
@@ -26,6 +26,7 @@ namespace GameLogic.Tests
             Assert.True(boardShallowCopy.IsEmpty(cell));
         }
 
+        // Creates a cell and check if the cell is on board.
         [Test]
         [TestCase(0, 0, true)]
         [TestCase(0, -1, false)]
@@ -33,24 +34,18 @@ namespace GameLogic.Tests
         [TestCase(7, 7, true)]
         [TestCase(7, 8, false)]
         [TestCase(8, 7, false)]
-        public void CheckCellCorrectness(int x, int y, bool cellOnBoardExpected)
+        public void CheckCellCorrectness(int x, int y, bool cellIsOnBoardExpected)
         {
-            /* Create a cell and check if the cell is on board.
-            */
-
             var board = new StandardBoard();
             var cell = new Cell(x, y);
-            Assert.AreEqual(board.IsOnBoard(cell), cellOnBoardExpected);
+            Assert.AreEqual(board.IsOnBoard(cell), cellIsOnBoardExpected);
         }
 
-
+        // Sets piece on cell and check the correctness with different filtering arguments. 
         [Test]
         [TestCase(3, 4, Color.White, PieceType.King)]
         public void CheckPiecesOnBoard(int x, int y, Color pieceColor, PieceType pieceType)
         {
-            /* Set piece on cell and check the correctness with different filtering arguments. 
-            */
-
             var board = new StandardBoard();
             var cell = new Cell(x, y);
             var piece = new Piece(pieceColor, pieceType);
@@ -80,13 +75,11 @@ namespace GameLogic.Tests
             }
         }
 
+        // Checks the board functionality, such as setting, removing, and replacing pieces.
         [Test]
         [TestCase(3, 4, Color.White, PieceType.King)]
         public void BoardAction(int x, int y, Color pieceColor, PieceType pieceType)
         {
-            /* Check the board functionality, such as setting, removing, and replacing pieces.
-            */
-
             var board = new StandardBoard();
             var cell = new Cell(x, y);
             var piece = new Piece(pieceColor, pieceType);

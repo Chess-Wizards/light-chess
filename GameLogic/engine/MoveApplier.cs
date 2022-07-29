@@ -82,7 +82,7 @@ namespace GameLogic.Engine
             }
         }
 
-        // Get a list of possible castles after the move is performed.
+        // Gets a list of possible castles after the move is performed.
         private static IList<Castle> _GetCastlesAfterMove(IBoard board,
                                                           Move move,
                                                           IEnumerable<Castle> castles)

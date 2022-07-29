@@ -20,9 +20,9 @@ namespace GameLogic.Entities.Pieces
             get
             {
                 return new List<PieceType>{PieceType.Knight,
-                                                                                   PieceType.Bishop,
-                                                                                   PieceType.Rook,
-                                                                                   PieceType.Queen};
+                                           PieceType.Bishop,
+                                           PieceType.Rook,
+                                           PieceType.Queen};
             }
         }
 

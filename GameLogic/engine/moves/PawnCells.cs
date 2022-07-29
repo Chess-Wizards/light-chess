@@ -8,7 +8,6 @@ namespace GameLogic.Engine.Moves
         {
             get
             {
-
                 var shiftWhite = new Cell(X.Zero, Y.Unit);
                 var shiftBlack = new Cell(X.Zero, -Y.Unit);
 

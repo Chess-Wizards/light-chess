@@ -16,7 +16,7 @@ namespace GameLogic.Engine
         // if the move is valid. Otherwise, returns null.
         TGameState? MakeMove(TGameState gameState, Move move);
 
-        // Find all valid moves. 
+        // Finds all valid moves. 
         IEnumerable<Move> FindAllValidMoves(TGameState gameState);
     }
 }

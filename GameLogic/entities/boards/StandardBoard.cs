@@ -57,7 +57,7 @@ namespace GameLogic.Entities.Boards
             return !_positionToPiece.ContainsKey(cell);
         }
 
-        // Find piece by cell.
+        // Finds piece by cell.
         public Piece? GetPiece(Cell cell)
         {
             EnsureCellIsOnBoard(cell);
@@ -69,7 +69,7 @@ namespace GameLogic.Entities.Boards
             return _positionToPiece[cell];
         }
 
-        // Set piece at cell.
+        // Sets piece at cell.
         public void SetPiece(Cell cell, Piece piece)
         {
             EnsureCellIsOnBoard(cell);
@@ -77,7 +77,7 @@ namespace GameLogic.Entities.Boards
             _positionToPiece[cell] = piece;
         }
 
-        // Remove the piece from the cell.
+        // Removes the piece from the cell.
         public void RemovePiece(Cell cell)
         {
 

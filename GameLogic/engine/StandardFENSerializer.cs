@@ -9,7 +9,7 @@ namespace GameLogic.Engine
 {
     public static class StandardFENSerializer
     {
-        // The class represents the serialization/deserialization to/from FEN notation.
+        // Represents the serialization/deserialization to/from FEN notation.
         // Please refer to the FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
 
         private static Dictionary<char, Piece> _mappingNotationToPiece = new Dictionary<char, Piece>()
@@ -56,7 +56,7 @@ namespace GameLogic.Engine
             };
         public static Dictionary<PieceType, char> _mappingPieceTypeToNotation = _mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
 
-        // Serialize object to FEN notation.
+        // Serializes object to FEN notation.
         public static string SerializeToFEN(IStandardGameState objectToSerialize)
         {
             var splitFenNotation = new string[6]
@@ -73,7 +73,7 @@ namespace GameLogic.Engine
             return fenNotation;
         }
 
-        // Deserialize FEN notation to object.
+        // Deserializes FEN notation to object.
         public static IStandardGameState DeserializeFromFEN(string fenNotation)
         {
             var splitFenNotation = fenNotation.Split(' ');
@@ -126,7 +126,7 @@ namespace GameLogic.Engine
             return board;
         }
 
-        // Serialize board to FEN notation.
+        // Serializes board to FEN notation.
         public static string BoardToNotation(IRectangularBoard board)
         {
             var rows = new List<string>();
@@ -166,7 +166,7 @@ namespace GameLogic.Engine
             return notation;
         }
 
-        // Deserialize color FEN notation.
+        // Deserializes color FEN notation.
         public static Color NotationToColor(string notation)
         {
             if (notation.Length != 1)
@@ -180,7 +180,7 @@ namespace GameLogic.Engine
             return mappingColorToNotation[color].ToString();
         }
 
-        // Deserialize castle FEN notation.
+        // Deserializes castle FEN notation.
         public static IEnumerable<Castle> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
@@ -188,7 +188,7 @@ namespace GameLogic.Engine
 
         }
 
-        // Serialize castles to the FEN notation.
+        // Serializes castles to the FEN notation.
         public static string CastleToNotation(IEnumerable<Castle> castles)
         {
             var notation = String.Join("",
@@ -197,7 +197,7 @@ namespace GameLogic.Engine
             return notation.Length == 0 ? "-" : notation;
         }
 
-        // Deserialize cell FEN notation.
+        // Deserializes cell FEN notation.
         public static Cell? NotationToCell(string notation)
         {
             if (notation != "-")
@@ -213,7 +213,7 @@ namespace GameLogic.Engine
             return null;
         }
 
-        // Serialize cell to the FEN notation.
+        // Serializes cell to the FEN notation.
         public static string CellToNotation(Cell? cell)
         {
             if (cell != null)
@@ -227,7 +227,7 @@ namespace GameLogic.Engine
             return "-";
         }
 
-        // Serialize move to the notation.
+        // Serializes move to the notation.
         //
         // The notation follows UCI (Universal Chess Interface {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
@@ -255,7 +255,7 @@ namespace GameLogic.Engine
             return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }
 
-        // Deserialize move by passing start and end cells.
+        // Deserializes move by passing start and end cells.
         public static Move NotationToMove(string startCellNotation,
                                           string endCellNotation,
                                           string pieceTypeNotation = "")
