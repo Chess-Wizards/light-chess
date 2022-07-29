@@ -88,7 +88,7 @@ namespace GameLogic.Tests
         public void IsMateCorrect(string gameStateNotation, bool expectedIsMate)
         {
             var gameState = StandardFENSerializer.DeserializeFromFEN(gameStateNotation);
-            Assert.AreEqual(new StandardGame().IsMate(gameState), expectedIsMate);
+            Assert.That(expectedIsMate, Is.EqualTo(new StandardGame().IsMate(gameState)));
         }
     }
 }

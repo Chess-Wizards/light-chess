@@ -15,7 +15,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(gameState);
 
-            Assert.AreEqual(gameStateFENNotationOutput, gameStateFENNotation);
+            Assert.That(gameStateFENNotation, Is.EqualTo(gameStateFENNotationOutput));
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var boardFENNotationOutput = StandardFENSerializer.BoardToNotation(board);
 
-            Assert.AreEqual(boardFENNotationOutput, boardFENNotation);
+            Assert.That(boardFENNotation, Is.EqualTo(boardFENNotationOutput));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var colorFENNotationOutput = StandardFENSerializer.ColorToNotation(color);
 
-            Assert.AreEqual(colorFENNotationOutput, colorFENNotation);
+            Assert.That(colorFENNotation, Is.EqualTo(colorFENNotationOutput));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var castleFENNotationOutput = StandardFENSerializer.CastleToNotation(castle);
 
-            Assert.AreEqual(castleFENNotationOutput, castleFENNotation);
+            Assert.That(castleFENNotation, Is.EqualTo(castleFENNotationOutput));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var cellFENNotationOutput = StandardFENSerializer.CellToNotation(cell);
 
-            Assert.AreEqual(cellFENNotationOutput, cellFENNotation);
+            Assert.That(cellFENNotation, Is.EqualTo(cellFENNotationOutput));
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var moveFENNotationOutput = StandardFENSerializer.MoveToNotation(move);
 
-            Assert.AreEqual(moveFENNotationOutput, moveFENNotation);
+            Assert.That(moveFENNotation, Is.EqualTo(moveFENNotationOutput));
         }
     }
 }

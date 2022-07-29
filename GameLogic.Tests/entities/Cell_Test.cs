@@ -17,7 +17,7 @@ namespace GameLogic.UnitTests
             var shift = new Cell(xShift, yShift);
             var expectedCell = new Cell(xExpectedCell, yExpectedCell);
 
-            Assert.AreEqual(cell + shift, expectedCell);
+            Assert.That(expectedCell, Is.EqualTo(cell + shift));
         }
     }
 }

@@ -38,7 +38,7 @@ namespace GameLogic.Tests
         {
             var board = new StandardBoard();
             var cell = new Cell(x, y);
-            Assert.AreEqual(board.IsOnBoard(cell), cellIsOnBoardExpected);
+            Assert.That(cellIsOnBoardExpected, Is.EqualTo(board.IsOnBoard(cell)));
         }
 
         // Sets piece on cell and check the correctness with different filtering arguments. 
@@ -86,7 +86,7 @@ namespace GameLogic.Tests
 
             // Set piece.
             board.SetPiece(cell, piece);
-            Assert.AreEqual(board.GetPiece(cell), piece);
+            Assert.That(piece, Is.EqualTo(board.GetPiece(cell)));
             Assert.That(board.GetCellsWithPieces(), Has.Exactly(1).Items);
 
             // Remove piece.
@@ -98,7 +98,7 @@ namespace GameLogic.Tests
             board.SetPiece(cell, piece);
             var pieceNext = new Piece(pieceColor.Change(), pieceType);
             board.SetPiece(cell, pieceNext);
-            Assert.AreEqual(board.GetPiece(cell), pieceNext);
+            Assert.That(pieceNext, Is.EqualTo(board.GetPiece(cell)));
             Assert.That(board.GetCellsWithPieces(), Has.Exactly(1).Items);
         }
     }

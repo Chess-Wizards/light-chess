@@ -126,7 +126,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var endGameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(endGameState);
 
-            Assert.AreEqual(endGameStateFENNotationOutput, endGameStateNotation);
+            Assert.That(endGameStateNotation, Is.EqualTo(endGameStateFENNotationOutput));
         }
     }
 }
