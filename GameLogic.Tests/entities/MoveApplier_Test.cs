@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using GameLogic.Entities;
 using GameLogic.Engine;
 
 namespace GameLogic.Tests
@@ -115,9 +114,7 @@ namespace GameLogic.Tests
         [TestCase("K1k5/8/8/8/8/8/6p1/5R1R b - - 2 20",
                   "K1k5/8/8/8/8/8/8/5R1n w - - 0 21",
                   "g2h1n")]
-        public void PerformMove(string startGameStateNotation,
-                                string endGameStateNotation,
-                                string moveNotation)
+        public void PerformMove(string startGameStateNotation, string endGameStateNotation, string moveNotation)
         {
             // Serialize.
             var startGameState = StandardFENSerializer.DeserializeFromFEN(startGameStateNotation);
@@ -129,7 +126,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(endGameState);
 
-            Assert.That(gameStateFENNotationOutput, Is.EqualTo(endGameStateNotation));
+            Assert.AreEqual(gameStateFENNotationOutput, endGameStateNotation);
         }
     }
 }

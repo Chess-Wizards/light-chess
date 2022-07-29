@@ -69,7 +69,7 @@ namespace GameLogic.Tests
                                                                       .OrderBy((notation) => (notation))
                                                                       .ToList();
 
-                        Assert.That(expectedCells, Is.EqualTo(cells).AsCollection);
+                        CollectionAssert.AreEqual(cells, expectedCells);
                     }
                     // Check if cell is empty.
                     else

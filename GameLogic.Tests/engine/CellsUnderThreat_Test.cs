@@ -67,7 +67,7 @@ namespace GameLogic.Tests
                         var expectedCellsUnderThreat = correctCellsUnderThreat[cellNotation]
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();
-                        Assert.That(expectedCellsUnderThreat, Is.EqualTo(cellsUnderThreat));
+                        CollectionAssert.AreEqual(cellsUnderThreat, expectedCellsUnderThreat);
                     }
                     // Check if the cell is empty.
                     else

@@ -7,7 +7,7 @@ namespace GameLogic.Entities
         Black
     }
 
-    static class ColorExtension
+    public static class ColorExtension
     {
         public static Color Change(this Color color)
         {

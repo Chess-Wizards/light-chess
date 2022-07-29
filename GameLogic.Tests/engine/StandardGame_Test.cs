@@ -29,8 +29,7 @@ namespace GameLogic.Tests
                   "e8d8 e8d7 e8e7 e8f7 e8f8 a4a3 a4b3 c4c3 c4b3")]
         [TestCase("4k3/8/8/8/pPp/8/8/4K3 b - - 2 20",
                   "e8d8 e8d7 e8e7 e8f7 e8f8 a4a3 c4c3")]
-        public void FindAllValidMovesCorrect(string gameStateNotation,
-                                             string cellsUnderThreatNotParsed)
+        public void FindAllValidMovesCorrect(string gameStateNotation, string cellsUnderThreatNotParsed)
         {
             var expectedCellsToMove = cellsUnderThreatNotParsed.Split(' ')
                                                                .OrderBy(notation => notation)
@@ -42,7 +41,7 @@ namespace GameLogic.Tests
                                                 .OrderBy(notation => notation)
                                                 .ToList();
 
-            Assert.That(cellsToMove, Is.EqualTo(expectedCellsToMove));
+            CollectionAssert.AreEqual(cellsToMove, expectedCellsToMove);
         }
 
         [Test]
@@ -63,8 +62,7 @@ namespace GameLogic.Tests
         [TestCase("r1r5/1k6/8/8/8/8/1K5K/R1R5 w - - 2 20", false)]
         // Number of enemy kings
         [TestCase("r1r5/1k5k/8/8/8/8/1K6/R1R5 w - - 2 20", false)]
-        public void IsValidCorrect(string gameStateNotation,
-                                   bool isValid)
+        public void IsValidCorrect(string gameStateNotation, bool isValidExpected)
         {
             var gameState = StandardFENSerializer.DeserializeFromFEN(gameStateNotation);
 
@@ -74,7 +72,7 @@ namespace GameLogic.Tests
             }
             catch (ArgumentException)
             {
-                Assert.False(isValid);
+                Assert.False(isValidExpected);
             }
         }
 
@@ -87,11 +85,10 @@ namespace GameLogic.Tests
         [TestCase("8/8/8/8/8/7Q/8/5K1k b - - 2 20", true)]
         [TestCase("8/8/8/8/8/7R/8/5K1k b - - 2 20", true)]
         [TestCase("8/8/8/8/8/4K3/6Q1/6k1 b - - 2 20", false)]
-        public void IsMateCorrect(string gameStateNotation,
-                                  bool isMate)
+        public void IsMateCorrect(string gameStateNotation, bool isMateExpected)
         {
             var gameState = StandardFENSerializer.DeserializeFromFEN(gameStateNotation);
-            Assert.That(new StandardGame().IsMate(gameState), Is.EqualTo(isMate));
+            Assert.AreEqual(new StandardGame().IsMate(gameState), isMateExpected);
         }
     }
 }
