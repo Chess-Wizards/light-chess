@@ -132,3 +132,5 @@ dmypy.json
 **/obj/*
 **/bin/*
 
+.vs/*
+.idea/*
