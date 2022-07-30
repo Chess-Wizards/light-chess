@@ -4,27 +4,26 @@ using GameLogic.Engine;
 
 namespace Communication.Protocols.UCI
 {
+    using CommandInput = IReadOnlyList<string>;
+    using CommandOutput = IEnumerable<string>;
+
     public class UCIProtocol : IProtocol
     {
-        private static readonly UCIProtocolConstants _UCIProtocolConstants = new();
-        private static readonly PositionCommandConstants _PositionCommandConstants = new();
-        private readonly int _Id;
         private string _NextMoveNotation { get; set; }
         private IBot _Bot { get; }
         private IStandardGameState _GameState { get; set; }
 
-        private readonly Dictionary<string, Func<IReadOnlyList<string>, IEnumerable<string>>> _mappingHandler;
-
-        private IEnumerable<IOption> _options = new List<IOption>
-        {
-        };
+        private static readonly PositionCommandConstants _PositionCommandConstants = new();
+        private readonly int _Id;
+        private readonly IDictionary<string, Func<CommandInput, CommandOutput>> _mappingHandler;
+        private IEnumerable<IOption> _options = new List<IOption> {};
 
         public UCIProtocol(IBot bot)
         {
             _Bot = bot;
             _Id = _GeneratePositiveIntegerNumber();
 
-            _mappingHandler = new(){
+            _mappingHandler = new Dictionary<string, Func<IReadOnlyList<string>, IEnumerable<string>>>{
                 {"ucinewgame", _HandleUCINewGameCommand},
                 {"isready", _HandleIsReadyCommand},
                 {"go", _HandleGoCommand},
@@ -42,11 +41,12 @@ namespace Communication.Protocols.UCI
 
         private IStandardGameState _GetInitialGameState()
         {
-            return StandardFENSerializer.DeserializeFromFEN(_UCIProtocolConstants.InitialFENGameState);
+            return StandardFENSerializer.DeserializeFromFEN(UCIProtocolConstants.InitialFENGameState);
         }
+
         public IEnumerable<string> HandleCommand(string input)
         {
-            var splitInput = input.Split(_UCIProtocolConstants.Delimiter);
+            var splitInput = input.Split(UCIProtocolConstants.Delimiter);
             // The first word from |input| is a command 
             var command = splitInput.First();
             var commandHandler = _GetCommand(command);
@@ -56,12 +56,12 @@ namespace Communication.Protocols.UCI
 
         private Func<IReadOnlyList<string>, IEnumerable<string>> _GetCommand(string command)
         {
-            if (!_mappingHandler.ContainsKey(command))
-            {
-                throw new UCIProtocolException($"Received unknown command '{command}'.");
+            Func<IReadOnlyList<string>, IEnumerable<string>> commandHandler;
+            if (_mappingHandler.TryGetValue(command, out commandHandler)) {
+                return commandHandler;
             }
 
-            return _mappingHandler[command];
+            throw new UCIProtocolException($"Received unknown command '{command}'.");
         }
 
         // As part of the initial 'uci' command the bot has to do following:
@@ -93,7 +93,7 @@ namespace Communication.Protocols.UCI
 
         // As part of the ready 'uci' command the bot has to do following:
         // 1. Prints 'readyok'.
-        private IEnumerable<string> _HandleIsReadyCommand(IReadOnlyList<string> splitInput)
+        public IEnumerable<string> _HandleIsReadyCommand(IReadOnlyList<string> splitInput)
         {
             yield return "readyok";
         }
@@ -127,7 +127,7 @@ namespace Communication.Protocols.UCI
             var startPositionUsed = splitInput[1] == _PositionCommandConstants.StartPositionIndicator;
 
             _GameState = startPositionUsed ? _GetInitialGameState()
-                                           : StandardFENSerializer.DeserializeFromFEN(string.Join(_UCIProtocolConstants.Delimiter,
+                                           : StandardFENSerializer.DeserializeFromFEN(string.Join(UCIProtocolConstants.Delimiter,
                                                                                                    splitInput.Skip(_PositionCommandConstants.FirstFENNotationIndex)
                                                                                                              .Take(_PositionCommandConstants.NotationLength)
                                                                                                 )

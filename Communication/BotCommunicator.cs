@@ -20,6 +20,10 @@ namespace Communication
             this.bot = bot;
         }
 
+        private bool _ShouldQuit(string commandInput) {
+            return commandInput == "quit";
+        }
+
         public void Start()
         {
             while (true)
@@ -37,27 +41,19 @@ namespace Communication
                     {
                         Console.WriteLine("Communication protocol is not initialized. " +
                                           $"Protocol '{input}' is not available. " +
-                                          "List of available protocols: " + String.Join(",", availableCommunicationProtocols.Keys));
+                                         $"List of available protocols: {String.Join(',', availableCommunicationProtocols.Keys)}");
                         continue;
                     }
                     initializedProtocol = availableCommunicationProtocols[input](bot);
                 }
 
                 IEnumerable<string> commandOutput = initializedProtocol.HandleCommand(input);
-                bool isTerminated = false;
                 foreach (string output in commandOutput)
                 {
-                    if (output == "quit")
-                    {
-                        isTerminated = true;
-                        break;
-                    }
-
                     Console.WriteLine(output);
                 }
 
-                if (isTerminated)
-                {
+                if (_ShouldQuit(input)) {
                     break;
                 }
             }
