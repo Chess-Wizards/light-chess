@@ -1,7 +1,7 @@
-using NUnit.Framework;
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
 using GameLogic.Entities.Pieces;
+using NUnit.Framework;
 
 namespace GameLogic.Tests
 {

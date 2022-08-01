@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using GameLogic.Engine;
+using NUnit.Framework;
 
 namespace GameLogic.Tests
 {

@@ -1,9 +1,9 @@
+using GameLogic.Engine.MoveTypes;
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
-using GameLogic.Entities.States;
 using GameLogic.Entities.Castles;
 using GameLogic.Entities.Pieces;
-using GameLogic.Engine.MoveTypes;
+using GameLogic.Entities.States;
 
 namespace GameLogic.Engine
 {

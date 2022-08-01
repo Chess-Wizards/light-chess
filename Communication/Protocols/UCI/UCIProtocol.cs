@@ -1,6 +1,6 @@
 using Bot;
-using GameLogic.Entities.States;
 using GameLogic.Engine;
+using GameLogic.Entities.States;
 
 namespace Communication.Protocols.UCI
 {

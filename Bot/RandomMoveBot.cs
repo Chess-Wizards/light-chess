@@ -1,6 +1,6 @@
+using GameLogic.Engine;
 using GameLogic.Entities;
 using GameLogic.Entities.States;
-using GameLogic.Engine;
 
 namespace Bot
 {

@@ -1,5 +1,5 @@
-﻿using Communication;
-using Bot;
+﻿using Bot;
+using Communication;
 
 var randomBot = new RandomMoveBot();
 BotCommunicator botCommunicator = new BotCommunicator(randomBot);

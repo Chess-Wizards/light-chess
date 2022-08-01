@@ -1,5 +1,5 @@
-using GameLogic.Entities.Boards;
 using GameLogic.Entities;
+using GameLogic.Entities.Boards;
 
 namespace GameLogic.Engine.MoveTypes
 {
