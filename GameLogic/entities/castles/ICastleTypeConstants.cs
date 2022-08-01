@@ -4,9 +4,9 @@ namespace GameLogic.Entities.Castles
 {
     public interface ICastleTypeConstants
     {
-        static int WhiteCastleRank => Y._0;
+        static int WhiteCastleRank { get; } = Y._0;
 
-        static int BlackCastleRank => Y._7;
+        static int BlackCastleRank { get; } = Y._7;
         Move CastleMove => new Move(InitialKingCell, FinalKingCell);
 
         Cell InitialKingCell { get; }
