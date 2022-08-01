@@ -1,5 +1,5 @@
-using System;
 using NUnit.Framework;
+using GameLogic.Engine;
 
 namespace GameLogic.Tests
 {
@@ -8,12 +8,14 @@ namespace GameLogic.Tests
     {
         [Test]
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
-        public void GameNotationNotChanged(string gameFENNotation)
+        public void GameNotationNotChanged(string gameStateFENNotation)
         {
             // Serialize.
-            var gameState = StandardFENSerializer.DeserializeFromFEN(gameFENNotation);
+            var gameState = StandardFENSerializer.DeserializeFromFEN(gameStateFENNotation);
             // Deserialize.
             var gameStateFENNotationOutput = StandardFENSerializer.SerializeToFEN(gameState);
+
+            Assert.That(gameStateFENNotation, Is.EqualTo(gameStateFENNotationOutput));
         }
 
         [Test]
@@ -25,7 +27,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var boardFENNotationOutput = StandardFENSerializer.BoardToNotation(board);
 
-            Assert.That(boardFENNotationOutput, Is.EqualTo(boardFENNotation));
+            Assert.That(boardFENNotation, Is.EqualTo(boardFENNotationOutput));
         }
 
         [Test]
@@ -38,7 +40,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var colorFENNotationOutput = StandardFENSerializer.ColorToNotation(color);
 
-            Assert.That(colorFENNotationOutput, Is.EqualTo(colorFENNotation));
+            Assert.That(colorFENNotation, Is.EqualTo(colorFENNotationOutput));
         }
 
         [Test]
@@ -54,7 +56,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var castleFENNotationOutput = StandardFENSerializer.CastleToNotation(castle);
 
-            Assert.That(castleFENNotationOutput, Is.EqualTo(castleFENNotation));
+            Assert.That(castleFENNotation, Is.EqualTo(castleFENNotationOutput));
         }
 
         [Test]
@@ -73,7 +75,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var cellFENNotationOutput = StandardFENSerializer.CellToNotation(cell);
 
-            Assert.That(cellFENNotationOutput, Is.EqualTo(cellFENNotation));
+            Assert.That(cellFENNotation, Is.EqualTo(cellFENNotationOutput));
         }
 
         [Test]
@@ -94,7 +96,7 @@ namespace GameLogic.Tests
             // Deserialize.
             var moveFENNotationOutput = StandardFENSerializer.MoveToNotation(move);
 
-            Assert.That(moveFENNotationOutput, Is.EqualTo(moveFENNotation));
+            Assert.That(moveFENNotation, Is.EqualTo(moveFENNotationOutput));
         }
     }
 }

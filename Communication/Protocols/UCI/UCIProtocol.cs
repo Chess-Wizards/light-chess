@@ -1,85 +1,72 @@
 using Bot;
-using GameLogic;
+using GameLogic.Entities.States;
+using GameLogic.Engine;
 
 namespace Communication.Protocols.UCI
 {
+    using CommandInput = IReadOnlyList<string>;
+    using CommandOutput = IEnumerable<string>;
+
     public class UCIProtocol : IProtocol
     {
-        private readonly int Id;
-        private string NextMoveNotation { get; set; }
-        private IBot Bot { get; set; }
-        private StandardGameState GameState { get; set; }
-        private const string InitialFENGameState = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        List<IOption> options = new List<IOption>
-        {
-        };
+        private string _NextMoveNotation { get; set; }
+        private IStandardGameState _GameState { get; set; }
+        private IBot _Bot { get; }
+        private readonly IDictionary<string, Func<CommandInput, CommandOutput>> _mappingHandler;
+        private IEnumerable<IOption> _options = new List<IOption> { };
 
         public UCIProtocol(IBot bot)
         {
-            Bot = bot;
-            Id = GeneratePositiveIntegerNumber();
+            _Bot = bot;
+
+            _mappingHandler = new Dictionary<string, Func<IReadOnlyList<string>, IEnumerable<string>>>{
+                {"ucinewgame", _HandleUCINewGameCommand},
+                {"isready", _HandleIsReadyCommand},
+                {"go", _HandleGoCommand},
+                {"stop", _HandleStopCommand},
+                {"quit", _HandleQuitCommand},
+                {"position", _HandlePositionCommand}
+            };
         }
 
-        // Generate a random positive integer number 
-        private int GeneratePositiveIntegerNumber()
+        private IStandardGameState _GetInitialGameState()
         {
-            return Math.Abs(new Random().Next());
+            return StandardFENSerializer.DeserializeFromFEN(UCIProtocolConstants.InitialFENGameState);
         }
 
-        private StandardGameState GetInitialGameState()
-        {
-            return StandardFENSerializer.DeserializeFromFEN(InitialFENGameState);
-        }
         public IEnumerable<string> HandleCommand(string input)
         {
-            var splitInput = input.Split(' ');
+            var splitInput = input.Split(UCIProtocolConstants.Delimiter);
+            // The first word from |input| is a command 
+            var command = splitInput.First();
+            var commandHandler = _GetCommand(command);
 
-            if (splitInput[0] == "uci")
+            return commandHandler(splitInput);
+        }
+
+        private Func<IReadOnlyList<string>, IEnumerable<string>> _GetCommand(string command)
+        {
+            Func<IReadOnlyList<string>, IEnumerable<string>> commandHandler;
+            if (_mappingHandler.TryGetValue(command, out commandHandler))
             {
-                return HandleInitialUCICommand();
-            }
-            else if (splitInput[0] == "ucinewgame")
-            {
-                return HandleUCINewGameCommand();
-            }
-            else if (splitInput[0] == "isready")
-            {
-                return HandleIsReadyCommand();
-            }
-            else if (splitInput[0] == "go")
-            {
-                return HandleGoCommand();
-            }
-            else if (splitInput[0] == "stop")
-            {
-                return HandleStopCommand();
-            }
-            else if (splitInput[0] == "quit")
-            {
-                return HandleQuitCommand();
-            }
-            else if (splitInput[0] == "position")
-            {
-                return HandlePositionCommand(splitInput);
+                return commandHandler;
             }
 
-            throw new UCIProtocolException($"Received unknown command '{input}'.");
+            throw new UCIProtocolException($"Received unknown command '{command}'.");
         }
 
         // As part of the initial 'uci' command the bot has to do following:
-        // 1. Print available options.
-        // 2. Print 'uciok'.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleInitialUCICommand()
+        // 1. Prints available options.
+        // 2. Prints 'uciok'.
+        private IEnumerable<string> _HandleInitialUCICommand(IReadOnlyList<string> splitInput)
         {
-            GameState = GetInitialGameState();
+            _GameState = _GetInitialGameState();
 
-            yield return $"id name Lightchess {Id}";
-            yield return $"id author the Lightchess developers";
+            yield return $"id name {UCIProtocolConstants.Name}";
+            yield return $"id author {UCIProtocolConstants.Author}";
             yield return "";
 
-            foreach (var option in options)
+            foreach (var option in _options)
             {
                 yield return option.ToString();
             }
@@ -87,70 +74,64 @@ namespace Communication.Protocols.UCI
             yield return "uciok";
         }
 
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Create a new game.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleUCINewGameCommand()
+        // As part of the new game 'uci' command the bot has to do following:
+        // 1. Creates a new game.
+        private IEnumerable<string> _HandleUCINewGameCommand(IReadOnlyList<string> splitInput)
         {
-            GameState = GetInitialGameState();
+            _GameState = _GetInitialGameState();
             yield break;
         }
 
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Print readyok.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleIsReadyCommand()
+        // As part of the ready 'uci' command the bot has to do following:
+        // 1. Prints 'readyok'.
+        private IEnumerable<string> _HandleIsReadyCommand(IReadOnlyList<string> splitInput)
         {
             yield return "readyok";
         }
 
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Suggest a move.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleGoCommand()
+        // As part of the go 'uci' command the bot has to do following:
+        // 1. Suggests a move.
+        private IEnumerable<string> _HandleGoCommand(IReadOnlyList<string> splitInput)
         {
-            var move = (Move)Bot.SuggestMove(GameState);
-            NextMoveNotation = StandardFENSerializer.MoveToNotation(move);
-            yield return $"bestmove {NextMoveNotation}";
+            var move = _Bot.SuggestMove(_GameState).Value;
+            _NextMoveNotation = StandardFENSerializer.MoveToNotation(move);
+            yield return $"bestmove {_NextMoveNotation}";
         }
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Return a move.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleStopCommand()
+        // As part of the stop 'uci' command the bot has to do following:
+        // 1. Returns a move.
+        private IEnumerable<string> _HandleStopCommand(IReadOnlyList<string> splitInput)
         {
-            yield return NextMoveNotation;
+            yield return _NextMoveNotation;
         }
 
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Suggest a move.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandleQuitCommand()
+        // As part of the quit 'uci' command the bot has to do following:
+        // 1. Returns a 'quit'.
+        private IEnumerable<string> _HandleQuitCommand(IReadOnlyList<string> splitInput)
         {
             yield return "quit";
         }
 
-        // As part of the initial 'uci' command the bot has to do following:
-        // 1. Set a position.
-        // http://wbec-ridderkerk.nl/html/UCIProtocol.html
-        private IEnumerable<string> HandlePositionCommand(string[] splitInput)
+        // As part of the position 'uci' command the bot has to do following:
+        // 1. Sets a position.
+        private IEnumerable<string> _HandlePositionCommand(IReadOnlyList<string> splitInput)
         {
-            var startposUsed = splitInput[1] == "startpos";
+            var startPositionUsed = splitInput[1] == PositionCommandConstants.StartPositionIndicator;
 
-            var firstFENNotationIndex = 2;
-            var notationLength = 6;
-            GameState = startposUsed ? GetInitialGameState()
-                                     : StandardFENSerializer.DeserializeFromFEN(string.Join(" ", splitInput.Skip(firstFENNotationIndex).Take(notationLength)));
+            _GameState = startPositionUsed ? _GetInitialGameState()
+                                           : StandardFENSerializer.DeserializeFromFEN(string.Join(UCIProtocolConstants.Delimiter,
+                                                                                                   splitInput.Skip(PositionCommandConstants.FirstFENNotationIndex)
+                                                                                                             .Take(PositionCommandConstants.NotationLength)
+                                                                                                )
+                                                                                    );
 
-            var firstMoveIndex = startposUsed ? 3 : 9;
-            var moves = splitInput.Skip(firstMoveIndex)
-                                  .Select(notation => StandardFENSerializer.NotationToMove(notation))
-                                  .ToList();
-            // Perform moves
-            foreach (var move in moves)
-            {
-                GameState = new StandardGame().MakeMove(GameState, move);
-            }
-
+            var firstMoveIndex = startPositionUsed
+                                ? PositionCommandConstants.FirstMoveIndexWithStartPositionIndicator
+                                : PositionCommandConstants.FirstMoveIndexWithoutStartPositionIndicator;
+            splitInput.Skip(firstMoveIndex)
+                      .Select(notation => StandardFENSerializer.NotationToMove(notation))
+                      .ToList()
+                      // Perform move
+                      .ForEach(move => { _GameState = new StandardGame().MakeMove(_GameState, move); });
             yield break;
         }
     }

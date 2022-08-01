@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using NUnit.Framework;
+using GameLogic.Entities;
+using GameLogic.Engine;
+using GameLogic.Engine.Moves;
 
 namespace GameLogic.Tests
 {
@@ -69,12 +69,12 @@ namespace GameLogic.Tests
                                                                       .OrderBy((notation) => (notation))
                                                                       .ToList();
 
-                        Assert.That(expectedCells, Is.EqualTo(cells).AsCollection);
+                        CollectionAssert.AreEqual(cells, expectedCells);
                     }
                     // Check if cell is empty.
                     else
                     {
-                        Assert.IsNull(board[cell]);
+                        Assert.IsNull(board.GetPiece(cell));
                     }
                 }
             }

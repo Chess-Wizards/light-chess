@@ -1,24 +1,49 @@
-using System;
+using GameLogic.Entities.Pieces;
 
-namespace GameLogic
+namespace GameLogic.Entities
 {
-    // The structure defines move. Each move can
+    // Defines a move. Each move can
     // be uniquely identified by a triplet of start cell, end cell, and end piece type.
     // For example, the pawn can be promoted to another piece. Therefore, the piece type is required.
     public struct Move
     {
-        public readonly Cell StartCell { get; }
-        public readonly Cell EndCell { get; }
-        public readonly PieceType? PromotionPieceType { get; }
+        public Cell StartCell { get; }
 
+        public Cell EndCell { get; }
 
-        public Move(Cell startCell,
-                    Cell endCell,
-                    PieceType? promotionPieceType = null)
+        public PieceType? PromotionPieceType { get; }
+
+        public Move(Cell startCell, Cell endCell, PieceType? promotionPieceType = null)
         {
             StartCell = startCell;
             EndCell = endCell;
             PromotionPieceType = promotionPieceType;
+        }
+
+        public static bool operator ==(Move move1, Move move2)
+        {
+            return move1.Equals(move2);
+        }
+
+        public static bool operator !=(Move move1, Move move2)
+        {
+            return !move1.Equals(move2);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var move = (Move)obj;
+            if (move == null)
+            {
+                return false;
+            }
+
+            return StartCell == move.StartCell && EndCell == move.EndCell && PromotionPieceType == move.PromotionPieceType;
+        }
+
+        public override int GetHashCode()
+        {
+            return StartCell.GetHashCode() ^ EndCell.GetHashCode() ^ (PromotionPieceType == null ? 0 : PromotionPieceType).GetHashCode();
         }
     }
 }

@@ -1,43 +1,26 @@
-// This class is not yet done.
+using GameLogic.Engine.Moves;
+using GameLogic.Entities;
+using GameLogic.Entities.States;
+using GameLogic.Entities.Castles;
+using GameLogic.Entities.Pieces;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace GameLogic
+namespace GameLogic.Engine
 {
     // This class is the entry point for all commands coming to the GameLogic project.
     // It is responsible for initial instantiation of the game.
     // Game state must be valid!!!
-    public class StandardGame : IGameLogic
+    public class StandardGame : IGameLogic<IStandardGameState>
     {
         // Checks if the mate occurs at the current game state.
         // Enemy color mates/wins the active color.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the mate occurs. Otherwise, false.
-        public bool IsMate(StandardGameState gameState)
+        public bool IsMate(IStandardGameState gameState)
         {
-            return IsCheck(gameState)
-                   && FindAllValidMoves(gameState).Count == 0;
+            return IsCheck(gameState) && !FindAllValidMoves(gameState).Any();
         }
 
         // Checks if the check occurs at the current game state.
         // Enemy color checks the active color.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the check occurs. Otherwise, false.
-        public bool IsCheck(StandardGameState gameState)
+        public bool IsCheck(IStandardGameState gameState)
         {
             // Extract king location.
             var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
@@ -48,42 +31,25 @@ namespace GameLogic
         }
 
         // Applies the move.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        // move: The move to apply.
-        // 
-        // Returns
-        // -------
-        // A new instance of StandardGame, if the move is valid. Otherwise, returns null.
-        public StandardGameState? MakeMove(StandardGameState gameState, Move move)
+        public IStandardGameState? MakeMove(IStandardGameState gameState, Move move)
         {
-            if (!IsValid(gameState))
+            if (!_IsValid(gameState))
             {
                 throw new ArgumentException("Invalid FEN notation.");
             }
 
-            var nextGameState = MoveApplier.GetNextGameState(gameState, move);
-            return IsValid(nextGameState) ? nextGameState : null;
+            var nextGameState = gameState.ApplyMove(move);
+            return _IsValid(nextGameState) ? nextGameState : null;
         }
 
-        // Check if the current game state is valid.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // true, if the current game state is valid. Otherwise, returns false.
-        private bool IsValid(StandardGameState gameState)
+        // Checks if the current game state is valid.
+        private bool _IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
-                                                                      filterByPieceType: PieceType.King).Count == 1;
+                                                                      filterByPieceType: PieceType.King).Count() == 1;
 
             var onlyOneKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                                 filterByPieceType: PieceType.King).Count == 1;
+                                                                 filterByPieceType: PieceType.King).Count() == 1;
 
             var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                    filterByPieceType: PieceType.King) // Extract king location.
@@ -91,9 +57,8 @@ namespace GameLogic
             var checkToEnemyKing = FindAllCellsUnderThreat(gameState, filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
 
             // Pawns cannot be located on first and last ranks.
-            var invalidPawnRanks = new List<int> { 0, 7 };
             var pawnsOnInvalidRanks = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
-                                                     .Any(cell => invalidPawnRanks.Contains(cell.Y));
+                                                     .Any(cell => PieceConstants.InvalidPawnRanks.Contains(cell.Y));
 
             return onlyOneEnemyKing
                    && onlyOneKing
@@ -101,131 +66,69 @@ namespace GameLogic
                    && !pawnsOnInvalidRanks;
         }
 
-        // Find all moves. Moves might be not valid.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A list containing all moves.
-        private List<Move> FindAllMoves(StandardGameState gameState)
+        // Finds all moves. Moves might be not valid.
+        private IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = GetEnPassantMoves(gameState);
-            var castleMoves = GetCastleMoves(gameState);
+            var enPassantMoves = _GetEnPassantMoves(gameState);
+            var castleMoves = _GetCastleMoves(gameState);
             var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
-                                           .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board))
-                                           .ToList();
+                                           .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board));
+
             // Combine moves.
             return enPassantMoves.Concat(castleMoves)
-                                 .Concat(restMoves)
-                                 .ToList();
+                                 .Concat(restMoves);
         }
 
-        // Find all en passant moves.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A list containing en passant moves.
-        private List<Move> GetEnPassantMoves(StandardGameState gameState)
+        // Finds all en passant moves.
+        private IEnumerable<Move> _GetEnPassantMoves(IStandardGameState gameState)
         {
-            var enPassantMoves = new List<Move>() { };
+            var enPassantMoves = Enumerable.Empty<Move>();
 
             if (gameState.EnPassantCell != null)
             {
-                var yShift = gameState.ActiveColor == Color.White ? -1 : 1;
-                var xShifts = new List<int>() { -1, 1 };
-
                 // Check possible pawns which can perform an en passant move.
-                enPassantMoves = xShifts.Select(xShift => (Cell)gameState.EnPassantCell + new Cell(xShift, yShift))
-                                        .Where(cell => gameState.Board.IsOnBoard(cell)
-                                                       && !gameState.Board.IsEmpty(cell)
-                                                       && gameState.Board[cell]?.Type == PieceType.Pawn
-                                                       && gameState.Board[cell]?.Color == gameState.ActiveColor)
-                                        .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell))
-                                        .ToList();
+                enPassantMoves = PieceConstants.ShiftsForEnPassantMove[gameState.ActiveColor]
+                                               .Select(shift => gameState.EnPassantCell.Value - shift)
+                                               .Where(cell => gameState.Board.IsOnBoard(cell))
+                                               .Where(cell => !gameState.Board.IsEmpty(cell))
+                                               .Where(cell => gameState.Board.GetPiece(cell)?.Type == PieceType.Pawn)
+                                               .Where(cell => gameState.Board.GetPiece(cell)?.Color == gameState.ActiveColor)
+                                               .Select(cell => new Move(cell, (Cell)gameState.EnPassantCell));
             }
 
             return enPassantMoves;
         }
 
-        // Find all castle moves.
+        // Finds all castle moves.
         //
         // This function should not check the location of the rook and king.
-        // gameState contains this information implicitly in |AvaialbleCastles| field.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A list containing castle moves.
-        private List<Move> GetCastleMoves(StandardGameState gameState)
+        // gameState contains this information implicitly in |AvailableCastles| field.
+        private IEnumerable<Move> _GetCastleMoves(IStandardGameState gameState)
         {
-            var mappingCatleToMoveNotation = new Dictionary<Castle, string>
-            {
-                {new Castle(Color.White, CastleType.King), "e1g1"},
-                {new Castle(Color.White, CastleType.Queen), "e1c1"},
-                {new Castle(Color.Black, CastleType.King), "e8g8"},
-                {new Castle(Color.Black, CastleType.Queen), "e8c8"}
-            };
-            var emptyCellNotations = new Dictionary<Castle, List<string>>
-            {
-                {new Castle(Color.White, CastleType.King), new List<string>(){"f1", "g1"}},
-                {new Castle(Color.White, CastleType.Queen), new List<string>(){"b1", "c1", "d1"}},
-                {new Castle(Color.Black, CastleType.King), new List<string>(){"f8", "g8"}},
-                {new Castle(Color.Black, CastleType.Queen), new List<string>(){"b8", "c8", "d8"}}
-            };
-
-            return gameState.AvaialbleCastles
-                            .Where(castle => castle.Color == gameState.ActiveColor
-                                             && emptyCellNotations[castle].All(notation => gameState.Board.IsEmpty((Cell)StandardFENSerializer.NotationToCell(notation))))
-                            .Select(castle => StandardFENSerializer.NotationToMove(mappingCatleToMoveNotation[castle]))
-                            .ToList();
+            return gameState.AvailableCastles
+                            .Where(castle => castle.Color == gameState.ActiveColor)
+                            .Where(castle => CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
+                            .Select(castle => CastleConstants.mappingCastleToConstant[castle].CastleMove);
         }
 
-        // Find all valid moves.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A list containing valid moves.
-        public List<Move> FindAllValidMoves(StandardGameState gameState)
+        // Finds all valid moves.
+        public IEnumerable<Move> FindAllValidMoves(IStandardGameState gameState)
         {
-            if (!IsValid(gameState))
+            if (!_IsValid(gameState))
             {
-                throw new ArgumentException("Invalid FEN notation.");
+                throw new ArgumentException("Invalid game state.");
             }
 
-            return FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null)
-                                          .ToList();
+            return _FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null);
         }
 
-        // Find all cells 'under threat' produced by |filterByColor| color.
+        // Finds all cells 'under threat' produced by |filterByColor| color.
         // 'under threat' means all cells at which the enemy king cannot stand because of the check.
-        //
-        // Parameters
-        // ----------
-        // gameState: The state of the game.
-        //
-        // Returns
-        // -------
-        // A list containing all cells.
-        private List<Cell> FindAllCellsUnderThreat(StandardGameState gameState, Color filterByColor)
+        private IEnumerable<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
         {
             return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))
-                                  .Distinct()
-                                  .ToList();
+                                  .Distinct();
         }
     }
 }

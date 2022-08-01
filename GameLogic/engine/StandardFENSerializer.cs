@@ -1,15 +1,18 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using GameLogic.Entities;
+using GameLogic.Entities.Boards;
+using GameLogic.Entities.States;
+using GameLogic.Entities.Castles;
+using GameLogic.Entities.Pieces;
 
-namespace GameLogic
+
+namespace GameLogic.Engine
 {
     public static class StandardFENSerializer
     {
-        // The class represents the serialization/deserialization to/from FEN notation.
+        // Represents the serialization/deserialization to/from FEN notation.
         // Please refer to the FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
 
-        public static Dictionary<char, Piece> mappingNotationToPiece = new Dictionary<char, Piece>()
+        private static Dictionary<char, Piece> _mappingNotationToPiece = new Dictionary<char, Piece>()
             {
                 {'P', new Piece(Color.White, PieceType.Pawn)},
                 {'N', new Piece(Color.White, PieceType.Knight)},
@@ -24,49 +27,43 @@ namespace GameLogic
                 {'q', new Piece(Color.Black, PieceType.Queen)},
                 {'k', new Piece(Color.Black, PieceType.King)}
             };
-        public static Dictionary<Piece, char> mappingPieceToNotation = mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
+        private static Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
-        public static Dictionary<char, Castle> mappingNotationToCastle = new Dictionary<char, Castle>()
+        private static Dictionary<char, Castle> _mappingNotationToCastle = new Dictionary<char, Castle>()
             {
                 {'K', new Castle(Color.White, CastleType.King)},
                 {'Q', new Castle(Color.White, CastleType.Queen)},
                 {'k', new Castle(Color.Black, CastleType.King)},
                 {'q', new Castle(Color.Black, CastleType.Queen)},
             };
-        public static Dictionary<Castle, char> mappingCastleToNotation = mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
-        public static Dictionary<char, Color> mappingNotationToColor = new Dictionary<char, Color>()
+        private static Dictionary<Castle, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
+
+        private static Dictionary<char, Color> _mappingNotationToColor = new Dictionary<char, Color>()
             {
                 {'w', Color.White},
                 {'b', Color.Black}
             };
 
-        public static Dictionary<char, PieceType> mappingNotationToPieceType = new Dictionary<char, PieceType>()
+        public static Dictionary<Color, char> mappingColorToNotation = _mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
+
+        private static Dictionary<char, PieceType> _mappingNotationToPieceType = new Dictionary<char, PieceType>()
             {
                 {'n', PieceType.Knight},
                 {'b', PieceType.Bishop},
                 {'r', PieceType.Rook},
                 {'q', PieceType.Queen}
             };
-        public static Dictionary<PieceType, char> mappingPieceTypeToNotation = mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
+        public static Dictionary<PieceType, char> _mappingPieceTypeToNotation = _mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
 
-
-        // Serialize object to FEN notation.
-        //
-        // Parameters
-        // ----------
-        // objectToSerialize: The object to serializer.
-        // 
-        // Returns
-        // -------
-        // The FEN notation.
-        public static string SerializeToFEN(StandardGameState objectToSerialize)
+        // Serializes object to FEN notation.
+        public static string SerializeToFEN(IStandardGameState objectToSerialize)
         {
             var splitFenNotation = new string[6]
             {
                 BoardToNotation(objectToSerialize.Board),
                 ColorToNotation(objectToSerialize.ActiveColor),
-                CastleToNotation(objectToSerialize.AvaialbleCastles),
+                CastleToNotation(objectToSerialize.AvailableCastles),
                 CellToNotation(objectToSerialize.EnPassantCell),
                 objectToSerialize.HalfmoveNumber.ToString(),
                 objectToSerialize.FullmoveNumber.ToString()
@@ -76,20 +73,8 @@ namespace GameLogic
             return fenNotation;
         }
 
-        // Deserialize FEN notation to object.
-        //
-        // Parameters
-        // ----------
-        // fenNotation: The FEN notation.
-        //
-        // Exceptions
-        // ----------
-        // ArgumentException: Invalid FEN notation.
-        // 
-        // Returns
-        // -------
-        // The game. 
-        public static StandardGameState DeserializeFromFEN(string fenNotation)
+        // Deserializes FEN notation to object.
+        public static IStandardGameState DeserializeFromFEN(string fenNotation)
         {
             var splitFenNotation = fenNotation.Split(' ');
 
@@ -108,24 +93,8 @@ namespace GameLogic
             return gameState;
         }
 
-        public static Dictionary<Color, char> mappingColorToNotation = mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
-
         // Deserializes board FEN notation.
-        //
-        // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
-        // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
-        // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
-        // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
-        // corresponding to the number of squares.
-        //
-        // Parameters
-        // ----------
-        // notation: The board FEN notation.
-        //
-        // Returns
-        // -------
-        // The deserialized board.
-        public static StandardBoard NotationToBoard(string notation)
+        public static IRectangularBoard NotationToBoard(string notation)
         {
             var board = new StandardBoard();
 
@@ -139,10 +108,10 @@ namespace GameLogic
                 foreach (var character in row)
                 {
                     // Set piece to board and increment |x| by 1 .
-                    if (mappingNotationToPiece.ContainsKey(character))
+                    if (_mappingNotationToPiece.ContainsKey(character))
                     {
                         var cell = new Cell(x, y);
-                        board[cell] = mappingNotationToPiece[character];
+                        board.SetPiece(cell, _mappingNotationToPiece[character]);
                         x += 1;
                     }
                     // Increment |x| by number of empty cells.
@@ -157,22 +126,8 @@ namespace GameLogic
             return board;
         }
 
-        // Serialize board to FEN notation.
-        //
-        // Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; 
-        // within each rank, the contents of the squares are described in order from the a-file to the h-file. 
-        // Each piece is identified by a single letter taken from the standard English names in algebraic notatio.
-        // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", 
-        // corresponding to the number of squares.
-        //
-        // Parameters
-        // ----------
-        // board: The board to serialize.
-        //
-        // Returns
-        // -------
-        // The serialized board.
-        public static string BoardToNotation(StandardBoard board)
+        // Serializes board to FEN notation.
+        public static string BoardToNotation(IRectangularBoard board)
         {
             var rows = new List<string>();
 
@@ -195,7 +150,7 @@ namespace GameLogic
                     else
                     {
                         if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
-                        row.Add(mappingPieceToNotation[(Piece)board[cell]]);
+                        row.Add(_mappingPieceToNotation[board.GetPiece(cell).Value]);
                         numberEmptyCells = 0;
                     }
                 }
@@ -211,98 +166,38 @@ namespace GameLogic
             return notation;
         }
 
-        // Deserialize color FEN notation.
-        //
-        // "w" means that White is to move; "b" means that Black is to move.
-        //
-        // Parameters
-        // ----------
-        // notation: The notation to deserialize.
-        //
-        // Returns
-        // -------
-        // The deserialized color.
+        // Deserializes color FEN notation.
         public static Color NotationToColor(string notation)
         {
             if (notation.Length != 1)
                 throw new ArgumentException();
-            return mappingNotationToColor[notation[0]];
+            return _mappingNotationToColor[notation[0]];
         }
 
         // Serialize color to the FEN notation.
-        //
-        // "w" means that White is to move; "b" means that Black is to move.
-        //
-        // Parameters
-        // ----------
-        // color: The color to serialize.
-        //
-        // Returns
-        // -------
-        // The serialized color.
         public static string ColorToNotation(Color color)
         {
             return mappingColorToNotation[color].ToString();
         }
 
-        // Deserialize castle FEN notation.
-        //
-        // If neither side has the ability to castle, this field uses the character "-". 
-        // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
-        // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
-        // A situation that temporarily prevents castling does not prevent the use of this notation.
-        //
-        // Parameters
-        // ----------
-        // notation: The notation to deserialize.
-        //
-        // Returns
-        // -------
-        // The deserialized castles.
-        public static List<Castle> NotationToCastle(string notation)
+        // Deserializes castle FEN notation.
+        public static IEnumerable<Castle> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
-                           .Select((castle) => (mappingNotationToCastle[castle]))
-                           .ToList();
+                           .Select((castle) => (_mappingNotationToCastle[castle]));
 
         }
 
-        // Serialize castles to the FEN notation.
-        //
-        // If neither side has the ability to castle, this field uses the character "-". 
-        // Otherwise, this field contains one or more letters: "K" if White can castle kingside, 
-        // "Q" if White can castle queenside, "k" if Black can castle kingside, and "q" if Black can castle queenside. 
-        // A situation that temporarily prevents castling does not prevent the use of this notation.
-        //
-        // Parameters
-        // ----------
-        // castles: A list of castles.
-        //
-        // Returns
-        // -------
-        // The serialized castles.
-        public static string CastleToNotation(List<Castle> castles)
+        // Serializes castles to the FEN notation.
+        public static string CastleToNotation(IEnumerable<Castle> castles)
         {
             var notation = String.Join("",
-                        castles.Select((castle) => mappingCastleToNotation[castle])
-                               .ToList()
-                       );
+                        castles.Select((castle) => _mappingCastleToNotation[castle])
+            );
             return notation.Length == 0 ? "-" : notation;
         }
 
-        // Deserialize cell FEN notation.
-        //
-        // Parameters
-        // ----------
-        // notation: The notation to deserialize or '-'.
-        //
-        // Exceptions
-        // ----------
-        // ArgumentException: The length of notation is not equal to two.
-        //
-        // Returns
-        // -------
-        // The deserialized cell or null.
+        // Deserializes cell FEN notation.
         public static Cell? NotationToCell(string notation)
         {
             if (notation != "-")
@@ -318,83 +213,49 @@ namespace GameLogic
             return null;
         }
 
-        // Serialize cell to the FEN notation.
-        //
-        // Parameters
-        // ----------
-        // cell: The cell to serialize or null.
-        //
-        // Returns
-        // -------
-        // The serialized cell or '-'. 
+        // Serializes cell to the FEN notation.
         public static string CellToNotation(Cell? cell)
         {
             if (cell != null)
             {
                 // Integer to letter char. Example: 0 -> 'a'.
-                var x = (char)(((Cell)cell).X + 97);
+                var x = (char)(cell.Value.X + 97);
                 // Integer to digit char. Example: 8 -> '7'.
-                var y = ((Cell)cell).Y + 1;
+                var y = cell.Value.Y + 1;
                 return $"{x}{y}";
             }
             return "-";
         }
 
-        // Serialize move to the notation.
+        // Serializes move to the notation.
         //
-        // Parameters
-        // ----------
-        // move: The move to serialize.
-        //
-        // Returns
-        // -------
-        // The serialized move. The notation follows UCI (Universal Chess Interface 
-        // {StartCell}-{EndCell}{PieceType or Empty}
+        // The notation follows UCI (Universal Chess Interface {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : mappingPieceTypeToNotation[(PieceType)move.PromotionPieceType].ToString();
+            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : _mappingPieceTypeToNotation[move.PromotionPieceType.Value].ToString();
             return $"{CellToNotation(move.StartCell)}{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
         // Deserialize move.
-        //
-        // Parameters
-        // ----------
-        // notation: The notation to deserialize. The notation follows UCI (Universal Chess Interface)
-        // {StartCell}{EndCell}{PieceType or Empty}
-        //
-        // Returns
-        // -------
-        // The deserialized move.
         public static Move NotationToMove(string notation)
         {
             PieceType? pieceType = null;
             var lastIndex = notation.Length - 1;
             // Check if the last character is piece type
-            if (mappingNotationToPieceType.ContainsKey(notation[lastIndex]))
+            if (_mappingNotationToPieceType.ContainsKey(notation[lastIndex]))
             {
-                pieceType = mappingNotationToPieceType[notation[lastIndex]];
+                pieceType = _mappingNotationToPieceType[notation[lastIndex]];
                 // Remove piece type from |notation|
                 notation = notation.Remove(lastIndex);
             }
 
             var cells = notation.Chunk(2)
-                                .Select(cellNotation => (Cell)NotationToCell(new string(cellNotation)))
+                                .Select(cellNotation => NotationToCell(new string(cellNotation)).Value)
                                 .ToArray(); ;
             return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }
 
-        // Deserialize move by passing start and end cells.
-        //
-        // Parameters
-        // ----------
-        // startCellNotation: The notation of the start cell.
-        // endCellNotation: The notation of the end cell.
-        // pieceTypeNotation: The notation of the piece type or empty.
-        //
-        // Returns
-        // -------
-        // The deserialized move.
+        // Deserializes move by passing start and end cells.
         public static Move NotationToMove(string startCellNotation,
                                           string endCellNotation,
                                           string pieceTypeNotation = "")

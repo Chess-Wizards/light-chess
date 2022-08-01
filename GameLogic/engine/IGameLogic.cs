@@ -1,22 +1,22 @@
-using System;
-using System.Collections.Generic;
+using GameLogic.Entities;
+using GameLogic.Entities.States;
 
-namespace GameLogic
+namespace GameLogic.Engine
 {
     // The interface represents the logic of chess game. 
-    public interface IGameLogic
+    public interface IGameLogic<TGameState>
     {
         // Checks if the mate occurs at the current game state.
-        bool IsMate(StandardGameState gameState);
+        bool IsMate(TGameState gameState);
 
         // Checks if the check occurs at the current game state.
-        bool IsCheck(StandardGameState gameState);
+        bool IsCheck(TGameState gameState);
 
         // Applies the move and returns a new instance of a class implementing the IStandardGameLogic interface, 
         // if the move is valid. Otherwise, returns null.
-        StandardGameState? MakeMove(StandardGameState gameState, Move move);
+        TGameState? MakeMove(TGameState gameState, Move move);
 
-        // Find all valid moves. 
-        List<Move> FindAllValidMoves(StandardGameState gameState);
+        // Finds all valid moves. 
+        IEnumerable<Move> FindAllValidMoves(TGameState gameState);
     }
 }

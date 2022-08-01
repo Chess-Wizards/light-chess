@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using NUnit.Framework;
+using GameLogic.Entities;
+using GameLogic.Engine;
+using GameLogic.Engine.Moves;
 
 namespace GameLogic.Tests
 {
@@ -19,20 +19,20 @@ namespace GameLogic.Tests
                 {"e8", new List<string>(){"d8", "e7", "f8"}},
                 {"g8", new List<string>(){"e7", "f6", "h6"}},
                 {"h8", new List<string>(){}},
-                {"a7", new List<string>(){}},
-                {"d7", new List<string>(){}},
-                {"f7", new List<string>(){}},
+                {"a7", new List<string>(){"b6"}},
+                {"d7", new List<string>(){"c6", "e6"}},
+                {"f7", new List<string>(){"e6", "g6"}},
                 {"g7", new List<string>(){"e6", "f5", "e8"}},
-                {"h7", new List<string>(){}},
+                {"h7", new List<string>(){"g6"}},
                 {"a6", new List<string>(){"b8", "c7", "c5", "b4"}},
                 {"d6", new List<string>(){"b8", "c7", "e7", "f8", "c5", "b4", "a3"}},
-                {"b5", new List<string>(){}},
+                {"b5", new List<string>(){"a4", "c4"}},
                 {"d5", new List<string>(){"b6", "c7", "e7", "f6", "f4", "e3", "c3", "b4"}},
-                {"e5", new List<string>(){}},
-                {"h5", new List<string>(){}},
-                {"g4", new List<string>(){}},
+                {"e5", new List<string>(){"f6"}},
+                {"h5", new List<string>(){"g6"}},
+                {"g4", new List<string>(){"f5"}},
                 {"b3", new List<string>(){"a2", "c2"}},
-                {"d3", new List<string>(){}},
+                {"d3", new List<string>(){"c4", "e4"}},
                 {"f3", new List<string>(){"f7", "f6", "f5", "f4", "f2", "f1",
                                           "e3", "g3", "h3",
                                           "e4", "g2", "h1"}},
@@ -67,12 +67,12 @@ namespace GameLogic.Tests
                         var expectedCellsUnderThreat = correctCellsUnderThreat[cellNotation]
                                                    .OrderBy((notation) => (notation))
                                                    .ToList();
-                        Assert.That(expectedCellsUnderThreat, Is.EqualTo(cellsUnderThreat));
+                        CollectionAssert.AreEqual(cellsUnderThreat, expectedCellsUnderThreat);
                     }
                     // Check if the cell is empty.
                     else
                     {
-                        Assert.Null(board[cell]);
+                        Assert.Null(board.GetPiece(cell));
                     }
                 }
             }
