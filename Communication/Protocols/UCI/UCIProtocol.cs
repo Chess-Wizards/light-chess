@@ -84,7 +84,7 @@ namespace Communication.Protocols.UCI
 
         // As part of the ready 'uci' command the bot has to do following:
         // 1. Prints 'readyok'.
-        public IEnumerable<string> _HandleIsReadyCommand(IReadOnlyList<string> splitInput)
+        private IEnumerable<string> _HandleIsReadyCommand(IReadOnlyList<string> splitInput)
         {
             yield return "readyok";
         }
