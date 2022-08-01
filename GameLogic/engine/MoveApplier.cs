@@ -10,10 +10,6 @@ namespace GameLogic.Engine
     // Applies a move.
     public static class MoveApplier
     {
-        private static readonly PieceConstants _PieceConstants = new();
-
-        private static readonly CastleConstants _CastleConstants = new();
-
         // Applies move and returns next game state.
         public static IStandardGameState ApplyMove(this IStandardGameState gameState, Move move)
         {
@@ -53,13 +49,13 @@ namespace GameLogic.Engine
 
         private static bool _IsPawnPromotionRank(int rank)
         {
-            return _PieceConstants.BlackPawnPromotionRank == rank || _PieceConstants.WhitePawnPromotionRank == rank;
+            return PieceConstants.BlackPawnPromotionRank == rank || PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
         {
             if (startCellPiece.Type == PieceType.King
-                && _CastleConstants.mappingCastleToConstant.Values.Any(castleConstant => castleConstant.CastleMove == move))
+                && CastleConstants.mappingCastleToConstant.Values.Any(castleConstant => castleConstant.CastleMove == move))
             {
                 return new CastleMove();
             }
@@ -93,19 +89,19 @@ namespace GameLogic.Engine
             // King move.
             if (piece.Type == PieceType.King)
             {
-                _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+                CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
                                                         .ToList()
                                                         .ForEach(pair => nextCastles.Remove(pair.Key));
             }
 
             // Rook moves.
-            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+            CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
                                                     .Where(pair => move.StartCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));
 
             // Capture of the enemy rook.
-            _CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change())
+            CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change())
                                                     .Where(pair => move.EndCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));
@@ -122,9 +118,9 @@ namespace GameLogic.Engine
 
             // Return en passant cell if the pawn moves forward on two cells.
             if (piece.Type == PieceType.Pawn &&
-                Math.Abs(deltaY) == _PieceConstants.MaxForwardPawnMovesNotTouched)
+                Math.Abs(deltaY) == PieceConstants.MaxForwardPawnMovesNotTouched)
             {
-                return move.EndCell + _PieceConstants.NewEnPassantCellAfterMove[piece.Color];
+                return move.EndCell + PieceConstants.NewEnPassantCellAfterMove[piece.Color];
             }
 
             return null;

@@ -6,9 +6,6 @@ namespace GameLogic.Entities.Boards
     // The width means A-H, while height - 1-8.
     public class StandardBoard : IRectangularBoard
     {
-
-        private static readonly StandardBoardConstants _StandardBoardConstants = new();
-
         public int Width { get; }
         public int Height { get; }
 
@@ -17,8 +14,8 @@ namespace GameLogic.Entities.Boards
 
         public StandardBoard()
         {
-            Width = _StandardBoardConstants.Size;
-            Height = _StandardBoardConstants.Size;
+            Width = StandardBoardConstants.Size;
+            Height = StandardBoardConstants.Size;
             _positionToPiece = new Dictionary<Cell, Piece>();
         }
 

@@ -8,8 +8,6 @@ namespace GameLogic.Engine.Moves
     // This class does not consider checks, en passant moves, and castles.
     static public class PieceMoves
     {
-        private static readonly PieceConstants _PieceConstants = new();
-
         // Finds moves produced by piece at cell |cell|.
         public static IEnumerable<Move> GetMoves(Cell cell, IRectangularBoard board)
         {
@@ -34,13 +32,13 @@ namespace GameLogic.Engine.Moves
                                                            )
                                                  // Suggest four moves, if the pawn promotion is applied. Otherwise, only move is suggested.
                                                  .SelectMany(nextCell => (piece.Value.Type == PieceType.Pawn && _IsPawnPromotionRank(nextCell.Y)
-                                                                        ? _PieceConstants.PossiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
+                                                                        ? PieceConstants.PossiblePromotionPieceTypes.Select(pieceType => new Move(cell, nextCell, pieceType))
                                                                         : new List<Move>() { new Move(cell, nextCell) }));
         }
 
         private static bool _IsPawnPromotionRank(int rank)
         {
-            return _PieceConstants.BlackPawnPromotionRank == rank || _PieceConstants.WhitePawnPromotionRank == rank;
+            return PieceConstants.BlackPawnPromotionRank == rank || PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         private static IEnumerable<IPieceCells> _PieceCells(Cell cell, Piece piece)
@@ -67,7 +65,7 @@ namespace GameLogic.Engine.Moves
             }
             else if (piece.Type == PieceType.Pawn)
             {
-                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? _PieceConstants.MaxForwardPawnMovesNotTouched : _PieceConstants.MaxForwardPawnMovesTouched;
+                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? PieceConstants.MaxForwardPawnMovesNotTouched : PieceConstants.MaxForwardPawnMovesTouched;
                 return new List<IPieceCells>() { new PawnCells(numberShifts), new PawnCellsCapture() };
             }
 
@@ -76,7 +74,7 @@ namespace GameLogic.Engine.Moves
 
         private static bool _PawnIsNotTouched(int rank, Color color)
         {
-            return (color == Color.White ? _PieceConstants.WhiteInitialPawnRank : _PieceConstants.BlackInitialPawnRank) == rank;
+            return (color == Color.White ? PieceConstants.WhiteInitialPawnRank : PieceConstants.BlackInitialPawnRank) == rank;
         }
     }
 }

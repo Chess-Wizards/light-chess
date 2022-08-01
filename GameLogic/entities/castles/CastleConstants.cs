@@ -1,8 +1,8 @@
 namespace GameLogic.Entities.Castles
 {
-    public class CastleConstants
+    static public class CastleConstants
     {
-        public readonly Dictionary<Castle, ICastleTypeConstants> mappingCastleToConstant = new()
+        public static readonly Dictionary<Castle, ICastleTypeConstants> mappingCastleToConstant = new()
         {
             {new Castle(Color.White, CastleType.King), new KingCastleConstants(Color.White)},
             {new Castle(Color.White, CastleType.Queen), new QueenCastleConstants(Color.White)},
