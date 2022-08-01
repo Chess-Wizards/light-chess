@@ -20,7 +20,8 @@ namespace Communication
             this.bot = bot;
         }
 
-        private bool _ShouldQuit(string commandInput) {
+        private bool _ShouldQuit(string commandInput)
+        {
             return commandInput == "quit";
         }
 
@@ -53,7 +54,8 @@ namespace Communication
                     Console.WriteLine(output);
                 }
 
-                if (_ShouldQuit(input)) {
+                if (_ShouldQuit(input))
+                {
                     break;
                 }
             }

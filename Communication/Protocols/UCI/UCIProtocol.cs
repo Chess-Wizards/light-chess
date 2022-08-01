@@ -10,18 +10,14 @@ namespace Communication.Protocols.UCI
     public class UCIProtocol : IProtocol
     {
         private string _NextMoveNotation { get; set; }
-        private IBot _Bot { get; }
         private IStandardGameState _GameState { get; set; }
-
-        private static readonly PositionCommandConstants _PositionCommandConstants = new();
-        private readonly int _Id;
+        private IBot _Bot { get; }
         private readonly IDictionary<string, Func<CommandInput, CommandOutput>> _mappingHandler;
-        private IEnumerable<IOption> _options = new List<IOption> {};
+        private IEnumerable<IOption> _options = new List<IOption> { };
 
         public UCIProtocol(IBot bot)
         {
             _Bot = bot;
-            _Id = _GeneratePositiveIntegerNumber();
 
             _mappingHandler = new Dictionary<string, Func<IReadOnlyList<string>, IEnumerable<string>>>{
                 {"ucinewgame", _HandleUCINewGameCommand},
@@ -31,12 +27,6 @@ namespace Communication.Protocols.UCI
                 {"quit", _HandleQuitCommand},
                 {"position", _HandlePositionCommand}
             };
-        }
-
-        // Generate a random positive integer number 
-        private int _GeneratePositiveIntegerNumber()
-        {
-            return Math.Abs(new Random().Next());
         }
 
         private IStandardGameState _GetInitialGameState()
@@ -57,7 +47,8 @@ namespace Communication.Protocols.UCI
         private Func<IReadOnlyList<string>, IEnumerable<string>> _GetCommand(string command)
         {
             Func<IReadOnlyList<string>, IEnumerable<string>> commandHandler;
-            if (_mappingHandler.TryGetValue(command, out commandHandler)) {
+            if (_mappingHandler.TryGetValue(command, out commandHandler))
+            {
                 return commandHandler;
             }
 
@@ -71,8 +62,8 @@ namespace Communication.Protocols.UCI
         {
             _GameState = _GetInitialGameState();
 
-            yield return $"id name Lightchess {_Id}";
-            yield return $"id author the Lightchess developers";
+            yield return $"id name {UCIProtocolConstants.Name}";
+            yield return $"id author {UCIProtocolConstants.Author}";
             yield return "";
 
             foreach (var option in _options)
@@ -124,18 +115,18 @@ namespace Communication.Protocols.UCI
         // 1. Sets a position.
         private IEnumerable<string> _HandlePositionCommand(IReadOnlyList<string> splitInput)
         {
-            var startPositionUsed = splitInput[1] == _PositionCommandConstants.StartPositionIndicator;
+            var startPositionUsed = splitInput[1] == PositionCommandConstants.StartPositionIndicator;
 
             _GameState = startPositionUsed ? _GetInitialGameState()
                                            : StandardFENSerializer.DeserializeFromFEN(string.Join(UCIProtocolConstants.Delimiter,
-                                                                                                   splitInput.Skip(_PositionCommandConstants.FirstFENNotationIndex)
-                                                                                                             .Take(_PositionCommandConstants.NotationLength)
+                                                                                                   splitInput.Skip(PositionCommandConstants.FirstFENNotationIndex)
+                                                                                                             .Take(PositionCommandConstants.NotationLength)
                                                                                                 )
                                                                                     );
 
             var firstMoveIndex = startPositionUsed
-                                ? _PositionCommandConstants.FirstMoveIndexWithStartPositionIndicator
-                                : _PositionCommandConstants.FirstMoveIndexWithoutStartPositionIndicator;
+                                ? PositionCommandConstants.FirstMoveIndexWithStartPositionIndicator
+                                : PositionCommandConstants.FirstMoveIndexWithoutStartPositionIndicator;
             splitInput.Skip(firstMoveIndex)
                       .Select(notation => StandardFENSerializer.NotationToMove(notation))
                       .ToList()
