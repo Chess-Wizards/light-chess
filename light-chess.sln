@@ -1,25 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\GameLogic.csproj", "{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{7C8049FB-2D00-4577-9A80-0D9FDA25F4A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C2C2C3A7-F241-47A9-A59E-B10F894311CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{C2C2C3A7-F241-47A9-A59E-B10F894311CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication", "Communication\Communication.csproj", "{05E83453-6620-48BB-A4F6-D1ABD3DEC78B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication", "Communication\Communication.csproj", "{05E83453-6620-48BB-A4F6-D1ABD3DEC78B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot", "Bot\Bot.csproj", "{415BD447-4EC4-4B39-B08E-694BE31B60AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bot", "Bot\Bot.csproj", "{415BD447-4EC4-4B39-B08E-694BE31B60AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A1E4D82-32C6-4512-8923-123BE8E30C29}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7C6A9B9E-5313-4A48-BD77-14E0F7D1EC49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +44,11 @@ Global
 		{415BD447-4EC4-4B39-B08E-694BE31B60AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415BD447-4EC4-4B39-B08E-694BE31B60AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415BD447-4EC4-4B39-B08E-694BE31B60AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F12B46C5-F86E-484C-937E-BE50C5780BE3}
 	EndGlobalSection
 EndGlobal

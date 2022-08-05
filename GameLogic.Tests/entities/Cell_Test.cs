@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using GameLogic.Entities;
+using NUnit.Framework;
 
 namespace GameLogic.UnitTests
 {
