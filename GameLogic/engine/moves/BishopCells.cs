@@ -1,7 +1,5 @@
 using GameLogic.Entities;
 
-// TODO: Dear @SherlockKA, please rename this file and all others that are related to the "cells".
-
 namespace GameLogic.Engine.Moves
 {
     public class BishopCells : IPieceCells
