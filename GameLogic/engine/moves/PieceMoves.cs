@@ -4,7 +4,7 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine.Moves
 {
-    // The class aims to find the array of all moves. Moves cannot be valid. // TODO: Dear @SherlockKA, please look at the last sentence of this line.
+    // The class aims to find the array of all moves. Moves can be invalid. 
     // This class does not consider checks, en passant moves, and castles.
     public static class PieceMoves
     {
