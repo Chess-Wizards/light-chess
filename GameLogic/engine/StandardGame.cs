@@ -1,6 +1,6 @@
 using GameLogic.Engine.Moves;
 using GameLogic.Entities;
-using GameLogic.Entities.Castles;
+using GameLogic.Entities.Castlings;
 using GameLogic.Entities.Pieces;
 using GameLogic.Entities.States;
 
@@ -24,10 +24,9 @@ namespace GameLogic.Engine
         {
             // Extract king location.
             var kingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor,
-                                                              filterByPieceType: PieceType.King)
-                                          .First();
+                                                              filterByPieceType: PieceType.King).First();
 
-            return FindAllCellsUnderThreat(gameState, filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
+            return _FindAllCellsUnderThreat(gameState, filterByColor: gameState.EnemyColor).Any(cell => cell == kingCell);
         }
 
         // Applies the move.
@@ -35,7 +34,7 @@ namespace GameLogic.Engine
         {
             if (!_IsValid(gameState))
             {
-                throw new ArgumentException("Invalid FEN notation.");
+                throw new ArgumentException("Invalid game state.");
             }
 
             var nextGameState = gameState.ApplyMove(move);
@@ -43,7 +42,7 @@ namespace GameLogic.Engine
         }
 
         // Checks if the current game state is valid.
-        private bool _IsValid(IStandardGameState gameState)
+        private static bool _IsValid(IStandardGameState gameState)
         {
             var onlyOneEnemyKing = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                       filterByPieceType: PieceType.King).Count() == 1;
@@ -54,7 +53,7 @@ namespace GameLogic.Engine
             var enemyKingCell = gameState.Board.GetCellsWithPieces(filterByColor: gameState.EnemyColor,
                                                                    filterByPieceType: PieceType.King) // Extract king location.
                                                .First();
-            var checkToEnemyKing = FindAllCellsUnderThreat(gameState, filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
+            var checkToEnemyKing = _FindAllCellsUnderThreat(gameState, filterByColor: gameState.ActiveColor).Any(cell => enemyKingCell == cell);
 
             // Pawns cannot be located on first and last ranks.
             var pawnsOnInvalidRanks = gameState.Board.GetCellsWithPieces(filterByPieceType: PieceType.Pawn)
@@ -66,11 +65,11 @@ namespace GameLogic.Engine
                    && !pawnsOnInvalidRanks;
         }
 
-        // Finds all moves. Moves might be not valid.
-        private IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
+        // Finds all moves. Moves might be invalid.
+        private static IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
         {
             var enPassantMoves = _GetEnPassantMoves(gameState);
-            var castleMoves = _GetCastleMoves(gameState);
+            var castleMoves = _GetCastlingMoves(gameState);
             var restMoves = gameState.Board.GetCellsWithPieces(filterByColor: gameState.ActiveColor)
                                            .SelectMany(cell => PieceMoves.GetMoves(cell, gameState.Board));
 
@@ -80,7 +79,7 @@ namespace GameLogic.Engine
         }
 
         // Finds all en passant moves.
-        private IEnumerable<Move> _GetEnPassantMoves(IStandardGameState gameState)
+        private static IEnumerable<Move> _GetEnPassantMoves(IStandardGameState gameState)
         {
             var enPassantMoves = Enumerable.Empty<Move>();
 
@@ -99,16 +98,16 @@ namespace GameLogic.Engine
             return enPassantMoves;
         }
 
-        // Finds all castle moves.
+        // Finds all castlings.
         //
         // This function should not check the location of the rook and king.
-        // gameState contains this information implicitly in |AvailableCastles| field.
-        private IEnumerable<Move> _GetCastleMoves(IStandardGameState gameState)
+        // gameState contains this information implicitly in |AvailableCastlings| field.
+        private static IEnumerable<Move> _GetCastlingMoves(IStandardGameState gameState)
         {
-            return gameState.AvailableCastles
-                            .Where(castle => castle.Color == gameState.ActiveColor)
-                            .Where(castle => CastleConstants.mappingCastleToConstant[castle].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
-                            .Select(castle => CastleConstants.mappingCastleToConstant[castle].CastleMove);
+            return gameState.AvailableCastlings
+                            .Where(castling => castling.Color == gameState.ActiveColor)
+                            .Where(castling => CastlingConstants.castlingToConstantsMap[castling].RequiredEmptyCells.All(cell => gameState.Board.IsEmpty(cell)))
+                            .Select(castling => CastlingConstants.castlingToConstantsMap[castling].CastlingMove);
         }
 
         // Finds all valid moves.
@@ -124,7 +123,7 @@ namespace GameLogic.Engine
 
         // Finds all cells 'under threat' produced by |filterByColor| color.
         // 'under threat' means all cells at which the enemy king cannot stand because of the check.
-        private IEnumerable<Cell> FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
+        private static IEnumerable<Cell> _FindAllCellsUnderThreat(IStandardGameState gameState, Color filterByColor)
         {
             return gameState.Board.GetCellsWithPieces(filterByColor: filterByColor)
                                   .SelectMany(cell => CellsUnderThreat.GetCellsUnderThreat(cell, gameState.Board))

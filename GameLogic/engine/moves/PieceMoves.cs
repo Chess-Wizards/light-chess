@@ -4,9 +4,9 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine.Moves
 {
-    // The class aims to find the array of all moves. Moves cannot be valid.
+    // The class aims to find the array of all moves. Moves cannot be valid. // TODO: Dear @SherlockKA, please look at the last sentence of this line.
     // This class does not consider checks, en passant moves, and castles.
-    static public class PieceMoves
+    public static class PieceMoves
     {
         // Finds moves produced by piece at cell |cell|.
         public static IEnumerable<Move> GetMoves(Cell cell, IRectangularBoard board)
@@ -21,7 +21,7 @@ namespace GameLogic.Engine.Moves
 
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
-            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: (piece.Value.Color).Change());
+            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: (piece.Value.Color).Inversed());
 
 
             return _PieceCells(cell, piece.Value).SelectMany(option => option.GetCells(cell,
@@ -65,8 +65,8 @@ namespace GameLogic.Engine.Moves
             }
             else if (piece.Type == PieceType.Pawn)
             {
-                var numberShifts = _PawnIsNotTouched(cell.Y, piece.Color) ? PieceConstants.MaxForwardPawnMovesNotTouched : PieceConstants.MaxForwardPawnMovesTouched;
-                return new List<IPieceCells>() { new PawnCells(numberShifts), new PawnCellsCapture() };
+                var shiftsNumber = _PawnIsNotTouched(cell.Y, piece.Color) ? PieceConstants.MaxForwardPawnMovesNotTouched : PieceConstants.MaxForwardPawnMovesTouched;
+                return new List<IPieceCells>() { new PawnCells(shiftsNumber), new PawnCellsCapture() };
             }
 
             throw new ArgumentException("Invalid argument");

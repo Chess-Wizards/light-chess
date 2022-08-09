@@ -1,4 +1,4 @@
-﻿using Bot;
+using Bot;
 using Communication;
 
 var randomBot = new RandomMoveBot();

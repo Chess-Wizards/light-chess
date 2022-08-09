@@ -8,11 +8,11 @@ namespace GameLogic.Tests
     {
         [Test]
         // 1. White moves
-        // King castle.
+        // King-side castling.
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq g6 2 20",
                   "r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R4RK1 b kq - 3 21",
                   "e1g1")]
-        // Queen castle.                  
+        // Queen-side castling.                  
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq g6 2 20",
                   "r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/2KR3R b kq - 3 21",
                   "e1c1")]
@@ -32,19 +32,19 @@ namespace GameLogic.Tests
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq g6 2 20",
                   "r3k2r/p2p1p1p/n2B4/Pp1NP1pP/1p4P1/3P1Q2/2P5/R3K2R b KkQq - 0 21",
                   "a4a5")]
-        // Queen rook move to check an update of castles.                   
+        // Queen-side rook move to check an update of castlings.                   
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq g6 2 20",
                   "r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/1R2K2R b Kkq - 3 21",
                   "a1b1")]
-        // King rook move to check an update of castles.                  
+        // King-side rook move to check an update of castlings.                  
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq g6 2 20",
                   "r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K1R1 b kQq - 3 21",
                   "h1g1")]
-        // Capture of king rook to check an update of castles.
+        // Capture of king-side rook to check an update of castlings.
         [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KkQq - 2 20",
                   "r3k2R/8/8/8/8/8/8/R3K3 b Qq - 0 21",
                   "h1h8")]
-        // Capture of queen rook to check an update of castles.                  
+        // Capture of queen-side rook to check an update of castlings.                  
         [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KkQq - 2 20",
                   "R3k2r/8/8/8/8/8/8/4K2R b Kk - 0 21",
                   "a1a8")]
@@ -66,11 +66,11 @@ namespace GameLogic.Tests
                   "g7h8n")]
 
         // 2. Black moves
-        // King castle.       
+        // King-side castling.       
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R b KkQq a3 2 20",
                   "r4rk1/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KQ - 3 21",
                   "e8g8")]
-        // Queen castle.
+        // Queen-side castling.
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R b KkQq a3 2 20",
                   "2kr3r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KQ - 3 21",
                   "e8c8")]
@@ -82,19 +82,19 @@ namespace GameLogic.Tests
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R b KkQq a3 2 20",
                   "r3k2r/p2p3p/n2B4/1p1NPppP/Pp4P1/3P1Q2/2P5/R3K2R w KkQq f6 0 21",
                   "f7f5")]
-        // King rook move to check an update of castles.
+        // King-side rook move to check an update of castlings.
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R b KkQq a3 2 20",
                   "r3k1r1/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KQq - 3 21",
                   "h8g8")]
-        // Queen rook move to check an update of castles. 
+        // Queen-side rook move to check an update of castlings. 
         [TestCase("r3k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R b KkQq a3 2 20",
                   "1r2k2r/p2p1p1p/n2B4/1p1NP1pP/Pp4P1/3P1Q2/2P5/R3K2R w KkQ - 3 21",
                   "a8b8")]
-        // Capture of king rook to check an update of castles.
+        // Capture of king-side rook to check an update of castlings.
         [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KkQq - 2 20",
                   "r3k3/8/8/8/8/8/8/R3K2r b Qq - 0 21",
                   "h8h1")]
-        // Capture of queen rook to check an update of castles.
+        // Capture of queen-side rook to check an update of castlings.
         [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KkQq - 2 20",
                   "4k2r/8/8/8/8/8/8/r3K2R b Kk - 0 21",
                   "a8a1")]

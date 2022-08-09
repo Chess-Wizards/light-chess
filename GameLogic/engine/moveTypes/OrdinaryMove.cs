@@ -9,7 +9,7 @@ namespace GameLogic.Engine.MoveTypes
         {
             // Get a new board.
             var nextBoard = board.Copy();
-            var piece = nextBoard.GetPiece(move.StartCell).Value;
+            var piece = nextBoard.GetPiece(move.StartCell).Value; // TODO: CS8629
 
             // Perform a move.
             nextBoard.SetPiece(move.EndCell, piece);

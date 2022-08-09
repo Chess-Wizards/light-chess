@@ -11,30 +11,30 @@ namespace GameLogic.Engine.Moves
                 var shiftWhite = new Cell(X.Zero, Y.Unit);
                 var shiftBlack = new Cell(X.Zero, -Y.Unit);
 
-                var shiftsWhite = new List<Cell>()
+                var whiteShifts = new List<Cell>()
                     {
                         shiftWhite
                     };
 
-                var shiftsBlack = new List<Cell>()
+                var blackShifts = new List<Cell>()
                     {
                         shiftBlack
                     };
 
                 return new Dictionary<Color, IEnumerable<Cell>>()
                 {
-                    {Color.White, shiftsWhite},
-                    {Color.Black, shiftsBlack}
+                    {Color.White, whiteShifts},
+                    {Color.Black, blackShifts}
                 };
             }
         }
-        public int NumberShifts { get; }
+        public int ShiftsNumber { get; }
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MustNotContain;
 
-        public PawnCells(int numberShifts)
+        public PawnCells(int shiftsNumber)
         {
-            NumberShifts = numberShifts;
+            ShiftsNumber = shiftsNumber;
         }
     }
 }

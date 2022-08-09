@@ -4,9 +4,10 @@ namespace GameLogic.Engine.Moves
 {
     public interface IPieceCells
     {
+        // "Shift" means a unit direction in which a piece can move (or also capture like a pawn).
         IDictionary<Color, IEnumerable<Cell>> Shifts { get; }
 
-        int NumberShifts { get; }
+        int ShiftsNumber { get; }
 
         // Defines if we may/must/(must not) capture enemy pieces.
         EnemyPieceTolerance EnemyPieceTolerance { get; }
@@ -20,7 +21,7 @@ namespace GameLogic.Engine.Moves
             // List to save cells 'under threat'.
             var cells = new List<Cell>();
 
-            int currentNumberShifts = 1;
+            int currentShiftsNumber = 1;
             // Iterate over shifts.
 
             foreach (var shift in Shifts[activeColor])
@@ -29,15 +30,15 @@ namespace GameLogic.Engine.Moves
                 // Iterate once if |oneShift| is set to true, otherwise iterate until obstacles are found.
                 while (true)
                 {
-                    currentCell = currentCell + shift;
+                    currentCell += shift;
                     if (!IsOnBoard(currentCell) || pieceCells.Contains(currentCell))
                     {
                         break;
                     }
 
                     cells.Add(currentCell);
-                    currentNumberShifts += 1;
-                    if (currentNumberShifts > NumberShifts || enemyPieceCells.Contains(currentCell))
+                    currentShiftsNumber += 1;
+                    if (currentShiftsNumber > ShiftsNumber || enemyPieceCells.Contains(currentCell))
                     {
                         break;
                     }
