@@ -1,6 +1,6 @@
 namespace GameLogic.Entities.Pieces
 {
-    // Piece types.
+    // All possible types of chess pieces.
     public enum PieceType
     {
         Pawn,

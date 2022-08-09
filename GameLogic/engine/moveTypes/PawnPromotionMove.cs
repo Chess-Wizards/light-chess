@@ -4,7 +4,6 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine.MoveTypes
 {
-    // maybe rename to PromotionMove ?
     public class PawnPromotionMove : IMoveType<IRectangularBoard>
     {
         public IRectangularBoard Apply(IRectangularBoard board, Move move)
@@ -13,7 +12,7 @@ namespace GameLogic.Engine.MoveTypes
             var nextBoard = new OrdinaryMove().Apply(board, move);
 
             // Replace pawn with piece after promotion.
-            var pieceAfterPromotion = new Piece(color, move.PromotionPieceType.Value); // TODO: CS8629
+            var pieceAfterPromotion = new Piece(color, move.PromotedPieceType.Value); // TODO: CS8629
             nextBoard.SetPiece(move.EndCell, pieceAfterPromotion);
 
             return nextBoard;

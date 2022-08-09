@@ -1,7 +1,7 @@
 using GameLogic.Engine.MoveTypes;
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
-using GameLogic.Entities.Castles;
+using GameLogic.Entities.Castlings;
 using GameLogic.Entities.Pieces;
 using GameLogic.Entities.States;
 
@@ -23,8 +23,8 @@ namespace GameLogic.Engine
             var moveType = _SelectMoveType(gameState, piece, move);
             var nextBoard = moveType.Apply(gameState.Board, move);
 
-            // Next castles.
-            var nextAvailableCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
+            // Next castlings.
+            var nextAvailableCastlings = _GetCastlingsAfterMove(gameState.Board, move, gameState.AvailableCastlings);
 
             // Next cells. 
             var nextEnPassantCell = _GetEnPassantCellAfterMove(gameState.Board, move);
@@ -40,7 +40,7 @@ namespace GameLogic.Engine
             return new StandardGameState(
                 nextBoard,
                 gameState.EnemyColor,
-                nextAvailableCastles,
+                nextAvailableCastlings,
                 nextEnPassantCell,
                 nextHalfmoveNumber,
                 nextFullmoveNumber
@@ -56,9 +56,9 @@ namespace GameLogic.Engine
         private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
         {
             if (startCellPiece.Type == PieceType.King
-                && CastleConstants.mappingCastleToConstant.Values.Any(castleConstant => castleConstant.CastleMove == move))
+                && CastlingConstants.castlingToConstantsMap.Values.Any(castleConstant => castleConstant.CastlingMove == move))
             {
-                return new CastleMove();
+                return new CastlingMove();
             }
             // En passant move.
             else if (gameState.EnPassantCell != null
@@ -80,8 +80,8 @@ namespace GameLogic.Engine
         }
 
         // Gets a list of possible castles after the move is performed.
-        private static IList<Castle> _GetCastlesAfterMove(IBoard board, Move move,
-                                                          IEnumerable<Castle> castles)
+        private static IList<Castling> _GetCastlingsAfterMove(IBoard board, Move move,
+                                                              IEnumerable<Castling> castles)
         {
             var nextCastles = castles.ToList();
             var piece = board.GetPiece(move.StartCell).Value; // TODO: CS8629
@@ -89,19 +89,19 @@ namespace GameLogic.Engine
             // King move.
             if (piece.Type == PieceType.King)
             {
-                CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+                CastlingConstants.castlingToConstantsMap.Where(pair => pair.Key.Color == piece.Color)
                                                         .ToList()
                                                         .ForEach(pair => nextCastles.Remove(pair.Key));
             }
 
             // Rook moves.
-            CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color)
+            CastlingConstants.castlingToConstantsMap.Where(pair => pair.Key.Color == piece.Color)
                                                     .Where(pair => move.StartCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));
 
             // Capture of the enemy rook.
-            CastleConstants.mappingCastleToConstant.Where(pair => pair.Key.Color == piece.Color.Change())
+            CastlingConstants.castlingToConstantsMap.Where(pair => pair.Key.Color == piece.Color.Inversed())
                                                     .Where(pair => move.EndCell == pair.Value.InitialRookCell)
                                                     .ToList()
                                                     .ForEach(pair => nextCastles.Remove(pair.Key));

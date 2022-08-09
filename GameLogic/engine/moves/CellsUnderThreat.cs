@@ -4,12 +4,12 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Engine.Moves
 {
-    // Finds a INumerable collection of cells 'under threat'. 'under threat' means all cells
+    // Finds a IENumerable collection of cells 'under threat'. 'under threat' means all cells
     // at which the enemy king cannot stand because of the check. In addition, the piece must be able to 
     // make a move at this cell. For example, a pawn can capture if the enemy piece stands at a diagonal.
     //
-    // This class does not consider checks, en passant moves, and castles.
-    static public class CellsUnderThreat
+    // This class does not consider checks, en passant moves and castlings.
+    public static class CellsUnderThreat
     {
         // Finds cells under threat produced by piece at cell |cell|.
         public static IEnumerable<Cell> GetCellsUnderThreat(Cell cell, IRectangularBoard board)
@@ -24,7 +24,7 @@ namespace GameLogic.Engine.Moves
 
             // Divide pieces into own and enemy.
             var pieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color);
-            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color.Change());
+            var enemyPieceCells = board.GetCellsWithPieces(filterByColor: piece.Value.Color.Inversed());
 
             var pieceUnderThreatCells = _PieceUnderThreatCells(piece.Value.Type);
 
@@ -62,7 +62,7 @@ namespace GameLogic.Engine.Moves
                 return new PawnCellsUnderThreat();
             }
 
-            throw new ArgumentException("Invalid argument");
+            throw new ArgumentException("Invalid argument.");
         }
     }
 }

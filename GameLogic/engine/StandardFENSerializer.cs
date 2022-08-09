@@ -1,6 +1,6 @@
 using GameLogic.Entities;
 using GameLogic.Entities.Boards;
-using GameLogic.Entities.Castles;
+using GameLogic.Entities.Castlings;
 using GameLogic.Entities.Pieces;
 using GameLogic.Entities.States;
 
@@ -30,15 +30,15 @@ namespace GameLogic.Engine
 
         private static Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
-        private static Dictionary<char, Castle> _mappingNotationToCastle = new Dictionary<char, Castle>()
+        private static Dictionary<char, Castling> _mappingNotationToCastle = new Dictionary<char, Castling>()
             {
-                {'K', new Castle(Color.White, CastleType.King)},
-                {'Q', new Castle(Color.White, CastleType.Queen)},
-                {'k', new Castle(Color.Black, CastleType.King)},
-                {'q', new Castle(Color.Black, CastleType.Queen)},
+                {'K', new Castling(Color.White, CastlingType.KingSide)},
+                {'Q', new Castling(Color.White, CastlingType.QueenSide)},
+                {'k', new Castling(Color.Black, CastlingType.KingSide)},
+                {'q', new Castling(Color.Black, CastlingType.QueenSide)},
             };
 
-        private static Dictionary<Castle, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
+        private static Dictionary<Castling, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
         private static Dictionary<char, Color> _mappingNotationToColor = new Dictionary<char, Color>()
             {
@@ -65,7 +65,7 @@ namespace GameLogic.Engine
             {
                 BoardToNotation(objectToSerialize.Board),
                 ColorToNotation(objectToSerialize.ActiveColor),
-                CastleToNotation(objectToSerialize.AvailableCastles),
+                CastleToNotation(objectToSerialize.AvailableCastlings),
                 CellToNotation(objectToSerialize.EnPassantCell),
                 objectToSerialize.HalfmoveNumber.ToString(),
                 objectToSerialize.FullmoveNumber.ToString()
@@ -183,7 +183,7 @@ namespace GameLogic.Engine
         }
 
         // Deserializes castle FEN notation.
-        public static IEnumerable<Castle> NotationToCastle(string notation)
+        public static IEnumerable<Castling> NotationToCastle(string notation)
         {
             return notation.Where((castle) => (castle != '-'))
                            .Select((castle) => (_mappingNotationToCastle[castle]));
@@ -191,7 +191,7 @@ namespace GameLogic.Engine
         }
 
         // Serializes castles to the FEN notation.
-        public static string CastleToNotation(IEnumerable<Castle> castles)
+        public static string CastleToNotation(IEnumerable<Castling> castles)
         {
             var notation = String.Join("",
                         castles.Select((castle) => _mappingCastleToNotation[castle])
@@ -234,7 +234,7 @@ namespace GameLogic.Engine
         // The notation follows UCI (Universal Chess Interface {StartCell}-{EndCell}{PieceType or Empty}
         public static string MoveToNotation(Move move)
         {
-            var promotionPieceTypeNotation = move.PromotionPieceType == null ? "" : _mappingPieceTypeToNotation[move.PromotionPieceType.Value].ToString();
+            var promotionPieceTypeNotation = move.PromotedPieceType == null ? "" : _mappingPieceTypeToNotation[move.PromotedPieceType.Value].ToString();
             return $"{CellToNotation(move.StartCell)}{CellToNotation(move.EndCell)}{promotionPieceTypeNotation}";
         }
 
@@ -254,7 +254,7 @@ namespace GameLogic.Engine
             var cells = notation.Chunk(2)
                                 .Select(cellNotation => NotationToCell(new string(cellNotation)).Value) // CS8629
                                 .ToArray(); ;
-            return new Move(cells[0], cells[1], promotionPieceType: pieceType);
+            return new Move(cells[0], cells[1], promotedPieceType: pieceType);
         }
 
         // Deserializes move by passing start and end cells.

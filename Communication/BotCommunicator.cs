@@ -7,19 +7,20 @@ namespace Communication
     // further communication proxying.
     public class BotCommunicator
     {
-        private Protocols.IProtocol? initializedProtocol;
-        private IBot bot;
-        private Dictionary<string, Func<IBot, Protocols.IProtocol>> availableCommunicationProtocols =
-        new Dictionary<string, Func<IBot, Protocols.IProtocol>> {
-                {"uci", (x) => new Protocols.UCI.UCIProtocol(x)}
-            };
-
+        private Protocols.IProtocol? _initializedProtocol;
+        private readonly IBot _bot;
+        private readonly Dictionary<string, Func<IBot, Protocols.IProtocol>>
+            _availableCommunicationProtocols = new()
+        {
+            {"uci", (x) => new Protocols.UCI.UCIProtocol(x)}
+        };
+        
         public BotCommunicator(IBot bot)
         {
-            this.bot = bot;
+            _bot = bot;
         }
 
-        private bool _ShouldQuit(string commandInput) // static?
+        private static bool _ShouldQuit(string commandInput)
         {
             return commandInput == "quit";
         }
@@ -32,24 +33,22 @@ namespace Communication
 
                 if (input == null)
                 {
-                    // is it possible to read null?
-                    // maybe not throwing exception?
-                    throw new InvalidOperationException("Failed to read input.");
+                    throw new InvalidOperationException("Invalid input line reading (null).");
                 }
 
-                if (initializedProtocol == null)
+                if (_initializedProtocol == null)
                 {
-                    if (!availableCommunicationProtocols.ContainsKey(input))
+                    if (!_availableCommunicationProtocols.ContainsKey(input))
                     {
                         Console.WriteLine("Communication protocol is not initialized. " +
                                            $"Protocol '{input}' is not available. " +
-                                           $"List of available protocols: {String.Join(',', availableCommunicationProtocols.Keys)}");
+                                           $"List of available protocols: {string.Join(',', _availableCommunicationProtocols.Keys)}");
                         continue;
                     }
-                    initializedProtocol = availableCommunicationProtocols[input](bot);
+                    _initializedProtocol = _availableCommunicationProtocols[input](_bot);
                 }
 
-                IEnumerable<string> commandOutput = initializedProtocol.HandleCommand(input);
+                IEnumerable<string> commandOutput = _initializedProtocol.HandleCommand(input);
                 foreach (string output in commandOutput)
                 {
                     Console.WriteLine(output);

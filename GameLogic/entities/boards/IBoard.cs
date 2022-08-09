@@ -2,7 +2,7 @@ using GameLogic.Entities.Pieces;
 
 namespace GameLogic.Entities.Boards
 {
-    // Represents board functionality. 
+    // Represents board functionality.
     public interface IBoard
     {
         // Checks if the cell is on the board.
@@ -21,9 +21,10 @@ namespace GameLogic.Entities.Boards
         void RemovePiece(Cell cell);
 
         // Returns non-empty cells.
-        IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null, PieceType? filterByPieceType = null); // TODO: check
+        IEnumerable<Cell> GetCellsWithPieces(Color? filterByColor = null,
+                                             PieceType? filterByPieceType = null);
 
         // Creates a shallow copy of the board.
-        StandardBoard Copy(); // I believe it should not return a StandardBoard
+        StandardBoard Copy(); // TODO: check should it return a StandardBoard?
     }
 }

@@ -1,15 +1,16 @@
 using GameLogic.Entities.Boards;
-using GameLogic.Entities.Castles;
+using GameLogic.Entities.Castlings;
 
 namespace GameLogic.Entities.States
 {
-    // Represents standard state functionality. 
+    // Represents standard chess game functionality. 
     public interface IStandardGameState : IGameState<IRectangularBoard>
     {
-        IEnumerable<Castle> AvailableCastles { get; }
+        IEnumerable<Castling> AvailableCastlings { get; }
         Cell? EnPassantCell { get; }
-        int HalfmoveNumber { get; } // why both this
-        int FullmoveNumber { get; } // and this?
+        int HalfmoveNumber { get; }
+        int FullmoveNumber { get; }
+        // TODO: do replace with ActiveColor?
         Color EnemyColor { get; }
     }
 }

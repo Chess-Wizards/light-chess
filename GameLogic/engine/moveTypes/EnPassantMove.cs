@@ -17,7 +17,7 @@ namespace GameLogic.Engine.MoveTypes
 
             // Capture enemy pawn.
             var enemyCellWithPawn = new Cell(move.EndCell.X, move.StartCell.Y);
-            nextBoard.RemovePiece(enemyCellWithPawn); // TODO: check
+            nextBoard.RemovePiece(enemyCellWithPawn);
 
             return nextBoard;
         }

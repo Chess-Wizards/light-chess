@@ -5,7 +5,7 @@ namespace Bot
 {
     public interface IBot
     {
-        // Move Suggestion.
+        // Suggests a move. If move is null, then there are no valid moves.
         Move? SuggestMove(IStandardGameState gameState);
     }
 }

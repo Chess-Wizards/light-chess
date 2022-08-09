@@ -1,15 +1,14 @@
 namespace GameLogic.Entities
 {
-    // Player colors.
+    // Chess pieces colors.
     public enum Color
     {
         White,
         Black
     }
 
-    public static class ColorExtension // extension?
+    public static class ColorExtension
     {
-        // maybe rename to smth like "Inversed" ?
-        public static Color Change(this Color color) => (color == Color.White) ? Color.Black : Color.White;
+        public static Color Inversed(this Color color) => (color == Color.White) ? Color.Black : Color.White;
     }
 }

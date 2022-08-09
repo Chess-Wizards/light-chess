@@ -33,13 +33,14 @@ namespace GameLogic.Entities
             return !cell1.Equals(cell2);
         }
 
-        public override bool Equals(object obj) // object ???
+        public override bool Equals(object obj) // TODO: check CS8765
         {
-            var cell = (Cell)obj;
-            if (cell == null) // maybe remove since CS8073 ?
+            if (obj == null)
             {
                 return false;
             }
+
+            var cell = (Cell)obj;
 
             return X == cell.X && Y == cell.Y;
         }

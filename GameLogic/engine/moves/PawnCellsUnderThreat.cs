@@ -1,5 +1,7 @@
 using GameLogic.Entities;
 
+// TODO: Dear @SherlockKA, please try to get rid of this class.
+
 namespace GameLogic.Engine.Moves
 {
     public class PawnCellsUnderThreat : IPieceCells
@@ -32,7 +34,7 @@ namespace GameLogic.Engine.Moves
                 };
             }
         }
-        public int NumberShifts { get; } = 1;
+        public int ShiftsNumber { get; } = 1;
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }

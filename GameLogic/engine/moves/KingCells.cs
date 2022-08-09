@@ -24,7 +24,7 @@ namespace GameLogic.Engine.Moves
                 };
             }
         }
-        public int NumberShifts { get; } = 1; // maybe rename to "ShiftsNumber" ?
+        public int ShiftsNumber { get; } = 1;
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }

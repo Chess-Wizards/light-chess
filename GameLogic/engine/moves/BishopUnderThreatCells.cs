@@ -1,8 +1,9 @@
 using GameLogic.Entities;
 
+// TODO: Dear @SherlockKA, please rename this file and all others that are related to the "cells".
+
 namespace GameLogic.Engine.Moves
 {
-    // don't understand the idea
     public class BishopCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
@@ -31,7 +32,7 @@ namespace GameLogic.Engine.Moves
                 };
             }
         }
-        public int NumberShifts { get; } = int.MaxValue; // ???
+        public int ShiftsNumber { get; } = int.MaxValue;
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }

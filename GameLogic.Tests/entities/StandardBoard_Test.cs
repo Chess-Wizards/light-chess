@@ -8,8 +8,8 @@ namespace GameLogic.Tests
     [TestFixture]
     public class StandardBoard_Test
     {
-        // Creates a board and then shallow copy using constructor and method. Finally,
-        // check if the change in the initial board influences shallow copies.
+        // Creates a board and then shallow copy using constructor and method.
+        // Finally, check if the change in the initial board influences shallow copies.
         [Test]
         [TestCase(3, 4, Color.White, PieceType.King)]
         public void ShallowCopyPieces(int x, int y, Color pieceColor, PieceType pieceType)
@@ -96,7 +96,7 @@ namespace GameLogic.Tests
 
             // Replace piece.
             board.SetPiece(cell, piece);
-            var pieceNext = new Piece(pieceColor.Change(), pieceType);
+            var pieceNext = new Piece(pieceColor.Inversed(), pieceType);
             board.SetPiece(cell, pieceNext);
             Assert.That(pieceNext, Is.EqualTo(board.GetPiece(cell)));
             Assert.That(board.GetCellsWithPieces(), Has.Exactly(1).Items);

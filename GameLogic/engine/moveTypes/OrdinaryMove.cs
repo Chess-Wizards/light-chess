@@ -3,7 +3,6 @@ using GameLogic.Entities.Boards;
 
 namespace GameLogic.Engine.MoveTypes
 {
-    // maybe rename to "SimpleMove" ?
     public class OrdinaryMove : IMoveType<IRectangularBoard>
     {
         public IRectangularBoard Apply(IRectangularBoard board, Move move)

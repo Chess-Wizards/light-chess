@@ -1,7 +1,6 @@
 namespace GameLogic.Entities.Pieces
 {
-    // Possible pieces.
-    // Each piece can be uniquely identified by pair of color and piece type.
+    // Each piece can be uniquely identified by the pair: {color, piece type}.
     public struct Piece
     {
         public Color Color { get; }
