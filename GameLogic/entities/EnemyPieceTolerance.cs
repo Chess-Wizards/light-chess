@@ -5,6 +5,6 @@ namespace GameLogic.Entities
         // Defines if we may/must/(must not) capture enemy pieces.
         MustContain,
         MustNotContain,
-        MayContain
+        MayContainOnce
     }
 }
