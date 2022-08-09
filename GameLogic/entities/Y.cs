@@ -1,6 +1,6 @@
 namespace GameLogic.Entities
 {
-    // Represents a chess rank.
+    // Represents a chess board rank.
     public static class Y
     {
         public const int _0 = 0;
@@ -11,7 +11,8 @@ namespace GameLogic.Entities
         public const int _5 = 5;
         public const int _6 = 6;
         public const int _7 = 7;
-        public const int Unit = 1;
-        public const int Zero = 0;
+
+        public const int Unit = 1; // Is it so necessary? I can't imagine this value being greater than 1.
+        public const int Zero = 0; // TODO: check
     }
 }

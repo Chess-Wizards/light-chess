@@ -8,7 +8,7 @@ namespace GameLogic.Engine.Moves
         {
             get
             {
-                var bishopShifts = new BishopCells().Shifts[Color.White];
+                var bishopShifts = new BishopCells().Shifts[Color.White]; // why white ???
                 var rookShifts = new RookCells().Shifts[Color.White];
                 var shifts = bishopShifts.Concat(rookShifts);
 
@@ -19,7 +19,7 @@ namespace GameLogic.Engine.Moves
                 };
             }
         }
-        public int NumberShifts { get; } = Int32.MaxValue;
+        public int NumberShifts { get; } = int.MaxValue;
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }

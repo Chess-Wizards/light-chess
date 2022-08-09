@@ -8,30 +8,29 @@ namespace GameLogic.Engine.MoveTypes
     {
         public IRectangularBoard Apply(IRectangularBoard board, Move move)
         {
-
             // Get a new board.
             var nextBoard = board.Copy();
 
-            var activeColor = board.GetPiece(move.StartCell).Value.Color;
             var castleConstants = _SelectCastleConstants(move);
 
             // Perform castle.
-            var kingPiece = nextBoard.GetPiece(castleConstants.InitialKingCell).Value;
-            var rookPiece = nextBoard.GetPiece(castleConstants.InitialRookCell).Value;
+            var kingPiece = nextBoard.GetPiece(castleConstants.InitialKingCell).Value; // TODO: CS8629
+            var rookPiece = nextBoard.GetPiece(castleConstants.InitialRookCell).Value; // TODO: CS8629
+
             nextBoard.RemovePiece(castleConstants.InitialKingCell);
-            nextBoard.RemovePiece(castleConstants.InitialRookCell);
             nextBoard.SetPiece(castleConstants.FinalKingCell, kingPiece);
+
+            nextBoard.RemovePiece(castleConstants.InitialRookCell);
             nextBoard.SetPiece(castleConstants.FinalRookCell, rookPiece);
 
             return nextBoard;
         }
 
-        private ICastleTypeConstants _SelectCastleConstants(Move move)
+        private ICastleTypeConstants _SelectCastleConstants(Move move) // static ?
         {
             return CastleConstants.mappingCastleToConstant.Where(pair => pair.Value.CastleMove == move)
                                                           .Select(pair => pair.Value)
                                                           .First();
-
         }
     }
 }

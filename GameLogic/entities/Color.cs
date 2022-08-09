@@ -7,11 +7,9 @@ namespace GameLogic.Entities
         Black
     }
 
-    public static class ColorExtension
+    public static class ColorExtension // extension?
     {
-        public static Color Change(this Color color)
-        {
-            return color == Color.White ? Color.Black : Color.White;
-        }
+        // maybe rename to smth like "Inversed" ?
+        public static Color Change(this Color color) => (color == Color.White) ? Color.Black : Color.White;
     }
 }

@@ -8,8 +8,8 @@ namespace GameLogic.Entities.States
     {
         IEnumerable<Castle> AvailableCastles { get; }
         Cell? EnPassantCell { get; }
-        int HalfmoveNumber { get; }
-        int FullmoveNumber { get; }
+        int HalfmoveNumber { get; } // why both this
+        int FullmoveNumber { get; } // and this?
         Color EnemyColor { get; }
     }
 }

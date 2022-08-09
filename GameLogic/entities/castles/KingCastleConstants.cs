@@ -14,7 +14,10 @@ namespace GameLogic.Entities.Castles
 
         public KingCastleConstants(Color color)
         {
-            var _initialRank = color == Color.White ? ICastleTypeConstants.WhiteCastleRank : ICastleTypeConstants.BlackCastleRank;
+            var _initialRank = (color == Color.White)
+                ? ICastleTypeConstants.WhiteCastleRank
+                : ICastleTypeConstants.BlackCastleRank;
+
             InitialKingCell = new Cell(X.E, _initialRank);
             InitialRookCell = new Cell(X.H, _initialRank);
             FinalKingCell = new Cell(X.G, _initialRank);

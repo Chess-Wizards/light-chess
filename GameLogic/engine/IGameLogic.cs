@@ -3,10 +3,10 @@ using GameLogic.Entities;
 namespace GameLogic.Engine
 {
     // The interface represents the logic of chess game. 
-    public interface IGameLogic<TGameState>
+    public interface IGameLogic<TGameState> // maybe add constraint for TGameState ? and rename to "IGame" ?
     {
         // Checks if the mate occurs at the current game state.
-        bool IsMate(TGameState gameState);
+        bool IsMate(TGameState gameState); // maybe gameState as a field?
 
         // Checks if the check occurs at the current game state.
         bool IsCheck(TGameState gameState);

@@ -9,15 +9,15 @@ namespace GameLogic.Engine.MoveTypes
         {
             // Get a new board.
             var nextBoard = board.Copy();
-            var piece = board.GetPiece(move.StartCell).Value;
+            var piece = board.GetPiece(move.StartCell).Value; // TODO: CS8629
 
             // Move own pawn.
-            nextBoard.SetPiece(move.EndCell, piece);
             nextBoard.RemovePiece(move.StartCell);
+            nextBoard.SetPiece(move.EndCell, piece);
 
             // Capture enemy pawn.
             var enemyCellWithPawn = new Cell(move.EndCell.X, move.StartCell.Y);
-            nextBoard.RemovePiece(enemyCellWithPawn);
+            nextBoard.RemovePiece(enemyCellWithPawn); // TODO: check
 
             return nextBoard;
         }

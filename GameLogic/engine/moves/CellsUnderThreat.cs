@@ -6,12 +6,11 @@ namespace GameLogic.Engine.Moves
 {
     // Finds a INumerable collection of cells 'under threat'. 'under threat' means all cells
     // at which the enemy king cannot stand because of the check. In addition, the piece must be able to 
-    // make a move at this cell. For example, a pawn can capture iff the enemy piece stands at a diagonal.
+    // make a move at this cell. For example, a pawn can capture if the enemy piece stands at a diagonal.
     //
     // This class does not consider checks, en passant moves, and castles.
     static public class CellsUnderThreat
     {
-
         // Finds cells under threat produced by piece at cell |cell|.
         public static IEnumerable<Cell> GetCellsUnderThreat(Cell cell, IRectangularBoard board)
         {

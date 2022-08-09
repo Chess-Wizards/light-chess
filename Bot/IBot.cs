@@ -5,7 +5,7 @@ namespace Bot
 {
     public interface IBot
     {
-        // Suggest a move.
+        // Move Suggestion.
         Move? SuggestMove(IStandardGameState gameState);
     }
 }

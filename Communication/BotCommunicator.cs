@@ -19,7 +19,7 @@ namespace Communication
             this.bot = bot;
         }
 
-        private bool _ShouldQuit(string commandInput)
+        private bool _ShouldQuit(string commandInput) // static?
         {
             return commandInput == "quit";
         }
@@ -32,6 +32,8 @@ namespace Communication
 
                 if (input == null)
                 {
+                    // is it possible to read null?
+                    // maybe not throwing exception?
                     throw new InvalidOperationException("Failed to read input.");
                 }
 
@@ -40,8 +42,8 @@ namespace Communication
                     if (!availableCommunicationProtocols.ContainsKey(input))
                     {
                         Console.WriteLine("Communication protocol is not initialized. " +
-                                          $"Protocol '{input}' is not available. " +
-                                         $"List of available protocols: {String.Join(',', availableCommunicationProtocols.Keys)}");
+                                           $"Protocol '{input}' is not available. " +
+                                           $"List of available protocols: {String.Join(',', availableCommunicationProtocols.Keys)}");
                         continue;
                     }
                     initializedProtocol = availableCommunicationProtocols[input](bot);

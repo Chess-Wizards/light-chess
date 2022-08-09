@@ -35,7 +35,7 @@ namespace GameLogic.Engine
         {
             if (!_IsValid(gameState))
             {
-                throw new ArgumentException("Invalid FEN notation.");
+                throw new ArgumentException("Invalid FEN notation."); // FEN ?
             }
 
             var nextGameState = gameState.ApplyMove(move);
@@ -62,11 +62,11 @@ namespace GameLogic.Engine
 
             return onlyOneEnemyKing
                    && onlyOneKing
-                   && !checkToEnemyKing
+                   && !checkToEnemyKing // why not?
                    && !pawnsOnInvalidRanks;
         }
 
-        // Finds all moves. Moves might be not valid.
+        // Finds all moves. Moves might be invalid.
         private IEnumerable<Move> _FindAllMoves(IStandardGameState gameState)
         {
             var enPassantMoves = _GetEnPassantMoves(gameState);
@@ -116,7 +116,7 @@ namespace GameLogic.Engine
         {
             if (!_IsValid(gameState))
             {
-                throw new ArgumentException("Invalid game state.");
+                throw new ArgumentException("Invalid game state."); // FEN ?
             }
 
             return _FindAllMoves(gameState).Where(move => MakeMove(gameState, move) != null);

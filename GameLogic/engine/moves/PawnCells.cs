@@ -11,12 +11,12 @@ namespace GameLogic.Engine.Moves
                 var shiftWhite = new Cell(X.Zero, Y.Unit);
                 var shiftBlack = new Cell(X.Zero, -Y.Unit);
 
-                var shiftsWhite = new List<Cell>()
+                var shiftsWhite = new List<Cell>() // maybe rename to "whiteShifts" ?
                     {
                         shiftWhite
                     };
 
-                var shiftsBlack = new List<Cell>()
+                var shiftsBlack = new List<Cell>() // maybe rename to "blackShifts" ?
                     {
                         shiftBlack
                     };

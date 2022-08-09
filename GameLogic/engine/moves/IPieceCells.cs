@@ -6,7 +6,7 @@ namespace GameLogic.Engine.Moves
     {
         IDictionary<Color, IEnumerable<Cell>> Shifts { get; }
 
-        int NumberShifts { get; }
+        int NumberShifts { get; } // ???
 
         // Defines if we may/must/(must not) capture enemy pieces.
         EnemyPieceTolerance EnemyPieceTolerance { get; }
@@ -29,7 +29,7 @@ namespace GameLogic.Engine.Moves
                 // Iterate once if |oneShift| is set to true, otherwise iterate until obstacles are found.
                 while (true)
                 {
-                    currentCell = currentCell + shift;
+                    currentCell += shift;
                     if (!IsOnBoard(currentCell) || pieceCells.Contains(currentCell))
                     {
                         break;

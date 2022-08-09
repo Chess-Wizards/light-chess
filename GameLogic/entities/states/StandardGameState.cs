@@ -3,8 +3,7 @@ using GameLogic.Entities.Castles;
 
 namespace GameLogic.Entities.States
 {
-    // Represents the game state which has all the required information to continue
-    // playing game. 
+    // Represents the game state which has all the required information to continue playing game. 
     //        
     // The game state contains fields/properties inherited from
     // FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation). 

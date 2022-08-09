@@ -2,6 +2,7 @@ using GameLogic.Entities;
 
 namespace GameLogic.Engine.Moves
 {
+    // don't understand the idea
     public class BishopCells : IPieceCells
     {
         public IDictionary<Color, IEnumerable<Cell>> Shifts
@@ -30,7 +31,7 @@ namespace GameLogic.Engine.Moves
                 };
             }
         }
-        public int NumberShifts { get; } = Int32.MaxValue;
+        public int NumberShifts { get; } = int.MaxValue; // ???
 
         public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
     }

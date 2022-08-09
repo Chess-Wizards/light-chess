@@ -27,6 +27,7 @@ namespace GameLogic.Engine
                 {'q', new Piece(Color.Black, PieceType.Queen)},
                 {'k', new Piece(Color.Black, PieceType.King)}
             };
+
         private static Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
         private static Dictionary<char, Castle> _mappingNotationToCastle = new Dictionary<char, Castle>()
@@ -54,6 +55,7 @@ namespace GameLogic.Engine
                 {'r', PieceType.Rook},
                 {'q', PieceType.Queen}
             };
+
         public static Dictionary<PieceType, char> _mappingPieceTypeToNotation = _mappingNotationToPieceType.ToDictionary(x => x.Value, x => x.Key);
 
         // Serializes object to FEN notation.
@@ -69,7 +71,7 @@ namespace GameLogic.Engine
                 objectToSerialize.FullmoveNumber.ToString()
             };
 
-            var fenNotation = String.Join(" ", splitFenNotation);
+            var fenNotation = string.Join(" ", splitFenNotation);
             return fenNotation;
         }
 
@@ -157,11 +159,11 @@ namespace GameLogic.Engine
                 // Add the most right |numberEmptyCells| (if not zero) cells to |row|
                 if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
 
-                rows.Add(String.Join("", row));
+                rows.Add(string.Join("", row));
             }
 
             // Join rows into notation. 
-            var notation = String.Join("/", rows);
+            var notation = string.Join("/", rows);
 
             return notation;
         }
@@ -250,7 +252,7 @@ namespace GameLogic.Engine
             }
 
             var cells = notation.Chunk(2)
-                                .Select(cellNotation => NotationToCell(new string(cellNotation)).Value)
+                                .Select(cellNotation => NotationToCell(new string(cellNotation)).Value) // CS8629
                                 .ToArray(); ;
             return new Move(cells[0], cells[1], promotionPieceType: pieceType);
         }

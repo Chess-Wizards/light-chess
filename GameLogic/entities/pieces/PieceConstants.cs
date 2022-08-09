@@ -1,5 +1,6 @@
 namespace GameLogic.Entities.Pieces
 {
+    // this is also smth like StandardGamePieceConstants
     static class PieceConstants
     {
         public const int WhiteInitialPawnRank = Y._1;
@@ -10,14 +11,20 @@ namespace GameLogic.Entities.Pieces
 
         public const int BlackPawnPromotionRank = Y._0;
 
-        public static readonly IList<int> InvalidPawnRanks = new List<int> { Y._0, Y._7 };
-        public const int MaxForwardPawnMovesNotTouched = 2 * Y.Unit;
+        // why is smth "const int" and smth "static readonly" ?
 
+        // maybe ISet ?
+        public static readonly IList<int> InvalidPawnRanks = new List<int> { Y._0, Y._7 };
+
+        // TODO: check but seems weird
+        public const int MaxForwardPawnMovesNotTouched = 2 * Y.Unit;
         public const int MaxForwardPawnMovesTouched = Y.Unit;
 
+        // maybe ISet ?
         public static readonly IList<PieceType> PossiblePromotionPieceTypes = new List<PieceType>{PieceType.Knight, PieceType.Bishop,
                                                                                          PieceType.Rook, PieceType.Queen};
 
+        // TODO: check
         public static readonly IDictionary<Color, IList<Cell>> ShiftsForEnPassantMove = new Dictionary<Color, IList<Cell>>(){
             {Color.White, new List<Cell>(){new Cell(X.Unit, Y.Unit), new Cell(-X.Unit, Y.Unit)}},
             {Color.Black, new List<Cell>(){new Cell(X.Unit, -Y.Unit), new Cell(-X.Unit, -Y.Unit)}}

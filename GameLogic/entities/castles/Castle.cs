@@ -1,9 +1,7 @@
 namespace GameLogic.Entities.Castles
 {
-    // Describes a castle.
-    //
-    // Each castle can be uniquely identified by a pair of color and castle type.
-    public struct Castle
+    // Each castling move can be uniquely identified by pair of color and castle side.
+    public struct Castle // maybe rename to "Castling"
     {
         public Color Color { get; }
 

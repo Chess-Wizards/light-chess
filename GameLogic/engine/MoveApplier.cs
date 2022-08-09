@@ -16,12 +16,13 @@ namespace GameLogic.Engine
             var optionalPiece = gameState.Board.GetPiece(move.StartCell);
             if (optionalPiece == null)
             {
-                throw new ArgumentException("The start/initial cell does not contain a piece.");
+                throw new ArgumentException("The start/initial cell doesn't contain a piece.");
             }
 
             var piece = optionalPiece.Value;
             var moveType = _SelectMoveType(gameState, piece, move);
             var nextBoard = moveType.Apply(gameState.Board, move);
+
             // Next castles.
             var nextAvailableCastles = _GetCastlesAfterMove(gameState.Board, move, gameState.AvailableCastles);
 
@@ -29,9 +30,8 @@ namespace GameLogic.Engine
             var nextEnPassantCell = _GetEnPassantCellAfterMove(gameState.Board, move);
 
             // Next HalfmoveNumber.
-            var movePawn = piece.Type == PieceType.Pawn;
-            var moveCapture = !gameState.Board.IsEmpty(move.EndCell) ||
-                            move.EndCell == gameState.EnPassantCell;
+            var movePawn = (piece.Type == PieceType.Pawn);
+            var moveCapture = !gameState.Board.IsEmpty(move.EndCell) || move.EndCell == gameState.EnPassantCell;
             var nextHalfmoveNumber = movePawn || moveCapture ? 0 : gameState.HalfmoveNumber + 1;
 
             // Next FullmoveNumber.
@@ -49,7 +49,8 @@ namespace GameLogic.Engine
 
         private static bool _IsPawnPromotionRank(int rank)
         {
-            return PieceConstants.BlackPawnPromotionRank == rank || PieceConstants.WhitePawnPromotionRank == rank;
+            return PieceConstants.BlackPawnPromotionRank == rank ||
+                PieceConstants.WhitePawnPromotionRank == rank;
         }
 
         private static IMoveType<IRectangularBoard> _SelectMoveType(IStandardGameState gameState, Piece startCellPiece, Move move)
@@ -79,12 +80,11 @@ namespace GameLogic.Engine
         }
 
         // Gets a list of possible castles after the move is performed.
-        private static IList<Castle> _GetCastlesAfterMove(IBoard board,
-                                                          Move move,
+        private static IList<Castle> _GetCastlesAfterMove(IBoard board, Move move,
                                                           IEnumerable<Castle> castles)
         {
             var nextCastles = castles.ToList();
-            var piece = board.GetPiece(move.StartCell).Value;
+            var piece = board.GetPiece(move.StartCell).Value; // TODO: CS8629
 
             // King move.
             if (piece.Type == PieceType.King)
@@ -110,10 +110,9 @@ namespace GameLogic.Engine
         }
 
         // Get en passant cell after the move is performed.
-        private static Cell? _GetEnPassantCellAfterMove(IBoard board,
-                                                        Move move)
+        private static Cell? _GetEnPassantCellAfterMove(IBoard board, Move move)
         {
-            var piece = board.GetPiece(move.StartCell).Value;
+            var piece = board.GetPiece(move.StartCell).Value; // TODO: CS8629
             var deltaY = move.EndCell.Y - move.StartCell.Y;
 
             // Return en passant cell if the pawn moves forward on two cells.

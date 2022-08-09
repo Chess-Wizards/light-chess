@@ -5,7 +5,6 @@ namespace GameLogic.Entities
     public struct Cell
     {
         public int X { get; }
-
         public int Y { get; }
 
         public Cell(int x, int y)
@@ -34,10 +33,10 @@ namespace GameLogic.Entities
             return !cell1.Equals(cell2);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object obj) // object ???
         {
             var cell = (Cell)obj;
-            if (cell == null)
+            if (cell == null) // maybe remove since CS8073 ?
             {
                 return false;
             }
