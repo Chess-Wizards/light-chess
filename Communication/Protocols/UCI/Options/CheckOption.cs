@@ -2,16 +2,16 @@ namespace Communication.Protocols.UCI
 {
     class CheckOption : BaseOption
     {
-        private bool value;
+        private readonly bool _value;
 
         public CheckOption(string name, bool value = false) : base(name, "check")
         {
-            this.value = value;
+            _value = value;
         }
 
         protected override string GeneratePostfixForStringRepresentation()
         {
-            return $"default {this.value.ToString().ToLower()}";
+            return $"default {_value.ToString().ToLower()}";
         }
     }
 }

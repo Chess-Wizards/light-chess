@@ -14,7 +14,7 @@ namespace Communication
         {
             {"uci", (x) => new Protocols.UCI.UCIProtocol(x)}
         };
-        
+
         public BotCommunicator(IBot bot)
         {
             _bot = bot;

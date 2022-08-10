@@ -2,11 +2,11 @@ namespace Communication.Protocols.UCI
 {
     class ButtonOption : BaseOption
     {
-        private Action action;
+        private readonly Action _action;
 
         public ButtonOption(string name, Action action) : base(name, "button")
         {
-            this.action = action;
+            _action = action;
         }
 
         protected override string GeneratePostfixForStringRepresentation() => "";

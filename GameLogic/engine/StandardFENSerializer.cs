@@ -12,7 +12,7 @@ namespace GameLogic.Engine
         // Represents the serialization/deserialization to/from FEN notation.
         // Please refer to the FEN notation (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
 
-        private static Dictionary<char, Piece> _mappingNotationToPiece = new Dictionary<char, Piece>()
+        private static readonly Dictionary<char, Piece> _mappingNotationToPiece = new()
             {
                 {'P', new Piece(Color.White, PieceType.Pawn)},
                 {'N', new Piece(Color.White, PieceType.Knight)},
@@ -28,9 +28,9 @@ namespace GameLogic.Engine
                 {'k', new Piece(Color.Black, PieceType.King)}
             };
 
-        private static Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
+        private static readonly Dictionary<Piece, char> _mappingPieceToNotation = _mappingNotationToPiece.ToDictionary(x => x.Value, x => x.Key);
 
-        private static Dictionary<char, Castling> _mappingNotationToCastle = new Dictionary<char, Castling>()
+        private static readonly Dictionary<char, Castling> _mappingNotationToCastle = new()
             {
                 {'K', new Castling(Color.White, CastlingType.KingSide)},
                 {'Q', new Castling(Color.White, CastlingType.QueenSide)},
@@ -38,9 +38,9 @@ namespace GameLogic.Engine
                 {'q', new Castling(Color.Black, CastlingType.QueenSide)},
             };
 
-        private static Dictionary<Castling, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
+        private static readonly Dictionary<Castling, char> _mappingCastleToNotation = _mappingNotationToCastle.ToDictionary(x => x.Value, x => x.Key);
 
-        private static Dictionary<char, Color> _mappingNotationToColor = new Dictionary<char, Color>()
+        private static readonly Dictionary<char, Color> _mappingNotationToColor = new()
             {
                 {'w', Color.White},
                 {'b', Color.Black}
@@ -48,7 +48,7 @@ namespace GameLogic.Engine
 
         public static Dictionary<Color, char> mappingColorToNotation = _mappingNotationToColor.ToDictionary(x => x.Value, x => x.Key);
 
-        private static Dictionary<char, PieceType> _mappingNotationToPieceType = new Dictionary<char, PieceType>()
+        private static Dictionary<char, PieceType> _mappingNotationToPieceType = new()
             {
                 {'n', PieceType.Knight},
                 {'b', PieceType.Bishop},
@@ -88,8 +88,8 @@ namespace GameLogic.Engine
                 NotationToColor(splitFenNotation[1]),
                 NotationToCastle(splitFenNotation[2]),
                 NotationToCell(splitFenNotation[3]),
-                Int32.Parse(splitFenNotation[4]),
-                Int32.Parse(splitFenNotation[5])
+                int.Parse(splitFenNotation[4]),
+                int.Parse(splitFenNotation[5])
             );
 
             return gameState;
@@ -119,7 +119,7 @@ namespace GameLogic.Engine
                     // Increment |x| by number of empty cells.
                     else
                     {
-                        var numberEmptyCells = Int32.Parse(character.ToString());
+                        var numberEmptyCells = int.Parse(character.ToString());
                         x += numberEmptyCells;
                     }
                 }
@@ -151,7 +151,11 @@ namespace GameLogic.Engine
                     // Set |numberEmptyCells| to zero.
                     else
                     {
-                        if (numberEmptyCells != 0) row.Add(Convert.ToChar(numberEmptyCells + 48));
+                        if (numberEmptyCells != 0)
+                        {
+                            row.Add(Convert.ToChar(numberEmptyCells + 48));
+                        }
+
                         row.Add(_mappingPieceToNotation[board.GetPiece(cell).Value]);
                         numberEmptyCells = 0;
                     }
@@ -209,7 +213,7 @@ namespace GameLogic.Engine
                 // Char letter to integer. Example: 'a' -> 0.
                 var x = (int)notation[0] - 97;
                 // Char digit to integer. Example: '8' -> 7.
-                var y = Int32.Parse(notation[1].ToString()) - 1;
+                var y = int.Parse(notation[1].ToString()) - 1;
                 return new Cell(x, y);
             }
             return null;
