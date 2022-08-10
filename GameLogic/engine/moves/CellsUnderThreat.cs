@@ -59,7 +59,7 @@ namespace GameLogic.Engine.Moves
             }
             else if (pieceType == PieceType.Pawn)
             {
-                return new PawnCellsUnderThreat();
+                return new PawnCellsCapture();
             }
 
             throw new ArgumentException("Invalid argument.");

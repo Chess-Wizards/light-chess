@@ -32,6 +32,6 @@ namespace GameLogic.Engine.Moves
         }
         public int ShiftsNumber { get; } = int.MaxValue;
 
-        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContain;
+        public EnemyPieceTolerance EnemyPieceTolerance { get; } = EnemyPieceTolerance.MayContainOnce;
     }
 }

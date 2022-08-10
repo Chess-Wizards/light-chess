@@ -10,7 +10,6 @@ namespace GameLogic.Entities.States
         Cell? EnPassantCell { get; }
         int HalfmoveNumber { get; }
         int FullmoveNumber { get; }
-        // TODO: do replace with ActiveColor?
         Color EnemyColor { get; }
     }
 }
