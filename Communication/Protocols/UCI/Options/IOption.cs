@@ -1,7 +1,6 @@
 namespace Communication.Protocols.UCI
 {
-    // Common interface for all types of options possible
-    // in the UCI protocol.
+    // Common interface for all types of options possible in the UCI protocol.
     // More details:
     // http://wbec-ridderkerk.nl/html/UCIProtocol.html
     interface IOption
@@ -30,12 +29,12 @@ namespace Communication.Protocols.UCI
 
         public override string ToString()
         {
-            return String.Join(" ", new List<string>{
+            return string.Join(" ", new List<string> {
                 CommonPrefix(),
                 GeneratePostfixForStringRepresentation()
             });
         }
 
-        abstract protected string GeneratePostfixForStringRepresentation();
+        protected abstract string GeneratePostfixForStringRepresentation();
     }
 }

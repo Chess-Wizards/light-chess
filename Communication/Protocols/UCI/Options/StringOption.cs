@@ -3,26 +3,23 @@ namespace Communication.Protocols.UCI
     class StringOption : BaseOption
     {
         private const string EmptyValue = "<empty>";
-        private string value;
+        private string _value;
 
-        public StringOption(string name, string value) : base(name, "string")
-        {
-            SetValue(value);
-        }
+        public StringOption(string name, string value) : base(name, "string") => SetValue(value);
 
         public void SetValue(string value)
         {
             if (value == EmptyValue)
             {
-                this.value = "";
+                _value = "";
             }
 
-            this.value = value;
+            _value = value;
         }
 
         protected override string GeneratePostfixForStringRepresentation()
         {
-            return $"default {this.value}";
+            return $"default {_value}";
         }
     }
 }

@@ -2,18 +2,18 @@ using Bot;
 using GameLogic.Engine;
 using GameLogic.Entities.States;
 
+using CommandInput = System.Collections.Generic.IReadOnlyList<string>;
+using CommandOutput = System.Collections.Generic.IEnumerable<string>;
+
 namespace Communication.Protocols.UCI
 {
-    using CommandInput = IReadOnlyList<string>;
-    using CommandOutput = IEnumerable<string>;
-
     public class UCIProtocol : IProtocol
     {
         private string _NextMoveNotation { get; set; }
         private IStandardGameState _GameState { get; set; }
         private IBot _Bot { get; }
         private readonly IDictionary<string, Func<CommandInput, CommandOutput>> _mappingHandler;
-        private IEnumerable<IOption> _options = new List<IOption> { };
+        private readonly IEnumerable<IOption> _options = new List<IOption> { };
 
         public UCIProtocol(IBot bot)
         {
@@ -29,7 +29,7 @@ namespace Communication.Protocols.UCI
             };
         }
 
-        private IStandardGameState _GetInitialGameState()
+        private static IStandardGameState _GetInitialGameState()
         {
             return StandardFENSerializer.DeserializeFromFEN(UCIProtocolConstants.InitialFENGameState);
         }
@@ -117,21 +117,23 @@ namespace Communication.Protocols.UCI
         {
             var startPositionUsed = splitInput[1] == PositionCommandConstants.StartPositionIndicator;
 
-            _GameState = startPositionUsed ? _GetInitialGameState()
-                                           : StandardFENSerializer.DeserializeFromFEN(string.Join(UCIProtocolConstants.Delimiter,
-                                                                                                   splitInput.Skip(PositionCommandConstants.FirstFENNotationIndex)
-                                                                                                             .Take(PositionCommandConstants.NotationLength)
+            _GameState = startPositionUsed
+                ? _GetInitialGameState()
+                : StandardFENSerializer.DeserializeFromFEN(string.Join(UCIProtocolConstants.Delimiter,
+                                                                       splitInput.Skip(PositionCommandConstants.FirstFENNotationIndex)
+                                                                       .Take(PositionCommandConstants.NotationLength)
                                                                                                 )
                                                                                     );
 
             var firstMoveIndex = startPositionUsed
-                                ? PositionCommandConstants.FirstMoveIndexWithStartPositionIndicator
-                                : PositionCommandConstants.FirstMoveIndexWithoutStartPositionIndicator;
+                ? PositionCommandConstants.FirstMoveIndexWithStartPositionIndicator
+                : PositionCommandConstants.FirstMoveIndexWithoutStartPositionIndicator;
+
             splitInput.Skip(firstMoveIndex)
                       .Select(notation => StandardFENSerializer.NotationToMove(notation))
                       .ToList()
                       // Perform move
-                      .ForEach(move => { _GameState = new StandardGame().MakeMove(_GameState, move); });
+                      .ForEach(action: move => _GameState = new StandardGame().MakeMove(_GameState, move));
             yield break;
         }
     }

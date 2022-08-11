@@ -15,7 +15,7 @@ namespace GameLogic.Entities.Pieces
         public static readonly ISet<int> InvalidPawnRanks = new HashSet<int> { Y._0, Y._7 };
 
         public static readonly ISet<PieceType> PossiblePromotionPieceTypes =
-            new HashSet<PieceType>{PieceType.Knight, PieceType.Bishop, PieceType.Rook, PieceType.Queen};
+            new HashSet<PieceType> { PieceType.Knight, PieceType.Bishop, PieceType.Rook, PieceType.Queen };
 
         public static readonly IDictionary<Color, IList<Cell>> ShiftsForEnPassantMove = new Dictionary<Color, IList<Cell>>()
         {
