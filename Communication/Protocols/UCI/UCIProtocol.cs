@@ -20,12 +20,13 @@ namespace Communication.Protocols.UCI
             _Bot = bot;
 
             _mappingHandler = new Dictionary<string, Func<IReadOnlyList<string>, IEnumerable<string>>>{
+                {"uci", _HandleInitialUCICommand},
                 {"ucinewgame", _HandleUCINewGameCommand},
                 {"isready", _HandleIsReadyCommand},
                 {"go", _HandleGoCommand},
                 {"stop", _HandleStopCommand},
                 {"quit", _HandleQuitCommand},
-                {"position", _HandlePositionCommand}
+                {"position", _HandlePositionCommand},
             };
         }
 
