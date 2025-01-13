@@ -8,10 +8,13 @@
 * `dotnet format` for code refactoring 
 * `dotnet sln add Bot/Bot.csproj` for including Bot project into solution file. 
 
-### How to run the bot on lichess:
+### How to run the bot on lichess
 
-1) Run `dotnet run --project Application` for building the current project
-2) Clone https://github.com/ShailChoksi/lichess-bot and follow instructions to set up an environment and create `config.yml`
-3) Cut and paste all files from `./Application/bin/Debug/net6.0/` (current project) to `./engines/` (lichess-bot project)
-4) Set `engine.name` to `"Application"` in `config.yml`
-5) Run `python3 lichess-bot.py` (lichess-bot project)
+> [!Caution]
+> Lichess-bot cannot be used anymore to run our bot on lichess.org.
+
+1) ~~Run `dotnet run build` for building the current project~~
+2) ~~Clone https://github.com/ShailChoksi/lichess-bot and follow instructions to set up an environment and create `config.yml`~~
+3) ~~Cut and paste all files from `./Application/bin/Debug/net6.0/` (current project) to `./engines/` (lichess-bot project)~~
+4) ~~Set `engine.name` to `"Application"` in `config.yml`~~
+5) ~~Run `python3 lichess-bot.py` (lichess-bot project)~~
